@@ -32,23 +32,26 @@ namespace Characters
                 var rigidbody = gameObject.AddComponent<Rigidbody>();
                 rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
                 rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
-                //rigidbody.useGravity = false;
+
                 if (parent != null)
                 {
-                    var joint = gameObject.AddComponent<SpringJoint>();
+                    /*var joint = gameObject.AddComponent<SpringJoint>();
                     joint.anchor = child.pivot;
                     joint.axis = Vector3.forward;
                     joint.spring = 10000;
                     joint.damper = .0001f;
+                    joint.enableCollision = true;*/
+
+                    var joint = gameObject.AddComponent<HingeJoint>();
+                    joint.anchor = child.pivot;
+                    joint.axis = Vector3.forward;
                     joint.enableCollision = true;
 
-                    /*JointLimits limits = joint.limits;
-                    limits.min = 0;
-                    limits.bounciness = 0;
-                    limits.bounceMinVelocity = 0;
-                    limits.max = 10;
-                    joint.limits = limits;
-                    joint.useLimits = false;*/
+                    joint.useSpring = true;
+                    JointSpring spring = joint.spring;
+                    spring.spring = 10000;
+                    spring.damper = .0001f;
+                    joint.spring = spring;
                 }
             };
 

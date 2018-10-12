@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Characters
 {
-
+    
     public class BodyPart : MonoBehaviour
     {
         [SerializeField]
