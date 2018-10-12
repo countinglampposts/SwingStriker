@@ -29,29 +29,14 @@ namespace Characters
             Action<BodyPart, BodyPart> addChildComponents = (BodyPart parent, BodyPart child) =>
             {
                 var gameObject = child.gameObject;
-                var rigidbody = gameObject.AddComponent<Rigidbody>();
-                rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-                rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+                var rigidbody = gameObject.AddComponent<Rigidbody2D>();
 
                 if (parent != null)
                 {
-                    /*var joint = gameObject.AddComponent<SpringJoint>();
-                    joint.anchor = child.pivot;
-                    joint.axis = Vector3.forward;
-                    joint.spring = 10000;
-                    joint.damper = .0001f;
-                    joint.enableCollision = true;*/
 
-                    var joint = gameObject.AddComponent<HingeJoint>();
+                    var joint = gameObject.AddComponent<HingeJoint2D>();
                     joint.anchor = child.pivot;
-                    joint.axis = Vector3.forward;
                     joint.enableCollision = true;
-
-                    joint.useSpring = true;
-                    JointSpring spring = joint.spring;
-                    spring.spring = 10000;
-                    spring.damper = .0001f;
-                    joint.spring = spring;
                 }
             };
 
@@ -59,8 +44,8 @@ namespace Characters
             {
                 if (parent != null)
                 {
-                    var childJoint = child.GetComponent<Joint>();
-                    childJoint.connectedBody = parent.GetComponent<Rigidbody>();
+                    var childJoint = child.GetComponent<Joint2D>();
+                    childJoint.connectedBody = parent.GetComponent<Rigidbody2D>();
                 }
             };
 

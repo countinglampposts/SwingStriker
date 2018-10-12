@@ -9,16 +9,15 @@ namespace Characters
         [SerializeField]
         private LayerMask mask;
 
-        private Object currentRope;
+        private GameObject currentRope;
 
         private void Update()
         {
             if(Input.GetKeyDown(KeyCode.Mouse0)){
-                if(currentRope != null) Destroy(currentRope);
-                currentRope = ConnectRope(GetComponent<Rigidbody>(), GetMousePosition() - transform.position, mask.value);
+                currentRope = ConnectRope(GetComponent<Rigidbody2D>(), GetMousePosition() - transform.position, mask.value);
             }
             if(Input.GetKeyUp(KeyCode.Mouse0)){
-                //Destroy(currentRope);
+                Destroy(currentRope);
             }
         }
 
@@ -33,35 +32,33 @@ namespace Characters
             return Vector3.zero;
         }
 
-        private static Object ConnectRope(Rigidbody launcher, Vector3 direction, int mask)
+        private static GameObject ConnectRope(Rigidbody2D launcher, Vector3 direction, int mask)
         {
-            RaycastHit hit;
-            if(Physics.Raycast(launcher.position, direction, out hit, Mathf.Infinity, mask))
-            {
-                Debug.Log(hit.collider.gameObject.name);
-                Vector3 hitPosition = hit.point;
+            var hit = Physics2D.Raycast(launcher.position, direction, Mathf.Infinity, mask);
 
-                var anchor = new GameObject("GrapplingAnchor");
-                anchor.transform.position = hitPosition;
-                var anchorRigidbody = anchor.AddComponent<Rigidbody>();
-                anchorRigidbody.isKinematic = true;
+            Vector3 hitPosition = hit.point;
 
-                var joint = anchor.gameObject.AddComponent<HingeJoint>();
-                joint.anchor = anchor.transform.InverseTransformPoint(hitPosition);
-                joint.axis = Vector3.forward;
-                //joint.spring = 100;
-                //joint.damper = .0001f;
-                joint.enableCollision = true;
+            var anchor = new GameObject("GrapplingAnchor");
+            anchor.transform.position = hitPosition;
+            var anchorRigidbody = anchor.AddComponent<Rigidbody2D>();
+            anchorRigidbody.isKinematic = true;
 
-                joint.connectedBody = launcher;
+            var joint = anchor.gameObject.AddComponent<SpringJoint2D>();
+            joint.anchor = anchor.transform.InverseTransformPoint(hitPosition);
+            joint.autoConfigureDistance = false;
+            joint.distance = 0;
+            joint.dampingRatio = 1;
+            joint.frequency = 1f;
+            joint.enableCollision = true;
 
-                return joint;
-            }
+            joint.connectedBody = launcher;
+
+            return anchor;
 
             return null;
         }
 
-        /*public void OnDrawGizmos()
+        public void OnDrawGizmos()
         {
             if(currentRope != null){
                 Vector3 position = currentRope.transform.position;
@@ -69,7 +66,9 @@ namespace Characters
                 Gizmos.DrawLine(position + Vector3.up * iconSize, position - Vector3.up * iconSize);
                 Gizmos.DrawLine(position + Vector3.back * iconSize, position - Vector3.back * iconSize);
                 Gizmos.DrawLine(position + Vector3.right * iconSize, position - Vector3.right * iconSize);
+
+                Gizmos.DrawLine(currentRope.transform.position, transform.position);
             }
-        }*/
+        }
     }
 }
