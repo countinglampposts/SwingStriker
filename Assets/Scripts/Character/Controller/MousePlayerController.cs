@@ -8,15 +8,14 @@ namespace Characters
 {
     public class MousePlayerController : MonoBehaviour
     {
+        [Inject] Camera playerCamera;
         [Inject] SignalBus signalBus;
 
         public void Start()
         {
-            Debug.Log("Hello?");
             Observable.EveryUpdate()
                       .Where(_ => Input.GetKeyDown(KeyCode.Mouse0))
                       .TakeUntilDestroy(this)
-                      .Debug("fire!!!!")
                       .Subscribe(_ => signalBus.Fire(new GrapplingFiredSignal() { position = GetMousePosition() }));
 
             Observable.EveryUpdate()
@@ -25,9 +24,9 @@ namespace Characters
                       .Subscribe(_ => signalBus.Fire(new GrapplingReleasedSignal()));
         }
 
-        private static Vector3 GetMousePosition()
+        private Vector3 GetMousePosition()
         {
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var ray = playerCamera.ScreenPointToRay(Input.mousePosition);
             float point;
             if ((new Plane(Vector3.zero, Vector3.up, Vector3.right)).Raycast(ray, out point))
             {

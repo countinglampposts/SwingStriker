@@ -1,20 +1,22 @@
 ﻿using System;
 using UnityEngine;
+using Zenject;
 
 namespace Characters
 {
-
-    public class BodyRigger : MonoBehaviour
+    public class BodyRoot : MonoBehaviour
     {
         [SerializeField]
-        private BodyPart body;
+        public BodyPart rootBodyPart;
+
+        [Inject] CharacterSettings settings;
 
         private void Start()
         {
-            Rig(body);
+            Rig(rootBodyPart);
         }
 
-        private static void Rig(BodyPart body)
+        private void Rig(BodyPart body)
         {
             Action<BodyPart, BodyPart, Action<BodyPart, BodyPart>> applyRecursive = null;
             applyRecursive = (BodyPart parent, BodyPart target, Action<BodyPart, BodyPart> action) =>
@@ -36,6 +38,7 @@ namespace Characters
                     var joint = gameObject.AddComponent<HingeJoint2D>();
                     joint.anchor = child.pivot;
                     joint.enableCollision = true;
+                    joint.breakForce = settings.breakforce;
                 }
             };
 

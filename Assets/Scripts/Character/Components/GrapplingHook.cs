@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
-using System;
 
 namespace Characters
 {
@@ -24,6 +21,7 @@ namespace Characters
         private GameObject launcher;
 
         [Inject] private SignalBus signalBus;
+        [Inject] private CharacterSettings settings;
 
         private GameObject currentRope;
 
@@ -41,7 +39,6 @@ namespace Characters
 
         private void HandleGrapplingHookFired(GrapplingFiredSignal signal)
         {
-            Debug.Log("Fire");
             currentRope = ConnectRope(launcher.GetComponent<Rigidbody2D>(), signal.position - launcher.transform.position, mask.value);
         }
 
@@ -49,7 +46,7 @@ namespace Characters
             if (currentRope != null) Destroy(currentRope);
         }
 
-        private static GameObject ConnectRope(Rigidbody2D launcher, Vector3 direction, int mask)
+        private GameObject ConnectRope(Rigidbody2D launcher, Vector3 direction, int mask)
         {
             var hit = Physics2D.Raycast(launcher.position, direction, Mathf.Infinity, mask);
 
@@ -65,7 +62,7 @@ namespace Characters
             joint.autoConfigureDistance = false;
             joint.distance = 0;
             joint.dampingRatio = 1;
-            joint.frequency = 1f;
+            joint.frequency = settings.ropeSpringFrequency;
             joint.enableCollision = true;
 
             joint.connectedBody = launcher;
