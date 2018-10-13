@@ -3,8 +3,9 @@ using Zenject;
 using UniRx;
 using UniRx.Diagnostics;
 using System;
+using Character;
 
-namespace Character
+namespace Player
 {
     public class MousePlayerController : MonoBehaviour
     {

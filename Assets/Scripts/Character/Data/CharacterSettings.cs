@@ -13,5 +13,7 @@ namespace Character
         public float ropeSpringFrequency;
         [SerializeField]
         public GameObject bloodsplosionEffect;
+        [SerializeField]
+        public LineRenderer ropeEffect;
     }
 }

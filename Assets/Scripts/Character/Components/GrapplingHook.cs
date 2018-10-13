@@ -22,6 +22,7 @@ namespace Character
 
         [Inject] private SignalBus signalBus;
         [Inject] private CharacterSettings settings;
+        [Inject] private DiContainer container;
 
         private GameObject currentRope;
 
@@ -66,6 +67,8 @@ namespace Character
             joint.enableCollision = true;
 
             joint.connectedBody = launcher;
+
+            container.Inject(anchor.AddComponent<RopeEffect>());
 
             return anchor;
         }
