@@ -4,7 +4,7 @@ using UniRx;
 using UniRx.Diagnostics;
 using System;
 
-namespace Characters
+namespace Character
 {
     public class MousePlayerController : MonoBehaviour
     {

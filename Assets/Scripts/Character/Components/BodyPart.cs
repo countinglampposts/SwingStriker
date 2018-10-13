@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Characters
+namespace Character
 {
     
     public class BodyPart : MonoBehaviour

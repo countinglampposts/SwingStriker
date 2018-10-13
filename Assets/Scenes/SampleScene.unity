@@ -3425,6 +3425,8 @@ MonoBehaviour:
   settings:
     breakforce: 1500
     ropeSpringFrequency: 1
+    bloodsplosionEffect: {fileID: 1248047097124180, guid: 13d2a5f6019394802a217c5c58f4289e,
+      type: 2}
 --- !u!114 &1687286233
 MonoBehaviour:
   m_ObjectHideFlags: 0

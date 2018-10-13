@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Zenject;
 
-namespace Characters
+namespace Character
 {
     public class GrapplingFiredSignal
     {

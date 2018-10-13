@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Characters
+namespace Character
 {
     public class PlayerInstaller : MonoInstaller
     {

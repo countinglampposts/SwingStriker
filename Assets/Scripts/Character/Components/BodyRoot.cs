@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace Characters
+namespace Character
 {
     public class BodyRoot : MonoBehaviour
     {
@@ -10,6 +10,7 @@ namespace Characters
         public BodyPart rootBodyPart;
 
         [Inject] CharacterSettings settings;
+        [Inject] DiContainer container;
 
         private void Start()
         {
@@ -39,6 +40,8 @@ namespace Characters
                     joint.anchor = child.pivot;
                     joint.enableCollision = true;
                     joint.breakForce = settings.breakforce;
+
+                    container.Inject(gameObject.AddComponent<Bloodsplosion>());
                 }
             };
 

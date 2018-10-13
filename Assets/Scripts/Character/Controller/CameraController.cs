@@ -3,12 +3,12 @@ using Zenject;
 using System;
 using UniRx;
 
-namespace Characters
+namespace Character
 {
     public class CameraController : MonoBehaviour
     {
         [Inject] BodyRoot root;
-        [Inject] Camera camera;
+        [Inject] Camera movedCamera;
 
         private void Start()
         {
@@ -16,13 +16,13 @@ namespace Characters
                       .TakeUntilDestroy(this)
                       .Subscribe(_ =>
                       {
-                          Vector3 cameraPosition = camera.transform.position;
+                          Vector3 cameraPosition = movedCamera.transform.position;
                           Vector3 rootPosition = root.rootBodyPart.transform.position;
 
                           cameraPosition.x = rootPosition.x;
                           cameraPosition.y = rootPosition.y;
 
-                          camera.transform.position = cameraPosition;
+                          movedCamera.transform.position = cameraPosition;
                       });
         }
     }
