@@ -40,6 +40,7 @@ namespace Character
 
         private void HandleGrapplingHookFired(GrapplingFiredSignal signal)
         {
+            if (currentRope != null) Destroy(currentRope);
             currentRope = ConnectRope(launcher.GetComponent<Rigidbody2D>(), signal.position - launcher.transform.position, mask.value);
         }
 
