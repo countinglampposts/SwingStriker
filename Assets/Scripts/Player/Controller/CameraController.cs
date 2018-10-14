@@ -2,16 +2,20 @@
 using Zenject;
 using System;
 using UniRx;
+using Character;
 
-namespace Character
+namespace Player
 {
+
     public class CameraController : MonoBehaviour
     {
         [Inject] BodyRoot root;
         [Inject] Camera movedCamera;
+        [Inject] CameraSettings cameraSettings;
 
         private void Start()
         {
+            movedCamera.rect = cameraSettings.viewportRect;
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
                       .Subscribe(_ =>

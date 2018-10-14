@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Character
 {
-    public class PlayerInstaller : MonoInstaller
+    public class CharacterInstaller : MonoInstaller
     {
         [SerializeField]
         private Camera playerCamera;

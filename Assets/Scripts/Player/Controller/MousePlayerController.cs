@@ -11,16 +11,19 @@ namespace Player
     {
         [Inject] Camera playerCamera;
         [Inject] SignalBus signalBus;
+        [Inject] CameraSettings cameraSettings;
 
         public void Start()
         {
             Observable.EveryUpdate()
                       .Where(_ => Input.GetKeyDown(KeyCode.Mouse0))
+                      .Where(_ => playerCamera.pixelRect.Contains(Input.mousePosition))
                       .TakeUntilDestroy(this)
                       .Subscribe(_ => signalBus.Fire(new GrapplingFiredSignal() { position = GetMousePosition() }));
 
             Observable.EveryUpdate()
                       .Where(_ => Input.GetKeyUp(KeyCode.Mouse0))
+                      .Where(_ => playerCamera.pixelRect.Contains(Input.mousePosition))
                       .TakeUntilDestroy(this)
                       .Subscribe(_ => signalBus.Fire(new GrapplingReleasedSignal()));
         }
