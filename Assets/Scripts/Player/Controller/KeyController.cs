@@ -12,6 +12,8 @@ namespace Player
     public struct KeyMapping{
         public KeyCode left;
         public KeyCode right;
+        public KeyCode up;
+        public KeyCode down;
         public KeyCode fire;
     }
 
@@ -36,13 +38,26 @@ namespace Player
                       .TakeUntilDestroy(this)
                       .Subscribe(isDown => leftDown = isDown);
 
+            bool upDown = false;
+            bool downDown = false;
+
+            Observable.EveryUpdate()
+                      .Select(_ => Input.GetKey(keyMapping.up))
+                      .TakeUntilDestroy(this)
+                      .Subscribe(isDown => upDown = isDown);
+            Observable.EveryUpdate()
+                      .Select(_ => Input.GetKey(keyMapping.down))
+                      .TakeUntilDestroy(this)
+                      .Subscribe(isDown => downDown = isDown);
+
             Observable.EveryUpdate()
                       .Where(_ => Input.GetKeyDown(keyMapping.fire))
                       .TakeUntilDestroy(this)
                       .Subscribe(_ =>
                       {
-                Vector3 direction = Vector3.up;
+                          Vector3 direction = (upDown) ? Vector3.up : (downDown) ? Vector3.down : Vector3.zero;
                           direction += (leftDown) ? Vector3.left : (rightDown) ? Vector3.right : Vector3.zero;
+                          direction = (direction == Vector3.zero) ? Vector3.up : direction;
                           signalBus.Fire(new GrapplingFiredSignal() { direction = direction });
                       });
 

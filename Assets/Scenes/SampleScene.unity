@@ -4939,7 +4939,7 @@ MonoBehaviour:
   playerCamera: {fileID: 534669904}
   root: {fileID: 929098572}
   settings:
-    breakforce: 1500
+    breakforce: 2000
     ropeSpringFrequency: 1
     bloodsplosionEffect: {fileID: 1248047097124180, guid: 13d2a5f6019394802a217c5c58f4289e,
       type: 2}
@@ -5006,6 +5006,8 @@ MonoBehaviour:
   keyMapping:
     left: 276
     right: 275
+    up: 273
+    down: 274
     fire: 303
 --- !u!1 &1704478455
 GameObject:
@@ -5229,7 +5231,7 @@ MonoBehaviour:
   playerCamera: {fileID: 2135684244}
   root: {fileID: 1533240963}
   settings:
-    breakforce: 1500
+    breakforce: 2000
     ropeSpringFrequency: 1
     bloodsplosionEffect: {fileID: 1248047097124180, guid: 13d2a5f6019394802a217c5c58f4289e,
       type: 2}
@@ -5282,6 +5284,8 @@ MonoBehaviour:
   keyMapping:
     left: 97
     right: 100
+    up: 119
+    down: 115
     fire: 304
 --- !u!1 &1799787415
 GameObject:
