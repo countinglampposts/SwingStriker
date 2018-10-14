@@ -5,7 +5,7 @@ namespace Character
 {
     public class GrapplingFiredSignal
     {
-        public Vector3 position;
+        public Vector3 direction;
     }
 
     public class GrapplingReleasedSignal
@@ -41,7 +41,7 @@ namespace Character
         private void HandleGrapplingHookFired(GrapplingFiredSignal signal)
         {
             if (currentRope != null) Destroy(currentRope);
-            currentRope = ConnectRope(launcher.GetComponent<Rigidbody2D>(), signal.position - launcher.transform.position, mask.value);
+            currentRope = ConnectRope(launcher.GetComponent<Rigidbody2D>(), signal.direction, mask.value);
         }
 
         private void HandleGrapplingReleasedSignal(){
