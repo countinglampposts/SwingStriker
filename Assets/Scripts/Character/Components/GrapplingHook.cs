@@ -37,7 +37,7 @@ namespace Swing.Character
                         currentRope = ConnectRope(launcher.GetComponent<Rigidbody2D>(), signal.direction, mask.value);
                      });
 
-            signalBus.GetStream<GrapplingFiredSignal>()
+            signalBus.GetStream<GrapplingReleasedSignal>()
                      .Where(_ => currentRope != null)
                      .TakeUntilDestroy(this)
                      .Subscribe(_ => Destroy(currentRope));

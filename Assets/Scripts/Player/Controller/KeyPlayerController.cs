@@ -17,7 +17,7 @@ namespace Swing.Player
         public KeyCode fire;
     }
 
-    public class KeyController : MonoBehaviour
+    public class KeyPlayerController : MonoBehaviour
     {
         [SerializeField] KeyMapping keyMapping;
 
