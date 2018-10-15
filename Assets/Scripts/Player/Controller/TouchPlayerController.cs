@@ -18,16 +18,18 @@ namespace Swing.Player
         public void Start()
         {
             Observable.EveryUpdate()
-                      .Where(_ => Input.GetKeyDown(KeyCode.Mouse0))
-                      .Where(_ => playerCamera.pixelRect.Contains(Input.mousePosition))
-                      .TakeUntilDestroy(this)
-                      .Subscribe(_ => signalBus.Fire(new GrapplingFiredSignal() { direction = playerCamera.ScreenToWorldPoint(Input.mousePosition) - bodyRoot.rootBodyPart.transform.position }));
-
-            Observable.EveryUpdate()
-                      .Where(_ => Input.GetKeyUp(KeyCode.Mouse0))
-                      .Where(_ => playerCamera.pixelRect.Contains(Input.mousePosition))
-                      .TakeUntilDestroy(this)
-                      .Subscribe(_ => signalBus.Fire(new GrapplingReleasedSignal()));
+                      .Subscribe(_ =>
+                      {
+                        var touches = Input.touches.Where(touch => touch.phase == TouchPhase.Began && playerCamera.pixelRect.Contains(touch.position));
+                        
+                        foreach(var touch in touches){
+                              signalBus.Fire(new GrapplingFiredSignal() { direction = playerCamera.ScreenToWorldPoint(touch.position) - bodyRoot.rootBodyPart.transform.position });
+                              Observable.EveryUpdate()
+                                        .Where(__ => Input.GetTouch(touch.fingerId).phase == TouchPhase.Ended)
+                                        .First()
+                                        .Subscribe(__ => signalBus.Fire<GrapplingReleasedSignal>());
+                        }
+                      });
         }
     }
 }

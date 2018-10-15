@@ -9,10 +9,7 @@ namespace Swing.Character
         public Vector3 direction;
     }
 
-    public class GrapplingReleasedSignal
-    {
-
-    }
+    public class GrapplingReleasedSignal{}
 
     public class GrapplingHook : MonoBehaviour
     {
