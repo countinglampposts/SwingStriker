@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Player
+namespace Swing.Player
 {
     [System.Serializable]
     public struct CameraSettings

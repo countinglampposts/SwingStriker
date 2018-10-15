@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
+using UniRx;
 
-namespace Level
+namespace Swing.Level
 {
     public class GoalScoredSignal{
         public int team; 
@@ -19,31 +20,19 @@ namespace Level
 
         private void Start()
         {
-            signalBus.Subscribe<GoalScoredSignal>(HandleGoalScored);
-            signalBus.Subscribe<BallResetSignal>(HandleRestart);
-        }
+            signalBus.GetStream<GoalScoredSignal>()
+                     .TakeUntilDestroy(this)
+                     .Subscribe(_ => locked = true);
 
-        private void OnDestroy()
-        {
-            signalBus.Unsubscribe<GoalScoredSignal>(HandleGoalScored);
-            signalBus.Unsubscribe<BallResetSignal>(HandleRestart);
-        }
-
-        private void HandleGoalScored()
-        {
-            locked = true;
-        }
-
-        private void HandleRestart()
-        {
-            locked = false;
+            signalBus.GetStream<BallResetSignal>()
+                     .TakeUntilDestroy(this)
+                     .Subscribe(_ => locked = false);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if(!locked && collision.gameObject == gameBall.gameObject)
             {
-                Debug.Log("Goal!!!!");
                 signalBus.Fire<GoalScoredSignal>();
             }
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 using Zenject;
 using UniRx;
 
-namespace Character
+namespace Swing.Character
 {
     [RequireComponent(typeof(HingeJoint2D))]
     public class Bloodsplosion : MonoBehaviour

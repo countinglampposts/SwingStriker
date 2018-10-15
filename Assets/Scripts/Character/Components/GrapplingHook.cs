@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using Zenject;
+using UniRx;
 
-namespace Character
+namespace Swing.Character
 {
     public class GrapplingFiredSignal
     {
@@ -28,25 +29,20 @@ namespace Character
 
         public void Start()
         {
-            signalBus.Subscribe<GrapplingFiredSignal>(HandleGrapplingHookFired);
-            signalBus.Subscribe<GrapplingReleasedSignal>(HandleGrapplingReleasedSignal);
+            signalBus.GetStream<GrapplingFiredSignal>()
+                     .TakeUntilDestroy(this)
+                     .Subscribe((signal) =>
+                     {
+                        if (currentRope != null) Destroy(currentRope);
+                        currentRope = ConnectRope(launcher.GetComponent<Rigidbody2D>(), signal.direction, mask.value);
+                     });
+
+            signalBus.GetStream<GrapplingFiredSignal>()
+                     .Where(_ => currentRope != null)
+                     .TakeUntilDestroy(this)
+                     .Subscribe(_ => Destroy(currentRope));
         }
 
-        public void OnDestroy()
-        {
-            signalBus.Unsubscribe<GrapplingFiredSignal>(HandleGrapplingHookFired);
-            signalBus.Unsubscribe<GrapplingReleasedSignal>(HandleGrapplingReleasedSignal);
-        }
-
-        private void HandleGrapplingHookFired(GrapplingFiredSignal signal)
-        {
-            if (currentRope != null) Destroy(currentRope);
-            currentRope = ConnectRope(launcher.GetComponent<Rigidbody2D>(), signal.direction, mask.value);
-        }
-
-        private void HandleGrapplingReleasedSignal(){
-            if (currentRope != null) Destroy(currentRope);
-        }
 
         private GameObject ConnectRope(Rigidbody2D launcher, Vector3 direction, int mask)
         {

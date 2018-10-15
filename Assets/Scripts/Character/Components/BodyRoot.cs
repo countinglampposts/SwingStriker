@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace Character
+namespace Swing.Character
 {
     public class BodyRoot : MonoBehaviour
     {

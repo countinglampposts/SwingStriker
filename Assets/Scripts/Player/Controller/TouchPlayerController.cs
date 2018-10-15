@@ -4,10 +4,11 @@ using UniRx;
 using UniRx.Diagnostics;
 using System;
 using Swing.Character;
+using System.Linq;
 
 namespace Swing.Player
 {
-    public class MousePlayerController : MonoBehaviour
+    public class TouchPlayerController : MonoBehaviour
     {
         [Inject] Camera playerCamera;
         [Inject] SignalBus signalBus;
@@ -20,7 +21,7 @@ namespace Swing.Player
                       .Where(_ => Input.GetKeyDown(KeyCode.Mouse0))
                       .Where(_ => playerCamera.pixelRect.Contains(Input.mousePosition))
                       .TakeUntilDestroy(this)
-                      .Subscribe(_ => signalBus.Fire(new GrapplingFiredSignal() { direction = playerCamera.ScreenToWorldPoint(Input.mousePosition) - bodyRoot.rootBodyPart.transform.position}));
+                      .Subscribe(_ => signalBus.Fire(new GrapplingFiredSignal() { direction = playerCamera.ScreenToWorldPoint(Input.mousePosition) - bodyRoot.rootBodyPart.transform.position }));
 
             Observable.EveryUpdate()
                       .Where(_ => Input.GetKeyUp(KeyCode.Mouse0))

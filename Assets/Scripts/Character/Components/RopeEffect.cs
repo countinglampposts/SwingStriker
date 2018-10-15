@@ -4,7 +4,7 @@ using UnityEngine;
 using UniRx;
 using Zenject;
 
-namespace Character
+namespace Swing.Character
 {
     [RequireComponent(typeof(Joint2D))]
     public class RopeEffect : MonoBehaviour

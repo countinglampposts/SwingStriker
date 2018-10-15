@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using Zenject;
-using Character;
+using Swing.Character;
 using System;
 
-namespace Player
+namespace Swing.Player
 {
     [System.Serializable]
     public struct KeyMapping{

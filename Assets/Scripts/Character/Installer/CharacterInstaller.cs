@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Character
+namespace Swing.Character
 {
     public class CharacterInstaller : MonoInstaller
     {

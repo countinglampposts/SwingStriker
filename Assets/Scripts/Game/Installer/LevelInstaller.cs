@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Level
+namespace Swing.Level
 {
     [System.Serializable]
     public struct GameBall{

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Level
+namespace Swing.Level
 {
     public class LevelUIController : MonoBehaviour
     {
@@ -29,13 +29,9 @@ namespace Level
 
         private void Start()
         {
-            signalBus.Subscribe<GoalScoredSignal>(HandleGoalScored);
-
-        }
-
-        private void OnDestroy()
-        {
-            signalBus.Unsubscribe<GoalScoredSignal>(HandleGoalScored);
+            signalBus.GetStream<GoalScoredSignal>()
+                     .TakeUntilDestroy(this)
+                     .Subscribe(HandleGoalScored);
         }
 
         private void HandleGoalScored(GoalScoredSignal goalScored)

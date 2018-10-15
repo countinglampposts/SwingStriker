@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Player
+namespace Swing.Player
 {
     public class PlayerInstaller : MonoInstaller
     {

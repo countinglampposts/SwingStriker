@@ -2,9 +2,9 @@
 using Zenject;
 using System;
 using UniRx;
-using Character;
+using Swing.Character;
 
-namespace Player
+namespace Swing.Player
 {
 
     public class CameraController : MonoBehaviour
