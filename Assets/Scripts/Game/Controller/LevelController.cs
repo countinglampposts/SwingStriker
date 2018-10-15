@@ -31,8 +31,8 @@ namespace Swing.Level
             signalBus.GetStream<GoalScoredSignal>()
                      .Subscribe(_ =>
                      {
-                         Observable.Timer(TimeSpan.FromSeconds(5))
-                               .Subscribe(_ =>
+                        UniRx.Observable.Timer(TimeSpan.FromSeconds(5))
+                               .Subscribe(__ =>
                                {
                                    gameBall.gameObject.transform.position = gameBall.restartPoint.position;
                                    signalBus.Fire<BallResetSignal>();
@@ -41,7 +41,7 @@ namespace Swing.Level
                      .AddTo(disposables);
 
             signalBus.GetStream<RestartLevelSignal>()
-                     .Subscribe(_=> Application.LoadLevel(Application.loadedLevel));
+                     .Subscribe(_=> Application.LoadLevel(Application.loadedLevel))
                      .AddTo(disposables);
         }
 
