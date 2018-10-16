@@ -11,8 +11,16 @@ namespace Swing.Level
         public Transform restartPoint;
     }
 
+    [System.Serializable]
+    public struct SpawnPoint{
+        public int team;
+        public Transform spawnPoint;
+    }
+
     public class LevelInstaller : MonoInstaller
     {
+        [SerializeField]
+        public SpawnPoint[] spawnPoints;
         [SerializeField]
         private GameBall ball;
 
@@ -29,6 +37,13 @@ namespace Swing.Level
                      .NonLazy();
 
             Container.BindInstance(ball);
+        }
+
+        public void OnDrawGizmos()
+        {
+            foreach(var a in spawnPoints){
+                if(a.spawnPoint != null) Gizmos.DrawWireSphere(a.spawnPoint.position, .5f);
+            }
         }
     }
 }

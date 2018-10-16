@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using Zenject;
 using UniRx;
-using UniRx.Diagnostics;
-using System;
 using Swing.Character;
+using Swing.Game;
 
 namespace Swing.Player
 {

@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Swing.Player
+namespace Swing.Game
 {
     [System.Serializable]
     public struct CameraSettings

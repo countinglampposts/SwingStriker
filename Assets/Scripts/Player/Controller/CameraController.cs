@@ -1,21 +1,20 @@
 ﻿using UnityEngine;
 using Zenject;
-using System;
 using UniRx;
 using Swing.Character;
+using Swing.Game;
 
 namespace Swing.Player
 {
-
     public class CameraController : MonoBehaviour
     {
         [Inject] BodyRoot root;
         [Inject] Camera movedCamera;
-        [Inject] CameraSettings cameraSettings;
+        [InjectOptional] CameraSettings cameraSettings;
 
         private void Start()
         {
-            movedCamera.rect = cameraSettings.viewportRect;
+            if(cameraSettings.viewportRect.size != Vector2.zero) movedCamera.rect = cameraSettings.viewportRect;
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
                       .Subscribe(_ =>
