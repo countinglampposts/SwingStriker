@@ -4,6 +4,7 @@ using UnityEngine;
 using Swing.Level;
 using Swing.Player;
 using System.Collections.Generic;
+using UniRx;
 
 namespace Swing.Game
 {
@@ -25,16 +26,20 @@ namespace Swing.Game
             var level = levelContext.InstantiatePrefab(levelPrefab).GetComponent<LevelInstaller>();
 
             var layout = layouts.First(a => a.settings.Length == playersData.Length);
-            List<GameObject> spawned = new List<GameObject>();
+            var spawned = new List<Tuple<PlayerData, GameObject>>();
 
-            for (int a = 0; a < layout.settings.Length;a++){
+            for (int a = 0; a < layout.settings.Length; a++)
+            {
                 var playerData = playersData[a];
+
                 var playerContext = Container.CreateSubContainer();
                 playerContext.BindInstance(teams.First(element => element.id == playerData.team));
                 playerContext.BindInstance(layout.settings[a]);
-                spawned.Add(playerContext.InstantiatePrefab(playerData.prefab));
+                var instance = playerContext.InstantiatePrefab(playerData.prefab);
+
+                spawned.Add(new Tuple<PlayerData, GameObject>(playerData, instance));
             }
-            level.ResolvePlayerSpawn(spawned.ToArray());
+            level.ResolvePlayerSpawn(spawned);
         }
     }
 }

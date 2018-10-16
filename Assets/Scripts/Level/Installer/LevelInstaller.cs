@@ -1,5 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Swing.Player;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -39,9 +42,14 @@ namespace Swing.Level
             Container.BindInstance(ball);
         }
 
-        public void ResolvePlayerSpawn(params GameObject[] spawned){
-            for (int a = 0; a < spawned.Length;a++){
-                spawned[a].transform.position = spawnPoints[a].spawnPoint.position;
+        public void ResolvePlayerSpawn(List<Tuple<PlayerData,GameObject>> spawned){
+            List<SpawnPoint> availiblePoint = new List<SpawnPoint>(spawnPoints);
+            foreach(var player in spawned){
+                var data = player.Item1;
+                var gameObject = player.Item2;
+                var spawnPoint = availiblePoint.First(element => element.team == data.team);
+                gameObject.transform.position = spawnPoint.spawnPoint.position;
+                availiblePoint.Remove(spawnPoint);
             }
         }
 
