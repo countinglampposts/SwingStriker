@@ -43,9 +43,12 @@ namespace Swing.Character
 
         private GameObject ConnectRope(Rigidbody2D launcher, Vector3 direction, int mask)
         {
-            var hit = Physics2D.Raycast(launcher.position, direction, Mathf.Infinity, mask);
+            var hit = Physics2D.Raycast(launcher.position, direction, settings.grapplingDistance, mask);
 
             Vector3 hitPosition = hit.point;
+
+            if (hit.collider == null)
+                return null;
 
             var anchor = new GameObject("GrapplingAnchor");
             anchor.transform.position = hitPosition;

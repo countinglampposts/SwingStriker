@@ -13,6 +13,7 @@ namespace Swing.Level
 
     public class Goal : MonoBehaviour
     {
+        [SerializeField] int team;
         [Inject] GameBall gameBall;
         [Inject] SignalBus signalBus;
 
@@ -33,7 +34,7 @@ namespace Swing.Level
         {
             if(!locked && collision.gameObject == gameBall.gameObject)
             {
-                signalBus.Fire<GoalScoredSignal>();
+                signalBus.Fire(new GoalScoredSignal(){team = team});
             }
         }
     }

@@ -35,6 +35,9 @@ namespace Swing.Level
                                .Subscribe(__ =>
                                {
                                    gameBall.gameObject.transform.position = gameBall.restartPoint.position;
+                                   var ridigBody = gameBall.gameObject.GetComponent<Rigidbody2D>();
+                                   ridigBody.velocity = Vector2.zero;
+                                   ridigBody.angularVelocity = 0;
                                    signalBus.Fire<BallResetSignal>();
                                });
                      })

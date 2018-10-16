@@ -12,6 +12,8 @@ namespace Swing.Character
         [SerializeField]
         public float ropeSpringFrequency;
         [SerializeField]
+        public float grapplingDistance;
+        [SerializeField]
         public GameObject bloodsplosionEffect;
         [SerializeField]
         public LineRenderer ropeEffect;
