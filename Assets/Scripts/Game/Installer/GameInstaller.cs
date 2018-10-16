@@ -56,10 +56,14 @@ namespace Swing.Game
                              }
                              var oldInstance = instance;
                              Observable.Timer(TimeSpan.FromSeconds(3f))
-                                       .Subscribe(__=>Destroy(oldInstance));
+                                       .Subscribe(__ => {
 
-                             instance = playerContext.InstantiatePrefab(playerData.prefab);
-                             level.ResolvePlayerSpawn(new List<Tuple<PlayerData, GameObject>> { new Tuple<PlayerData, GameObject>(playerData, instance) });
+                                           instance = playerContext.InstantiatePrefab(playerData.prefab);
+                                           level.ResolvePlayerSpawn(new List<Tuple<PlayerData, GameObject>> { new Tuple<PlayerData, GameObject>(playerData, instance) });
+
+                                           Destroy(oldInstance); 
+                                        });
+
                          });
 
             return instance;

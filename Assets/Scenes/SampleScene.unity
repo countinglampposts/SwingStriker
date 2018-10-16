@@ -146,6 +146,8 @@ MonoBehaviour:
   playersData:
   - team: 0
     prefab: {fileID: 1882858632572936, guid: 1050cb67d1aa843ecb17a490f5debb88, type: 2}
+  - team: 1
+    prefab: {fileID: 1882858632572936, guid: 1050cb67d1aa843ecb17a490f5debb88, type: 2}
   teams:
   - id: 0
     color: {r: 0, g: 0, b: 1, a: 1}

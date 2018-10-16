@@ -6,7 +6,7 @@ using Swing.Game;
 
 namespace Swing.Player
 {
-    public class CameraController : MonoBehaviour, ICharacterDriver
+    public class CameraController : MonoBehaviour//, ICharacterDriver
     {
         [Inject] BodyRoot root;
         [Inject] Camera movedCamera;
