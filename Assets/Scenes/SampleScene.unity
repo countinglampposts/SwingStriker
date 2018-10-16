@@ -141,12 +141,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 608cc0e4b1c314a18821b68571ff44ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelPrefab: {fileID: 114129131135851408, guid: e82cedcc16bad4bcbb64b89f40d040a3,
+  levelPrefab: {fileID: 114112754377558042, guid: 617e8d09491774ee6a35281fca5cf405,
     type: 2}
   playersData:
   - team: 0
-    prefab: {fileID: 1882858632572936, guid: 1050cb67d1aa843ecb17a490f5debb88, type: 2}
-  - team: 1
     prefab: {fileID: 1882858632572936, guid: 1050cb67d1aa843ecb17a490f5debb88, type: 2}
   teams:
   - id: 0
