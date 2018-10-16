@@ -17,7 +17,7 @@ namespace Swing.Player
         public KeyCode fire;
     }
 
-    public class KeyPlayerController : MonoBehaviour
+    public class KeyPlayerController : MonoBehaviour, ICharacterDriver
     {
         [SerializeField] KeyMapping keyMapping;
 
@@ -31,10 +31,12 @@ namespace Swing.Player
 
             Observable.EveryUpdate()
                       .Select(_ => Input.GetKey(keyMapping.right))
+                      .Where(_ => enabled)
                       .TakeUntilDestroy(this)
                       .Subscribe(isDown => rightDown = isDown);
             Observable.EveryUpdate()
                       .Select(_ => Input.GetKey(keyMapping.left))
+                      .Where(_ => enabled)
                       .TakeUntilDestroy(this)
                       .Subscribe(isDown => leftDown = isDown);
 
@@ -43,15 +45,18 @@ namespace Swing.Player
 
             Observable.EveryUpdate()
                       .Select(_ => Input.GetKey(keyMapping.up))
+                      .Where(_ => enabled)
                       .TakeUntilDestroy(this)
                       .Subscribe(isDown => upDown = isDown);
             Observable.EveryUpdate()
                       .Select(_ => Input.GetKey(keyMapping.down))
+                      .Where(_ => enabled)
                       .TakeUntilDestroy(this)
                       .Subscribe(isDown => downDown = isDown);
 
             Observable.EveryUpdate()
                       .Where(_ => Input.GetKeyDown(keyMapping.fire))
+                      .Where(_ => enabled)
                       .TakeUntilDestroy(this)
                       .Subscribe(_ =>
                       {
@@ -63,8 +68,14 @@ namespace Swing.Player
 
             Observable.EveryUpdate()
                       .Where(_ => Input.GetKeyUp(keyMapping.fire))
+                      .Where(_ => enabled)
                       .TakeUntilDestroy(this)
                       .Subscribe(_ => signalBus.Fire<GrapplingReleasedSignal>());
+        }
+
+        public void Disable()
+        {
+            enabled = false;
         }
     }
 }

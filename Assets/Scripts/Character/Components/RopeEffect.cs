@@ -7,10 +7,9 @@ using Zenject;
 namespace Swing.Character
 {
     [RequireComponent(typeof(Joint2D))]
-    public class RopeEffect : MonoBehaviour
+    public class RopeEffect : MonoBehaviour, ICharacterDriver
     {
         [Inject] private CharacterSettings settings;
-
         private void Start()
         {
             var lineRenderer = Instantiate(settings.ropeEffect.gameObject,transform).GetComponent<LineRenderer>();
@@ -18,12 +17,19 @@ namespace Swing.Character
             var joint = GetComponent<SpringJoint2D>();
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
+                      .Where(_ => enabled)
+                      .Where(_ => joint.connectedBody != null)
                       .Subscribe(_ => {
                             lineRenderer.SetPositions(new Vector3[]{
                             joint.transform.TransformPoint(joint.anchor),
                             joint.connectedBody.transform.TransformPoint(joint.connectedAnchor)
                         });
              });
+        }
+
+        public void Disable()
+        {
+            enabled = false;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Swing.Character
 
     public class GrapplingReleasedSignal{}
 
-    public class GrapplingHook : MonoBehaviour
+    public class GrapplingHook : MonoBehaviour, ICharacterDriver
     {
         [SerializeField]
         private LayerMask mask;
@@ -28,6 +28,7 @@ namespace Swing.Character
         {
             signalBus.GetStream<GrapplingFiredSignal>()
                      .TakeUntilDestroy(this)
+                     .Where(_ => enabled)
                      .Subscribe((signal) =>
                      {
                         if (currentRope != null) Destroy(currentRope);
@@ -37,6 +38,7 @@ namespace Swing.Character
             signalBus.GetStream<GrapplingReleasedSignal>()
                      .Where(_ => currentRope != null)
                      .TakeUntilDestroy(this)
+                     .Where(_ => enabled)
                      .Subscribe(_ => Destroy(currentRope));
         }
 
@@ -68,6 +70,12 @@ namespace Swing.Character
             container.Inject(anchor.AddComponent<RopeEffect>());
 
             return anchor;
+        }
+
+        public void Disable()
+        {
+            if (currentRope != null) Destroy(currentRope);
+            enabled = false;
         }
 
         public void OnDrawGizmos()

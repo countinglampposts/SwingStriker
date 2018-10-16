@@ -5,6 +5,8 @@ using Swing.Level;
 using Swing.Player;
 using System.Collections.Generic;
 using UniRx;
+using Swing.Character;
+using System;
 
 namespace Swing.Game
 {
@@ -31,15 +33,36 @@ namespace Swing.Game
             for (int a = 0; a < layout.settings.Length; a++)
             {
                 var playerData = playersData[a];
-
-                var playerContext = Container.CreateSubContainer();
-                playerContext.BindInstance(teams.First(element => element.id == playerData.team));
-                playerContext.BindInstance(layout.settings[a]);
-                var instance = playerContext.InstantiatePrefab(playerData.prefab);
+                var instance = SpawnPlayer(playerData, layout.settings[a], level);
 
                 spawned.Add(new Tuple<PlayerData, GameObject>(playerData, instance));
             }
             level.ResolvePlayerSpawn(spawned);
+        }
+
+        private GameObject SpawnPlayer(PlayerData playerData, CameraSettings cameraSettings, LevelInstaller level){
+            var playerContext = Container.CreateSubContainer();
+            playerContext.DeclareSignal<ResetPlayerSignal>();
+            playerContext.BindInstance(teams.First(element => element.id == playerData.team));
+            playerContext.BindInstance(cameraSettings);
+            var instance = playerContext.InstantiatePrefab(playerData.prefab);
+
+            playerContext.Resolve<SignalBus>()
+                         .GetStream<ResetPlayerSignal>()
+                         .Subscribe(_ =>
+                         {
+                             foreach(var a in instance.GetComponentsInChildren<ICharacterDriver>()){
+                                 a.Disable();
+                             }
+                             var oldInstance = instance;
+                             Observable.Timer(TimeSpan.FromSeconds(3f))
+                                       .Subscribe(__=>Destroy(oldInstance));
+
+                             instance = playerContext.InstantiatePrefab(playerData.prefab);
+                             level.ResolvePlayerSpawn(new List<Tuple<PlayerData, GameObject>> { new Tuple<PlayerData, GameObject>(playerData, instance) });
+                         });
+
+            return instance;
         }
     }
 }

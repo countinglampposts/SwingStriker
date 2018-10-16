@@ -6,7 +6,7 @@ using Swing.Game;
 
 namespace Swing.Player
 {
-    public class CameraController : MonoBehaviour
+    public class CameraController : MonoBehaviour, ICharacterDriver
     {
         [Inject] BodyRoot root;
         [Inject] Camera movedCamera;
@@ -16,6 +16,7 @@ namespace Swing.Player
         {
             if(cameraSettings.viewportRect.size != Vector2.zero) movedCamera.rect = cameraSettings.viewportRect;
             Observable.EveryUpdate()
+                      .Where(_ => enabled)
                       .TakeUntilDestroy(this)
                       .Subscribe(_ =>
                       {
@@ -27,6 +28,12 @@ namespace Swing.Player
 
                           movedCamera.transform.position = cameraPosition;
                       });
+        }
+
+        public void Disable()
+        {
+            movedCamera.enabled = false;
+            enabled = false;
         }
     }
 }

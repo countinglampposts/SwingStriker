@@ -29,8 +29,6 @@ namespace Swing.Level
 
         public override void InstallBindings()
         {
-            SignalBusInstaller.Install(Container);
-
             Container.DeclareSignal<GoalScoredSignal>();
             Container.DeclareSignal<BallResetSignal>();
             Container.DeclareSignal<RestartLevelSignal>();
@@ -44,7 +42,13 @@ namespace Swing.Level
 
         public void ResolvePlayerSpawn(List<Tuple<PlayerData,GameObject>> spawned){
             List<SpawnPoint> availiblePoint = new List<SpawnPoint>(spawnPoints);
-            foreach(var player in spawned){
+            foreach(var spawnPoint in spawnPoints){
+                var hit = Physics2D.CircleCast(spawnPoint.spawnPoint.position, .5f, Vector2.up,0f);
+                if (hit.collider != null){
+                    availiblePoint.Remove(spawnPoint);
+                }
+            }
+            foreach(var player in spawned){  
                 var data = player.Item1;
                 var gameObject = player.Item2;
                 var spawnPoint = availiblePoint.First(element => element.team == data.team);

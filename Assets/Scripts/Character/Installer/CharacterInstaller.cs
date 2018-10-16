@@ -17,8 +17,6 @@ namespace Swing.Character
 
         public override void InstallBindings()
         {
-            SignalBusInstaller.Install(Container);
-
             Container.DeclareSignal<GrapplingFiredSignal>();
             Container.DeclareSignal<GrapplingReleasedSignal>();
 

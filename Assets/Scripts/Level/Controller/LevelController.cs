@@ -31,7 +31,7 @@ namespace Swing.Level
             signalBus.GetStream<GoalScoredSignal>()
                      .Subscribe(_ =>
                      {
-                        UniRx.Observable.Timer(TimeSpan.FromSeconds(5))
+                        Observable.Timer(TimeSpan.FromSeconds(5))
                                .Subscribe(__ =>
                                {
                                    gameBall.gameObject.transform.position = gameBall.restartPoint.position;
