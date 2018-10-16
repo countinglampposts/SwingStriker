@@ -11,7 +11,6 @@ namespace Swing.Player
     {
         [Inject] Camera playerCamera;
         [Inject] SignalBus signalBus;
-        [Inject] CameraSettings cameraSettings;
         [Inject] BodyRoot bodyRoot;
 
         public void Start()

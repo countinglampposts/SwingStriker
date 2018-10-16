@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Swing.Game
+namespace Swing.Player
 {
     [System.Serializable]
     public struct CameraSettings

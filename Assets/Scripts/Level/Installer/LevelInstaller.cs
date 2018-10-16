@@ -39,7 +39,13 @@ namespace Swing.Level
             Container.BindInstance(ball);
         }
 
-        public void OnDrawGizmos()
+        public void ResolvePlayerSpawn(params GameObject[] spawned){
+            for (int a = 0; a < spawned.Length;a++){
+                spawned[a].transform.position = spawnPoints[a].spawnPoint.position;
+            }
+        }
+
+        private void OnDrawGizmos()
         {
             foreach(var a in spawnPoints){
                 if(a.spawnPoint != null) Gizmos.DrawWireSphere(a.spawnPoint.position, .5f);
