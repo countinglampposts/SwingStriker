@@ -14,6 +14,7 @@ namespace Swing.Game
         [SerializeField] private CharacterCollection characters;
         [SerializeField] private TeamsData teams;
         [SerializeField] private SplitScreenLayouts layouts;
+        [SerializeField] private LevelTimeOptions timeOptions;
 
         public override void InstallBindings()
         {
@@ -21,6 +22,7 @@ namespace Swing.Game
             Container.BindInstance(characters);
             Container.BindInstance(teams);
             Container.BindInstance(layouts);
+            Container.BindInstance(timeOptions);
         }
     }
 }

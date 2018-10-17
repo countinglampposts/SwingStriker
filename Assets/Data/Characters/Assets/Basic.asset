@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Name: Basic
   m_EditorClassIdentifier: 
   prefab: {fileID: 1882858632572936, guid: 1050cb67d1aa843ecb17a490f5debb88, type: 2}
-  name: Basic B
+  displayName: Basic B
