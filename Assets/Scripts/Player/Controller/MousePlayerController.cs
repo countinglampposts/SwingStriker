@@ -8,9 +8,9 @@ namespace Swing.Player
 {
     public class MousePlayerController : MonoBehaviour
     {
-        [Inject] Camera playerCamera;
-        [Inject] SignalBus signalBus;
-        [Inject] BodyRoot bodyRoot;
+        [Inject] private Camera playerCamera;
+        [Inject] private SignalBus signalBus;
+        [Inject] private BodyRoot bodyRoot;
         [Inject] private CharacterState state;
 
         private void Start()
