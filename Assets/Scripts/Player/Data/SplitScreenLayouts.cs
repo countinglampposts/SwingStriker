@@ -4,7 +4,7 @@ using System;
 namespace Swing.Player
 {
     [CreateAssetMenu(menuName = "Swing/SplitScreenLayouts")]
-    public class SplitScreenLayouts :ScriptableObject
+    public class SplitScreenLayouts : ScriptableObject
     {
         public SplitScreenLayout[] layouts;
     }
@@ -16,7 +16,7 @@ namespace Swing.Player
     }
 
     [Serializable]
-    public struct CameraSettings
+    public class CameraSettings
     {
         public Rect viewportRect;
     }

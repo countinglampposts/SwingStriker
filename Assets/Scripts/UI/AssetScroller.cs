@@ -16,6 +16,8 @@ namespace Swing.UI
         Text text;
 
         private ReactiveProperty<int> index = new ReactiveProperty<int>();
+        private int usedIndex = 0;
+
 
         public void Init(IScrollableAsset scrollableAsset)
         {
@@ -27,11 +29,15 @@ namespace Swing.UI
                 .TakeUntilDestroy(this)
                 .Subscribe(currentIndex =>
                 {
-                    int usedIndex = (int)Mathf.Repeat(currentIndex, assets.Count);
+                    usedIndex = (int)Mathf.Repeat(currentIndex, assets.Count);
                     text.text = assets[usedIndex].displayName;
                 });
 
             index.Value = 0;
+        }
+
+        public int CurrentIndex(){
+            return usedIndex;
         }
     }
 }

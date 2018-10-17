@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Swing.Character;
 using UnityEngine;
 
 namespace Swing.Player
@@ -8,6 +9,6 @@ namespace Swing.Player
     public struct PlayerData
     {
         public int team;
-        public GameObject prefab;
+        public CharacterAsset character;
     }
 }

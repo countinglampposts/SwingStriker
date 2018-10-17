@@ -13,10 +13,12 @@ namespace Swing.Game
 {
     public class GameController : MonoBehaviour
     {
-        [SerializeField]
+        [Inject]
         private LevelAsset levelAsset;
-        [SerializeField]
+        [Inject]
         private PlayerData[] playersData;
+        [Inject]
+        private LevelTime time;
 
         [Inject]
         private TeamsData teams;
@@ -25,10 +27,9 @@ namespace Swing.Game
 
         [Inject] DiContainer container;
 
-        private void Start()
+        public void Start()
         {
             var levelContext = container.CreateSubContainer();
-            levelContext.BindInstance(teams);
             var level = levelContext.InstantiatePrefab(levelAsset.prefab).GetComponent<LevelInstaller>();
 
             var layout = layouts.layouts.First(a => a.settings.Length == playersData.Length);
@@ -45,16 +46,22 @@ namespace Swing.Game
         }
 
         private GameObject SpawnPlayer(PlayerData playerData, CameraSettings cameraSettings, InputDevice inputDevice, LevelInstaller level){
-            var playerContext = container.CreateSubContainer();
-            var characterState = new CharacterState();
-            playerContext.BindInstance(characterState);
-            playerContext.DeclareSignal<ResetPlayerSignal>();
-            playerContext.BindInstance(teams.teams.First(element => element.id == playerData.team));
-            playerContext.BindInstance(cameraSettings);
-            playerContext.BindInstance(inputDevice);
-            var instance = playerContext.InstantiatePrefab(playerData.prefab);
+            DiContainer playerContext = null;
+            CharacterState characterState = null;
+            GameObject instance = null;
 
-            playerContext.Resolve<SignalBus>()
+            Action MakeNewPlayer = null;
+            MakeNewPlayer = () =>
+            {
+                playerContext = container.CreateSubContainer();
+                characterState = new CharacterState();
+                playerContext.BindInstance(characterState);
+                playerContext.DeclareSignal<ResetPlayerSignal>();
+                playerContext.BindInstance(teams.teams.First(element => element.id == playerData.team));
+                playerContext.BindInstance(cameraSettings);
+                playerContext.BindInstance(inputDevice);
+                instance = playerContext.InstantiatePrefab(playerData.character.prefab);
+                playerContext.Resolve<SignalBus>()
                          .GetStream<ResetPlayerSignal>()
                          .Subscribe(_ =>
                          {
@@ -63,15 +70,19 @@ namespace Swing.Game
                              var oldInstance = instance;
                              Observable.Timer(TimeSpan.FromSeconds(3f))
                                        .Subscribe(__ => {
-                                           instance = playerContext.InstantiatePrefab(playerData.prefab);
-                                           characterState.localPlayerControl.Value = true;
+                                           characterState.isCorpse.Value = true;
+                                           //----RESETS ALL VALUES-----
+                                           MakeNewPlayer();
 
                                            level.ResolvePlayerSpawn(new List<Tuple<PlayerData, GameObject>> { new Tuple<PlayerData, GameObject>(playerData, instance) });
-
-                                           Destroy(oldInstance); 
-                                        });
+                                           Observable.Timer(TimeSpan.FromSeconds(30))
+                                                     .Subscribe(___ => GameObject.Destroy(oldInstance));
+                                       });
 
                          });
+            };
+
+            MakeNewPlayer();
 
             return instance;
         }
