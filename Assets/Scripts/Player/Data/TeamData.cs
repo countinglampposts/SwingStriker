@@ -4,6 +4,11 @@ using UnityEngine;
 
 namespace Swing.Player
 {
+    [CreateAssetMenu(menuName = "Swing/TeamsData")]
+    public class TeamsData : ScriptableObject{
+        public TeamData[] teams;
+    }
+
     [System.Serializable]
     public struct TeamData
     {

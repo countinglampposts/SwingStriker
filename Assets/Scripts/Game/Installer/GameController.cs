@@ -14,13 +14,14 @@ namespace Swing.Game
     public class GameController : MonoBehaviour
     {
         [SerializeField]
-        private LevelInstaller levelPrefab;
+        private LevelAsset levelAsset;
         [SerializeField]
         private PlayerData[] playersData;
-        [SerializeField]
-        private TeamData[] teams;
-        [SerializeField]
-        private SplitScreenLayout[] layouts;
+
+        [Inject]
+        private TeamsData teams;
+        [Inject]
+        private SplitScreenLayouts layouts;
 
         [Inject] DiContainer container;
 
@@ -28,9 +29,9 @@ namespace Swing.Game
         {
             var levelContext = container.CreateSubContainer();
             levelContext.BindInstance(teams);
-            var level = levelContext.InstantiatePrefab(levelPrefab).GetComponent<LevelInstaller>();
+            var level = levelContext.InstantiatePrefab(levelAsset.prefab).GetComponent<LevelInstaller>();
 
-            var layout = layouts.First(a => a.settings.Length == playersData.Length);
+            var layout = layouts.layouts.First(a => a.settings.Length == playersData.Length);
             var spawned = new List<Tuple<PlayerData, GameObject>>();
 
             for (int a = 0; a < layout.settings.Length; a++)
@@ -48,7 +49,7 @@ namespace Swing.Game
             var characterState = new CharacterState();
             playerContext.BindInstance(characterState);
             playerContext.DeclareSignal<ResetPlayerSignal>();
-            playerContext.BindInstance(teams.First(element => element.id == playerData.team));
+            playerContext.BindInstance(teams.teams.First(element => element.id == playerData.team));
             playerContext.BindInstance(cameraSettings);
             playerContext.BindInstance(inputDevice);
             var instance = playerContext.InstantiatePrefab(playerData.prefab);
