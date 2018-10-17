@@ -340,15 +340,15 @@ namespace InControl
 			thisCancelState = CancelAction == null ? CancelButton.IsPressed : CancelAction.IsPressed;
 		}
 
-        [SerializeField]
-        private int deviceIndex;
+        /*[SerializeField]
+        private int deviceIndex;*/
 
 		public InputDevice Device
 		{
 			set { inputDevice = value; }
 
-            //get { return inputDevice ?? InputManager.ActiveDevice; }
-            get { return inputDevice ?? ((InputManager.Devices != null && deviceIndex < InputManager.Devices.Count) ? InputManager.Devices[deviceIndex] : InputManager.ActiveDevice ); }
+            get { return inputDevice ?? InputManager.ActiveDevice; }
+            //get { return inputDevice ?? ((InputManager.Devices != null && deviceIndex < InputManager.Devices.Count) ? InputManager.Devices[deviceIndex] : InputManager.ActiveDevice ); }
 		}
 
 
