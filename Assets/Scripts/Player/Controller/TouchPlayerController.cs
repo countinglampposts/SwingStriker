@@ -7,13 +7,21 @@ using Swing.Game;
 
 namespace Swing.Player
 {
-    public class TouchPlayerController : MonoBehaviour, ICharacterDriver
+    public class TouchPlayerController : MonoBehaviour
     {
-        [Inject] Camera playerCamera;
-        [Inject] SignalBus signalBus;
-        [Inject] BodyRoot bodyRoot;
+        [Inject] private Camera playerCamera;
+        [Inject] private SignalBus signalBus;
+        [Inject] private BodyRoot bodyRoot;
+        [Inject] private CharacterState state;
 
         private bool locked = false;
+
+        private void Start()
+        {
+            state.localPlayerControl
+                 .TakeUntilDestroy(this)
+                 .Subscribe(localControl => enabled = localControl);
+        }
 
         public void Update()
         {

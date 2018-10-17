@@ -7,9 +7,10 @@ using Zenject;
 namespace Swing.Character
 {
     [RequireComponent(typeof(Joint2D))]
-    public class RopeEffect : MonoBehaviour, ICharacterDriver
+    public class RopeEffect : MonoBehaviour
     {
         [Inject] private CharacterSettings settings;
+
         private void Start()
         {
             var lineRenderer = Instantiate(settings.ropeEffect.gameObject,transform).GetComponent<LineRenderer>();
@@ -25,11 +26,6 @@ namespace Swing.Character
                             joint.connectedBody.transform.TransformPoint(joint.connectedAnchor)
                         });
              });
-        }
-
-        public void Disable()
-        {
-            enabled = false;
         }
     }
 }

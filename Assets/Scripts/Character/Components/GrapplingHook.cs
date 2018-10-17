@@ -11,7 +11,7 @@ namespace Swing.Character
 
     public class GrapplingReleasedSignal{}
 
-    public class GrapplingHook : MonoBehaviour, ICharacterDriver
+    public class GrapplingHook : MonoBehaviour
     {
         [SerializeField]
         private LayerMask mask;
@@ -24,11 +24,10 @@ namespace Swing.Character
 
         private GameObject currentRope;
 
-        public void Start()
+        private void Start()
         {
             signalBus.GetStream<GrapplingFiredSignal>()
                      .TakeUntilDestroy(this)
-                     .Where(_ => enabled)
                      .Subscribe((signal) =>
                      {
                         if (currentRope != null) Destroy(currentRope);
@@ -38,7 +37,6 @@ namespace Swing.Character
             signalBus.GetStream<GrapplingReleasedSignal>()
                      .Where(_ => currentRope != null)
                      .TakeUntilDestroy(this)
-                     .Where(_ => enabled)
                      .Subscribe(_ => Destroy(currentRope));
         }
 
@@ -72,13 +70,12 @@ namespace Swing.Character
             return anchor;
         }
 
-        public void Disable()
+        private void OnDestroy()
         {
             if (currentRope != null) Destroy(currentRope);
-            enabled = false;
         }
 
-        public void OnDrawGizmos()
+        private void OnDrawGizmos()
         {
             if(currentRope != null){
                 Vector3 position = currentRope.transform.position;

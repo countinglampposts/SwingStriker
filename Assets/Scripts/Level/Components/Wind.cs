@@ -24,6 +24,9 @@ namespace Swing.Level
 
         private void FixedUpdate()
         {
+            for (int a = collidedObjects.Count - 1; a >= 0;a--){
+                if (collidedObjects[a] == null) collidedObjects.RemoveAt(a);
+            }
             foreach(var rigidbody in collidedObjects){
                 rigidbody.AddForce(transform.TransformDirection(force),ForceMode2D.Force);
             }

@@ -272,6 +272,7 @@ GameObject:
   - component: {fileID: 33844923980236834}
   - component: {fileID: 23673108938484762}
   - component: {fileID: 114755220209888488}
+  - component: {fileID: 114085857877237926}
   m_Layer: 9
   m_Name: Pelvis
   m_TagString: Untagged
@@ -1659,6 +1660,17 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1468442281937186}
   m_Enabled: 1
+--- !u!114 &114085857877237926
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1826268662354792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b5a1f6c7623044f5a365286a0872501, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114106839325283696
 MonoBehaviour:
   m_ObjectHideFlags: 1

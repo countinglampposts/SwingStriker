@@ -6,14 +6,19 @@ using Swing.Game;
 
 namespace Swing.Player
 {
-    public class MousePlayerController : MonoBehaviour, ICharacterDriver
+    public class MousePlayerController : MonoBehaviour
     {
         [Inject] Camera playerCamera;
         [Inject] SignalBus signalBus;
         [Inject] BodyRoot bodyRoot;
+        [Inject] private CharacterState state;
 
-        public void Start()
+        private void Start()
         {
+            state.localPlayerControl
+                 .TakeUntilDestroy(this)
+                 .Subscribe(localControl => enabled = localControl);
+
             Observable.EveryUpdate()
                       .Where(_ => Input.GetKeyDown(KeyCode.Mouse0))
                       .Where(_ => playerCamera.pixelRect.Contains(Input.mousePosition))

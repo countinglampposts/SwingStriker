@@ -17,15 +17,20 @@ namespace Swing.Player
         public KeyCode fire;
     }
 
-    public class KeyPlayerController : MonoBehaviour, ICharacterDriver
+    public class KeyPlayerController : MonoBehaviour
     {
         [SerializeField] KeyMapping keyMapping;
 
         [Inject] BodyRoot bodyRoot;
         [Inject] SignalBus signalBus;
+        [Inject] private CharacterState state;
 
         private void Start()
         {
+            state.localPlayerControl
+                 .TakeUntilDestroy(this)
+                 .Subscribe(localControl => enabled = localControl);
+
             bool rightDown = false;
             bool leftDown = false;
 

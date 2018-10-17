@@ -42,6 +42,8 @@ namespace Swing.Game
 
         private GameObject SpawnPlayer(PlayerData playerData, CameraSettings cameraSettings, LevelInstaller level){
             var playerContext = Container.CreateSubContainer();
+            var characterState = new CharacterState();
+            playerContext.BindInstance(characterState);
             playerContext.DeclareSignal<ResetPlayerSignal>();
             playerContext.BindInstance(teams.First(element => element.id == playerData.team));
             playerContext.BindInstance(cameraSettings);
@@ -51,14 +53,14 @@ namespace Swing.Game
                          .GetStream<ResetPlayerSignal>()
                          .Subscribe(_ =>
                          {
-                             foreach(var a in instance.GetComponentsInChildren<ICharacterDriver>()){
-                                 a.Disable();
-                             }
+                             characterState.localPlayerControl.Value = false;
+
                              var oldInstance = instance;
                              Observable.Timer(TimeSpan.FromSeconds(3f))
                                        .Subscribe(__ => {
-
                                            instance = playerContext.InstantiatePrefab(playerData.prefab);
+                                           characterState.localPlayerControl.Value = true;
+
                                            level.ResolvePlayerSpawn(new List<Tuple<PlayerData, GameObject>> { new Tuple<PlayerData, GameObject>(playerData, instance) });
 
                                            Destroy(oldInstance); 
