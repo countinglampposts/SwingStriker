@@ -38,7 +38,8 @@ namespace Swing.Game
             for (int a = 0; a < layout.settings.Length; a++)
             {
                 var playerData = playersData[a];
-                var instance = SpawnPlayer(playerData, layout.settings[a], InputManager.Devices[a], level);
+                var device = (a < InputManager.Devices.Count) ? InputManager.Devices[a] : null;
+                var instance = SpawnPlayer(playerData, layout.settings[a], device, level);
 
                 spawned.Add(new Tuple<PlayerData, GameObject>(playerData, instance));
             }
@@ -59,7 +60,7 @@ namespace Swing.Game
                 playerContext.DeclareSignal<ResetPlayerSignal>();
                 playerContext.BindInstance(teams.teams.First(element => element.id == playerData.team));
                 playerContext.BindInstance(cameraSettings);
-                playerContext.BindInstance(inputDevice);
+                if(inputDevice != null) playerContext.BindInstance(inputDevice);
                 instance = playerContext.InstantiatePrefab(playerData.character.prefab);
                 playerContext.Resolve<SignalBus>()
                          .GetStream<ResetPlayerSignal>()

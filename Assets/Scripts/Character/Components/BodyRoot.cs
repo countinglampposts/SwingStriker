@@ -32,7 +32,8 @@ namespace Swing.Character
             Action<BodyPart, BodyPart> addChildComponents = (BodyPart parent, BodyPart child) =>
             {
                 var gameObject = child.gameObject;
-                gameObject.AddComponent<Rigidbody2D>();
+                var rigidBody = gameObject.AddComponent<Rigidbody2D>();
+                rigidBody.mass = settings.mass;
 
                 if (parent != null)
                 {

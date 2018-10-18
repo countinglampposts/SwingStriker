@@ -8,12 +8,12 @@ namespace Swing.Player
     public class GamepadPlayerController : MonoBehaviour
     {
         [Inject] SignalBus signalBus;
-        [Inject] InputDevice inputDevice;
+        [InjectOptional] InputDevice inputDevice;
         [Inject] CharacterState state;
 
         private void Update()
         {
-            if (state.localPlayerControl.Value == true)
+            if (state.localPlayerControl.Value == true && inputDevice != null)
             {
                 if (inputDevice.RightTrigger.WasPressed)
                 {

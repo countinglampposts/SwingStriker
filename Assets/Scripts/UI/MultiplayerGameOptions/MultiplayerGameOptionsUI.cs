@@ -44,6 +44,8 @@ namespace Swing.UI
                 for (int a = 0; a < InputManager.Devices.Count;a++){
                     playersData.Add(new PlayerData { team = a%2, character = characterAsset });
                 }
+                if(playersData.Count == 0) playersData.Add(new PlayerData { character = characterAsset });
+
                 gameContext.BindInstance(playersData.ToArray());
 
                 gameContext.InstantiatePrefab(gamePrefab);

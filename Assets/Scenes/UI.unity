@@ -170,52 +170,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &158409199
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4092289493126734, guid: 89f0d47e9f3d74a229e4711bd992af79, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4092289493126734, guid: 89f0d47e9f3d74a229e4711bd992af79, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4092289493126734, guid: 89f0d47e9f3d74a229e4711bd992af79, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4092289493126734, guid: 89f0d47e9f3d74a229e4711bd992af79, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4092289493126734, guid: 89f0d47e9f3d74a229e4711bd992af79, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4092289493126734, guid: 89f0d47e9f3d74a229e4711bd992af79, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4092289493126734, guid: 89f0d47e9f3d74a229e4711bd992af79, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4092289493126734, guid: 89f0d47e9f3d74a229e4711bd992af79, type: 2}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1704185641444824, guid: 89f0d47e9f3d74a229e4711bd992af79, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 89f0d47e9f3d74a229e4711bd992af79, type: 2}
-  m_IsPrefabAsset: 0
 --- !u!1 &334654892
 GameObject:
   m_ObjectHideFlags: 0
@@ -1684,7 +1638,7 @@ MonoBehaviour:
   levelScroller: {fileID: 334654895}
   timeScroller: {fileID: 1842873529}
   playButton: {fileID: 1653139439}
-  characterAsset: {fileID: 11400000, guid: cd2000dc2341c408780db67fa5f594c3, type: 2}
+  characterAsset: {fileID: 11400000, guid: 157b66b751a0443289dbaeba1b60c08b, type: 2}
   gamePrefab: {fileID: 114430266536700314, guid: 97768017860bd48aa954a860347f2821,
     type: 2}
 --- !u!1 &2131765377
