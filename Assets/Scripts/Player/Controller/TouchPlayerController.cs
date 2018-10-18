@@ -31,7 +31,8 @@ namespace Swing.Player
 
                 foreach (var touch in touches)
                 {
-                    signalBus.Fire(new GrapplingFiredSignal() { direction = playerCamera.ScreenToWorldPoint(touch.position) - bodyRoot.rootBodyPart.transform.position });
+                    state.aimDirection.Value = playerCamera.ScreenToWorldPoint(touch.position) - bodyRoot.rootBodyPart.transform.position;
+                    signalBus.Fire<GrapplingFiredSignal>();
                     locked = true;
                     Observable.EveryUpdate()
                               .Where(__ => Input.touches.First(selectedTouch => selectedTouch.fingerId == touch.fingerId).phase == TouchPhase.Ended)

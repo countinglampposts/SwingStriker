@@ -21,10 +21,18 @@ namespace Swing.Player
 
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
+                      .Where(_ => playerCamera.pixelRect.Contains(Input.mousePosition))
+                      .Subscribe(_ =>
+                      {
+                          state.aimDirection.Value = playerCamera.ScreenToWorldPoint(Input.mousePosition) - bodyRoot.rootBodyPart.transform.position;
+                      });
+
+            Observable.EveryUpdate()
+                      .TakeUntilDestroy(this)
                       .Where(_ => Input.GetKeyDown(KeyCode.Mouse0))
                       .Where(_ => playerCamera.pixelRect.Contains(Input.mousePosition))
                       .Where(_ => enabled)
-                      .Subscribe(_ => signalBus.Fire(new GrapplingFiredSignal() { direction = playerCamera.ScreenToWorldPoint(Input.mousePosition) - bodyRoot.rootBodyPart.transform.position}));
+                      .Subscribe(_ => signalBus.Fire<GrapplingFiredSignal>());
 
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)

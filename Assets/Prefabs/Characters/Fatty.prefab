@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 114669647397069756}
   - component: {fileID: 114132042341316970}
   - component: {fileID: 114502341037049118}
+  - component: {fileID: 114268487049045554}
   m_Layer: 9
   m_Name: L hand
   m_TagString: Untagged
@@ -348,7 +349,6 @@ GameObject:
   - component: {fileID: 114923414322800712}
   - component: {fileID: 114106839325283696}
   - component: {fileID: 114870661718886052}
-  - component: {fileID: 114387166094050978}
   - component: {fileID: 114981180900963388}
   - component: {fileID: 114220243126425398}
   m_Layer: 9
@@ -1697,7 +1697,12 @@ MonoBehaviour:
       type: 2}
     ropeEffect: {fileID: 120737986554554048, guid: e752f7f35b7344b529448196adb03172,
       type: 2}
+    laserEffect: {fileID: 120737986554554048, guid: 9fc44a8db4c86449081d57f342bcd018,
+      type: 2}
     physicsMaterial: {fileID: 6200000, guid: 5b70a68aebb9a45a98c73f0900cc7644, type: 2}
+    grapplingMask:
+      serializedVersion: 2
+      m_Bits: 1024
 --- !u!114 &114132042341316970
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1811,6 +1816,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootBodyPart: {fileID: 114204132126281104}
+--- !u!114 &114268487049045554
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1365907436019740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 671757f0bedd34cedb83ffb735695e17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114296396246059932
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1836,23 +1852,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 728a654e1b8b4483f831004caad2a27d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114387166094050978
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1882858632572936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07f0d28ba2c0b4e0d9cfb5f212aff94b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  keyMapping:
-    left: 276
-    right: 275
-    up: 273
-    down: 274
-    fire: 303
 --- !u!114 &114502341037049118
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1928,10 +1927,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29b178a8235e940f5888f72205b6d44f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mask:
-    serializedVersion: 2
-    m_Bits: 1024
-  launcher: {fileID: 1365907436019740}
 --- !u!114 &114704963105246790
 MonoBehaviour:
   m_ObjectHideFlags: 1

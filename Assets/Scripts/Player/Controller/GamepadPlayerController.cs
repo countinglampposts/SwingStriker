@@ -17,10 +17,11 @@ namespace Swing.Player
             var inputDevice = InputManager.Devices.FirstOrDefault(device => device.GUID == playerData.deviceID);
             if (state.localPlayerControl.Value == true && inputDevice != null)
             {
+                var direction = new Vector2(inputDevice.RightStickX, inputDevice.RightStickY).normalized;
+                state.aimDirection.Value = direction;
                 if (inputDevice.RightTrigger.WasPressed)
                 {
-                    var direction = new Vector2(inputDevice.RightStickX, inputDevice.RightStickY).normalized;
-                    signalBus.Fire(new GrapplingFiredSignal { direction = direction });
+                    signalBus.Fire<GrapplingFiredSignal>();
                 }
 
                 if (inputDevice.RightTrigger.WasReleased)

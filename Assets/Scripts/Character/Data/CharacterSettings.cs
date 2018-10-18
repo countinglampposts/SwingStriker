@@ -26,6 +26,10 @@ namespace Swing.Character
         [SerializeField]
         public LineRenderer ropeEffect;
         [SerializeField]
+        public LineRenderer laserEffect;
+        [SerializeField]
         public PhysicsMaterial2D physicsMaterial;
+        [SerializeField]
+        public LayerMask grapplingMask;
     }
 }

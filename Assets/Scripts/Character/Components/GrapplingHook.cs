@@ -4,23 +4,16 @@ using UniRx;
 
 namespace Swing.Character
 {
-    public class GrapplingFiredSignal
-    {
-        public Vector3 direction;
-    }
+    public class GrapplingFiredSignal{}
 
     public class GrapplingReleasedSignal{}
 
     public class GrapplingHook : MonoBehaviour
     {
-        [SerializeField]
-        private LayerMask mask;
-        [SerializeField]
-        private GameObject launcher;
-
         [Inject] private SignalBus signalBus;
         [Inject] private CharacterSettings settings;
         [Inject] private DiContainer container;
+        [Inject] private CharacterState characterState;
 
         private GameObject currentRope;
 
@@ -28,10 +21,10 @@ namespace Swing.Character
         {
             signalBus.GetStream<GrapplingFiredSignal>()
                      .TakeUntilDestroy(this)
-                     .Subscribe((signal) =>
+                     .Subscribe(_ =>
                      {
                         if (currentRope != null) Destroy(currentRope);
-                        currentRope = ConnectRope(launcher.GetComponent<Rigidbody2D>(), signal.direction, mask.value);
+                        currentRope = ConnectRope(GetComponent<Rigidbody2D>(), characterState.aimDirection.Value, settings.grapplingMask.value);
                      });
 
             signalBus.GetStream<GrapplingReleasedSignal>()

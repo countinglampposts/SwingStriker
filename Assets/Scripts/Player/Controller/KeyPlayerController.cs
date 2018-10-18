@@ -61,14 +61,22 @@ namespace Swing.Player
 
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
-                      .Where(_ => Input.GetKeyDown(keyMapping.fire))
                       .Where(_ => enabled)
                       .Subscribe(_ =>
                       {
                           Vector3 direction = (upDown) ? Vector3.up : (downDown) ? Vector3.down : Vector3.zero;
                           direction += (leftDown) ? Vector3.left : (rightDown) ? Vector3.right : Vector3.zero;
                           direction = (direction == Vector3.zero) ? Vector3.up : direction;
-                          signalBus.Fire(new GrapplingFiredSignal() { direction = direction });
+                          state.aimDirection.Value = direction;
+                      });
+
+            Observable.EveryUpdate()
+                      .TakeUntilDestroy(this)
+                      .Where(_ => Input.GetKeyDown(keyMapping.fire))
+                      .Where(_ => enabled)
+                      .Subscribe(_ =>
+                      {
+                          signalBus.Fire<GrapplingFiredSignal>();
                       });
 
             Observable.EveryUpdate()
