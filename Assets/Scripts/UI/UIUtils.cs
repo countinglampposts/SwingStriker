@@ -12,7 +12,7 @@ namespace Swing.UI
 {
     public static class UIUtils
     {
-        public static IDisposable AddGamepadButtonPressToButton(Button button, int actionIndex)
+        public static IDisposable BindToAllDevices(Button button, int actionIndex)
         {
             return BindToDevice(button, actionIndex, Guid.Empty);
         }

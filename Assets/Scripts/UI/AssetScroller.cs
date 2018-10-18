@@ -41,12 +41,17 @@ namespace Swing.UI
             index.Value = 0;
         }
 
+        public IDisposable BindToAllDevices()
+        {
+            return BindToDevice(Guid.Empty);
+        }
+
         public IDisposable BindToDevice(Guid deviceID)
         {
             disposables = new CompositeDisposable();
             Observable.EveryUpdate()
                       .Where(_ => enabled)
-                      .Select(_ => InputManager.Devices.FirstOrDefault(device => device.GUID == deviceID))
+                      .Select(_ => (deviceID == Guid.Empty)? InputManager.ActiveDevice : InputManager.Devices.FirstOrDefault(device => device.GUID == deviceID))
                       .Where(device => device != null)
                       .Select(device => device.RightStickX < -.9f || device.LeftStickX < -.9f || device.DPadX < -.9f)
                       .DistinctUntilChanged()
@@ -56,7 +61,7 @@ namespace Swing.UI
 
             Observable.EveryUpdate()
                       .Where(_ => enabled)
-                      .Select(_ => InputManager.Devices.FirstOrDefault(device => device.GUID == deviceID))
+                      .Select(_ => (deviceID == Guid.Empty) ? InputManager.ActiveDevice : InputManager.Devices.FirstOrDefault(device => device.GUID == deviceID))
                       .Where(device => device != null)
                       .Select(device => device.RightStickX > .9f || device.LeftStickX > .9f || device.DPadX > .9f)
                       .DistinctUntilChanged()

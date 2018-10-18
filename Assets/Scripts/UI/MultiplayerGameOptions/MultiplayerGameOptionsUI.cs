@@ -8,18 +8,32 @@ using Swing.Player;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using UniRx;
 
 namespace Swing.UI
 {
 
     public class MultiplayerGameOptionsUI : MonoBehaviour
     {
+        [System.Serializable]
+        public class LevelSelectMenu
+        {
+            public GameObject root;
+            public AssetScroller scroller;
+            public Button nextButton;
+        }
+        [System.Serializable]
+        public class TimeSelectMenu
+        {
+            public GameObject root;
+            public AssetScroller scroller;
+            public Button nextButton;
+            public Button backButton;
+        }
         [SerializeField]
-        private AssetScroller levelScroller;
+        private LevelSelectMenu levelSelectMenu;
         [SerializeField]
-        private AssetScroller timeScroller;
-        [SerializeField]
-        private Button playButton;
+        private TimeSelectMenu timeSelectMenu;
         [SerializeField]
         private GameObject nextUI;
 
@@ -29,22 +43,46 @@ namespace Swing.UI
 
         private void Start()
         {
-            levelScroller.Init(levels);
-            timeScroller.Init(levelTimeOptions);
+            levelSelectMenu.scroller.Init(levels);
+            levelSelectMenu.scroller.BindToAllDevices();
 
-            playButton.onClick.AddListener(() =>
-            {
-                var level = levels.levels[levelScroller.CurrentIndex()];
-                container.Unbind(level.GetType());
-                container.BindInstance(level);
+            UIUtils.BindToAllDevices(levelSelectMenu.nextButton,0);
+            levelSelectMenu.nextButton.onClick.AsObservable()
+                          .TakeUntilDestroy(this)
+                          .Subscribe(_ =>
+                          {
+                              var level = levels.levels[levelSelectMenu.scroller.CurrentIndex()];
+                              container.Unbind(level.GetType());
+                              container.BindInstance(level);
 
-                var levelTime = levelTimeOptions.levelTimes[timeScroller.CurrentIndex()];
-                container.Unbind(levelTime.GetType());
-                container.BindInstance(levelTime);
+                              levelSelectMenu.root.SetActive(false);
+                              timeSelectMenu.root.SetActive(true);
+                          });
 
-                gameObject.SetActive(false);
-                nextUI.SetActive(true);
-            });
+            timeSelectMenu.scroller.Init(levelTimeOptions);
+            timeSelectMenu.scroller.BindToAllDevices();
+
+            UIUtils.BindToAllDevices(timeSelectMenu.backButton, 1);
+            timeSelectMenu.backButton.onClick.AsObservable()
+                          .TakeUntilDestroy(this)
+                          .Subscribe(_ =>
+                          {
+                              timeSelectMenu.root.SetActive(false);
+                              levelSelectMenu.root.SetActive(true);
+                          });
+
+            UIUtils.BindToAllDevices(timeSelectMenu.nextButton,0);
+            timeSelectMenu.nextButton.onClick.AsObservable()
+                          .TakeUntilDestroy(this)
+                          .Subscribe(_ =>
+                          {
+                              var levelTime = levelTimeOptions.levelTimes[timeSelectMenu.scroller.CurrentIndex()];
+                              container.Unbind(levelTime.GetType());
+                              container.BindInstance(levelTime);
+
+                              gameObject.SetActive(false);
+                              nextUI.SetActive(true);
+                          });
         }
     }
 }

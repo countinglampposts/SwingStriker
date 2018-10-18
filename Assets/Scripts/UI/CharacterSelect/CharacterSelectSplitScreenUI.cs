@@ -38,7 +38,7 @@ namespace Swing.UI
                       .Select(_ => selectUIs.Any(ui => ui.isSelecting) && selectUIs.Where(ui => ui.isSelecting).All(ui => ui.isReady))
                       .DistinctUntilChanged()
                       .Subscribe(showButton => goButton.gameObject.SetActive(showButton));
-            UIUtils.AddGamepadButtonPressToButton(goButton, 0);
+            UIUtils.BindToAllDevices(goButton, 0);
             goButton.onClick.AddListener(() =>
             {
                 var players = selectUIs.Where(ui => ui.isReady).Select(ui => ui.GetPlayerData()).ToArray();
@@ -54,7 +54,7 @@ namespace Swing.UI
                       .Where(_ => gameObject.activeInHierarchy && gameObject.activeSelf)
                       .Select(_ => selectUIs.All(ui => !ui.isSelecting))
                       .Subscribe(showButton => backButton.gameObject.SetActive(showButton));
-            UIUtils.AddGamepadButtonPressToButton(backButton, 1);
+            UIUtils.BindToAllDevices(backButton, 1);
             backButton.onClick.AddListener(() =>
             {
                 root.SetActive(false);
