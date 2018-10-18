@@ -21,9 +21,7 @@ namespace Swing.UI
         [SerializeField]
         private Button playButton;
         [SerializeField]
-        private CharacterAsset characterAsset;
-        [SerializeField]
-        private GameController gamePrefab;
+        private GameObject nextUI;
 
         [Inject] LevelCollection levels;
         [Inject] LevelTimeOptions levelTimeOptions;
@@ -36,21 +34,13 @@ namespace Swing.UI
 
             playButton.onClick.AddListener(() =>
             {
-                var gameContext = container.CreateSubContainer();
-                gameContext.BindInstance(levels.levels[levelScroller.CurrentIndex()]);
-                gameContext.BindInstance(levelTimeOptions.levelTimes[timeScroller.CurrentIndex()]);
-
-                List<PlayerData> playersData = new List<PlayerData>();
-                for (int a = 0; a < InputManager.Devices.Count;a++){
-                    playersData.Add(new PlayerData { team = a%2, character = characterAsset });
-                }
-                if(playersData.Count == 0) playersData.Add(new PlayerData { character = characterAsset });
-
-                gameContext.BindInstance(playersData.ToArray());
-
-                gameContext.InstantiatePrefab(gamePrefab);
+                container.BindInstance(levels.levels[levelScroller.CurrentIndex()])
+                         .AsSingle();
+                container.BindInstance(levelTimeOptions.levelTimes[timeScroller.CurrentIndex()])
+                         .AsSingle();
 
                 gameObject.SetActive(false);
+                nextUI.SetActive(true);
             });
         }
     }

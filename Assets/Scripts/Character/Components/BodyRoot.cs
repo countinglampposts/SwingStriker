@@ -31,9 +31,12 @@ namespace Swing.Character
 
             Action<BodyPart, BodyPart> addChildComponents = (BodyPart parent, BodyPart child) =>
             {
+                child.GetComponent<Collider2D>().sharedMaterial = settings.physicsMaterial;
                 var gameObject = child.gameObject;
                 var rigidBody = gameObject.AddComponent<Rigidbody2D>();
                 rigidBody.mass = settings.mass;
+                rigidBody.drag = rigidBody.angularDrag = settings.drag;
+                rigidBody.gravityScale = settings.gravity;
 
                 if (parent != null)
                 {

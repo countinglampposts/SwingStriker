@@ -51,7 +51,7 @@ namespace Swing.Level
             foreach(var player in spawned){  
                 var data = player.Item1;
                 var gameObject = player.Item2;
-                var spawnPoint = availiblePoint.First(element => element.team == data.team);
+                var spawnPoint = availiblePoint.First(element => element.team == data.team.id);
                 gameObject.transform.position = spawnPoint.spawnPoint.position;
                 availiblePoint.Remove(spawnPoint);
             }

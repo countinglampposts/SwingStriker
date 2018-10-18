@@ -13,6 +13,5 @@ namespace Swing
                 action => signalBus.Subscribe<T>(action),
                 action => signalBus.Unsubscribe<T>(action));
         }
-
     }
 }

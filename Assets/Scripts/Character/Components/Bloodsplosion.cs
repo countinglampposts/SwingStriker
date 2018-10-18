@@ -24,9 +24,9 @@ namespace Swing.Character
         void AutoDestructionParticleSystem(GameObject gameObject){
             var ps = gameObject.GetComponent<ParticleSystem>();
             Observable.EveryUpdate()
+                      .TakeUntilDestroy(gameObject)
                       .Skip(5)
                       .Where(_ => ps.particleCount == 0)
-                      .TakeUntilDestroy(gameObject)
                       .Subscribe(_ => Destroy(gameObject));
         }
     }

@@ -35,34 +35,34 @@ namespace Swing.Player
             bool leftDown = false;
 
             Observable.EveryUpdate()
+                      .TakeUntilDestroy(this)
                       .Select(_ => Input.GetKey(keyMapping.right))
                       .Where(_ => enabled)
-                      .TakeUntilDestroy(this)
                       .Subscribe(isDown => rightDown = isDown);
             Observable.EveryUpdate()
+                      .TakeUntilDestroy(this)
                       .Select(_ => Input.GetKey(keyMapping.left))
                       .Where(_ => enabled)
-                      .TakeUntilDestroy(this)
                       .Subscribe(isDown => leftDown = isDown);
 
             bool upDown = false;
             bool downDown = false;
 
             Observable.EveryUpdate()
+                      .TakeUntilDestroy(this)
                       .Select(_ => Input.GetKey(keyMapping.up))
                       .Where(_ => enabled)
-                      .TakeUntilDestroy(this)
                       .Subscribe(isDown => upDown = isDown);
             Observable.EveryUpdate()
+                      .TakeUntilDestroy(this)
                       .Select(_ => Input.GetKey(keyMapping.down))
                       .Where(_ => enabled)
-                      .TakeUntilDestroy(this)
                       .Subscribe(isDown => downDown = isDown);
 
             Observable.EveryUpdate()
+                      .TakeUntilDestroy(this)
                       .Where(_ => Input.GetKeyDown(keyMapping.fire))
                       .Where(_ => enabled)
-                      .TakeUntilDestroy(this)
                       .Subscribe(_ =>
                       {
                           Vector3 direction = (upDown) ? Vector3.up : (downDown) ? Vector3.down : Vector3.zero;
@@ -72,9 +72,9 @@ namespace Swing.Player
                       });
 
             Observable.EveryUpdate()
+                      .TakeUntilDestroy(this)
                       .Where(_ => Input.GetKeyUp(keyMapping.fire))
                       .Where(_ => enabled)
-                      .TakeUntilDestroy(this)
                       .Subscribe(_ => signalBus.Fire<GrapplingReleasedSignal>());
         }
 

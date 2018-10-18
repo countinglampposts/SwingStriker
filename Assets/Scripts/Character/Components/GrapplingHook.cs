@@ -35,8 +35,8 @@ namespace Swing.Character
                      });
 
             signalBus.GetStream<GrapplingReleasedSignal>()
-                     .Where(_ => currentRope != null)
                      .TakeUntilDestroy(this)
+                     .Where(_ => currentRope != null)
                      .Subscribe(_ => Destroy(currentRope));
         }
 

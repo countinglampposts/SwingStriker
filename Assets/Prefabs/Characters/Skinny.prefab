@@ -365,7 +365,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1882858632572936}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.56, y: 0, z: 0}
+  m_LocalPosition: {x: -6, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4403813641404540}
@@ -1697,14 +1697,18 @@ MonoBehaviour:
   playerCamera: {fileID: 20936669961252514}
   root: {fileID: 114250153146029506}
   settings:
-    breakforce: 1500
-    ropeSpringFrequency: 1
+    breakforce: 1250
+    ropeSpringFrequency: 1.1
     grapplingDistance: 50
     mass: 0.5
+    collideWithSelf: 1
+    drag: 0.05
+    gravity: 1
     bloodsplosionEffect: {fileID: 1248047097124180, guid: 13d2a5f6019394802a217c5c58f4289e,
       type: 2}
     ropeEffect: {fileID: 120737986554554048, guid: e752f7f35b7344b529448196adb03172,
       type: 2}
+    physicsMaterial: {fileID: 6200000, guid: 5b70a68aebb9a45a98c73f0900cc7644, type: 2}
 --- !u!114 &114132042341316970
 MonoBehaviour:
   m_ObjectHideFlags: 1

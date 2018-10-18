@@ -13,18 +13,10 @@ namespace Swing.Game
 {
     public class GameController : MonoBehaviour
     {
-        [Inject]
-        private LevelAsset levelAsset;
-        [Inject]
-        private PlayerData[] playersData;
-        [Inject]
-        private LevelTime time;
-
-        [Inject]
-        private TeamsData teams;
-        [Inject]
-        private SplitScreenLayouts layouts;
-
+        [Inject] private LevelAsset levelAsset;
+        [Inject] private PlayerData[] playersData;
+        [Inject] private LevelTime time;
+        [Inject] private SplitScreenLayouts layouts;
         [Inject] DiContainer container;
 
         public void Start()
@@ -38,7 +30,7 @@ namespace Swing.Game
             for (int a = 0; a < layout.settings.Length; a++)
             {
                 var playerData = playersData[a];
-                var device = (a < InputManager.Devices.Count) ? InputManager.Devices[a] : null;
+                var device = InputManager.Devices.FirstOrDefault(selectedDevice => selectedDevice.GUID == playerData.deviceID);
                 var instance = SpawnPlayer(playerData, layout.settings[a], device, level);
 
                 spawned.Add(new Tuple<PlayerData, GameObject>(playerData, instance));
@@ -56,9 +48,9 @@ namespace Swing.Game
             {
                 playerContext = container.CreateSubContainer();
                 characterState = new CharacterState();
-                playerContext.BindInstance(characterState);
                 playerContext.DeclareSignal<ResetPlayerSignal>();
-                playerContext.BindInstance(teams.teams.First(element => element.id == playerData.team));
+                playerContext.BindInstance(characterState);
+                playerContext.BindInstance(playerData.team);
                 playerContext.BindInstance(cameraSettings);
                 if(inputDevice != null) playerContext.BindInstance(inputDevice);
                 instance = playerContext.InstantiatePrefab(playerData.character.prefab);

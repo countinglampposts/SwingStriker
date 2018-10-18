@@ -23,8 +23,8 @@ namespace Swing.Player
                  .Subscribe(_ => movedCamera.enabled = false);
 
             Observable.EveryUpdate()
-                  .Where(_ => state.localPlayerControl.Value)
                   .TakeUntilDestroy(this)
+                  .Where(_ => state.localPlayerControl.Value)
                   .Subscribe(_ =>
                   {
                       Vector3 cameraPosition = movedCamera.transform.position;
