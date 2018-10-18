@@ -44,11 +44,9 @@ namespace Swing.UI
         public IDisposable BindToDevice(Guid deviceID)
         {
             disposables = new CompositeDisposable();
-            Debug.Log("Binding Asset Scroller");
             Observable.EveryUpdate()
                       .Where(_ => enabled)
                       .Select(_ => InputManager.Devices.FirstOrDefault(device => device.GUID == deviceID))
-                      .Debug()
                       .Where(device => device != null)
                       .Select(device => device.RightStickX < -.9f || device.LeftStickX < -.9f || device.DPadX < -.9f)
                       .DistinctUntilChanged()

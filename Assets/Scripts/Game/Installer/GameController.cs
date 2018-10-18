@@ -30,15 +30,14 @@ namespace Swing.Game
             for (int a = 0; a < layout.settings.Length; a++)
             {
                 var playerData = playersData[a];
-                var device = InputManager.Devices.FirstOrDefault(selectedDevice => selectedDevice.GUID == playerData.deviceID);
-                var instance = SpawnPlayer(playerData, layout.settings[a], device, level);
+                var instance = SpawnPlayer(playerData, layout.settings[a], level);
 
                 spawned.Add(new Tuple<PlayerData, GameObject>(playerData, instance));
             }
             level.ResolvePlayerSpawn(spawned);
         }
 
-        private GameObject SpawnPlayer(PlayerData playerData, CameraSettings cameraSettings, InputDevice inputDevice, LevelInstaller level){
+        private GameObject SpawnPlayer(PlayerData playerData, CameraSettings cameraSettings, LevelInstaller level){
             DiContainer playerContext = null;
             CharacterState characterState = null;
             GameObject instance = null;
@@ -50,9 +49,8 @@ namespace Swing.Game
                 characterState = new CharacterState();
                 playerContext.DeclareSignal<ResetPlayerSignal>();
                 playerContext.BindInstance(characterState);
-                playerContext.BindInstance(playerData.team);
+                playerContext.BindInstance(playerData);
                 playerContext.BindInstance(cameraSettings);
-                if(inputDevice != null) playerContext.BindInstance(inputDevice);
                 instance = playerContext.InstantiatePrefab(playerData.character.prefab);
                 playerContext.Resolve<SignalBus>()
                          .GetStream<ResetPlayerSignal>()

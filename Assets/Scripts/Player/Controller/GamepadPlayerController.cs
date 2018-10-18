@@ -2,17 +2,19 @@
 using UnityEngine;
 using Zenject;
 using Swing.Character;
+using System.Linq;
 
 namespace Swing.Player
 {
     public class GamepadPlayerController : MonoBehaviour
     {
         [Inject] SignalBus signalBus;
-        [InjectOptional] InputDevice inputDevice;
+        [Inject] PlayerData playerData;
         [Inject] CharacterState state;
 
         private void Update()
         {
+            var inputDevice = InputManager.Devices.FirstOrDefault(device => device.GUID == playerData.deviceID);
             if (state.localPlayerControl.Value == true && inputDevice != null)
             {
                 if (inputDevice.RightTrigger.WasPressed)

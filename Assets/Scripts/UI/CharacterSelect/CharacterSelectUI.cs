@@ -79,7 +79,6 @@ namespace Swing.UI
 
         public void BindToDevice(Guid deviceID)
         {
-            Debug.Log("Binding select UI");
             if (isClaimed) Debug.LogError("Trying to set a new deviceID for claimed CharacterSelectUI");
 
             isClaimed = true;

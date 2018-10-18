@@ -9,11 +9,11 @@ namespace Swing.Character
     [RequireComponent(typeof(Renderer))]
     public class TeamColored : MonoBehaviour
     {
-        [InjectOptional] TeamData teamData;
+        [Inject] PlayerData playerData;
 
         private void Start()
         {
-            GetComponent<Renderer>().material.color = teamData.color;
+            GetComponent<Renderer>().material.color = playerData.team.color;
         }
     }
 }
