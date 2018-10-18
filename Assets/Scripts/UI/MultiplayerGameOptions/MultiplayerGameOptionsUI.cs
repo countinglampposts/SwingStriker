@@ -34,10 +34,13 @@ namespace Swing.UI
 
             playButton.onClick.AddListener(() =>
             {
-                container.BindInstance(levels.levels[levelScroller.CurrentIndex()])
-                         .AsSingle();
-                container.BindInstance(levelTimeOptions.levelTimes[timeScroller.CurrentIndex()])
-                         .AsSingle();
+                var level = levels.levels[levelScroller.CurrentIndex()];
+                container.Unbind(level.GetType());
+                container.BindInstance(level);
+
+                var levelTime = levelTimeOptions.levelTimes[timeScroller.CurrentIndex()];
+                container.Unbind(levelTime.GetType());
+                container.BindInstance(levelTime);
 
                 gameObject.SetActive(false);
                 nextUI.SetActive(true);

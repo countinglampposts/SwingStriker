@@ -12,12 +12,17 @@ namespace Swing.UI
 {
     public static class UIUtils
     {
+        public static void AddGamepadButtonPressToButton(Button button, int actionIndex)
+        {
+            AddGamepadButtonPressToButton(button, actionIndex, Guid.Empty);
+        }
+
         public static void AddGamepadButtonPressToButton(Button button, int actionIndex, Guid deviceID)
         {
             Observable.EveryUpdate()
                       .TakeUntilDestroy(button)
                       .Where(_ => button.gameObject.activeSelf && button.gameObject.activeInHierarchy)
-                      .Select(_ => InputManager.Devices.First(device => device.GUID == deviceID))
+                      .Select(_ => (deviceID == Guid.Empty)? InputManager.ActiveDevice : InputManager.Devices.FirstOrDefault(device => device.GUID == deviceID))
                       .Where(device => device != null)
                       .Where(device => { switch (actionIndex)
                           {
