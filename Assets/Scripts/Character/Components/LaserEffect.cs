@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using Zenject;
+using Swing.Player;
 
 namespace Swing.Character
 {
@@ -10,10 +11,13 @@ namespace Swing.Character
     {
         [Inject] private CharacterSettings settings;
         [Inject] private CharacterState state;
+        [Inject] private CameraSettings cameraSettings;
 
         private void Start()
         {
+
             var lineRenderer = Instantiate(settings.laserEffect.gameObject,transform).GetComponent<LineRenderer>();
+            lineRenderer.gameObject.layer = LayerMask.NameToLayer(cameraSettings.cullingLayer);
 
             var raycastStream = Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
@@ -21,7 +25,7 @@ namespace Swing.Character
                       .Select(_ => Physics2D.Raycast(transform.position, state.aimDirection.Value, settings.grapplingDistance, settings.grapplingMask));
 
             raycastStream.Select(hit => hit.transform != null)
-                         .CombineLatest(state.localPlayerControl, (hitting, localControl) => hitting && localControl)
+                         .CombineLatest(state.localPlayerControl, (hitting, localControl) => hitting && localControl) 
                          .Subscribe(show => lineRenderer.enabled = show);
 
             raycastStream.Where(hit => hit.transform != null)

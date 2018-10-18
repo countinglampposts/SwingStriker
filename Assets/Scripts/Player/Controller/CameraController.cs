@@ -15,7 +15,8 @@ namespace Swing.Player
 
         private void Start()
         {
-            if(cameraSettings.viewportRect.size != Vector2.zero) movedCamera.rect = cameraSettings.viewportRect;
+            movedCamera.rect = cameraSettings.viewportRect;
+            movedCamera.cullingMask = cameraSettings.mask.value;
 
             state.isCorpse
                  .Where(isCorpse => isCorpse)

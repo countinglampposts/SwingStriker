@@ -18,6 +18,8 @@ namespace Swing.Player
     [Serializable]
     public class CameraSettings
     {
+        public LayerMask mask;
+        public string cullingLayer;
         public Rect viewportRect;
     }
 }

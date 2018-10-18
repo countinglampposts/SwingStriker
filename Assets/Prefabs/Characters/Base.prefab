@@ -1699,7 +1699,7 @@ MonoBehaviour:
   settings:
     breakforce: 2000
     ropeSpringFrequency: 1
-    grapplingDistance: 35
+    grapplingDistance: 25
     mass: 1
     collideWithSelf: 1
     drag: 0.05

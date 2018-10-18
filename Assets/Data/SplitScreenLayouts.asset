@@ -13,64 +13,104 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:Swing.Player:SplitScreenLayouts
   layouts:
   - settings:
-    - viewportRect:
+    - mask:
+        serializedVersion: 2
+        m_Bits: 268451639
+      cullingLayer: Player1
+      viewportRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 1
         height: 1
   - settings:
-    - viewportRect:
+    - mask:
+        serializedVersion: 2
+        m_Bits: 268451639
+      cullingLayer: Player1
+      viewportRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0.5
         height: 1
-    - viewportRect:
+    - mask:
+        serializedVersion: 2
+        m_Bits: 536887095
+      cullingLayer: Player2
+      viewportRect:
         serializedVersion: 2
         x: 0.5
         y: 0
         width: 0.5
         height: 1
   - settings:
-    - viewportRect:
+    - mask:
+        serializedVersion: 2
+        m_Bits: 268451639
+      cullingLayer: Player1
+      viewportRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0.5
-    - viewportRect:
+    - mask:
+        serializedVersion: 2
+        m_Bits: 536887095
+      cullingLayer: Player2
+      viewportRect:
         serializedVersion: 2
         x: 0
         y: 0.5
         width: 0
         height: 0.5
-    - viewportRect:
+    - mask:
+        serializedVersion: 2
+        m_Bits: 1073758007
+      cullingLayer: Player3
+      viewportRect:
         serializedVersion: 2
         x: 0.5
         y: 0
         width: 0.5
         height: 1
   - settings:
-    - viewportRect:
+    - mask:
+        serializedVersion: 2
+        m_Bits: 268451639
+      cullingLayer: Player1
+      viewportRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0.5
         height: 0.5
-    - viewportRect:
+    - mask:
+        serializedVersion: 2
+        m_Bits: 536887095
+      cullingLayer: Player2
+      viewportRect:
         serializedVersion: 2
         x: 0
         y: 0.5
         width: 0.5
         height: 0.5
-    - viewportRect:
+    - mask:
+        serializedVersion: 2
+        m_Bits: 1073758007
+      cullingLayer: Player3
+      viewportRect:
         serializedVersion: 2
         x: 0.5
         y: 0
         width: 0.5
         height: 0.5
-    - viewportRect:
+    - mask:
+        serializedVersion: 2
+        m_Bits: 2147499831
+      cullingLayer: Player4
+      viewportRect:
         serializedVersion: 2
         x: 0.5
         y: 0.5
