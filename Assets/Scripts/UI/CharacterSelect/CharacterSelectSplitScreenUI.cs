@@ -62,8 +62,12 @@ namespace Swing.UI
             });
 
             for (int a = 0; a < InputManager.Devices.Count;a++){
-                selectUIs[a].Init(InputManager.Devices[a].GUID);
+                selectUIs[a].BindToDevice(InputManager.Devices[a].GUID);
             }
+
+            Observable.FromEvent<InputDevice>(d => InputManager.OnDeviceAttached += d, d => InputManager.OnDeviceAttached -= d)
+                      .TakeUntilDestroy(this)
+                      .Subscribe(newDevice => selectUIs.First(ui => !ui.isClaimed).BindToDevice(newDevice.GUID));
         }
     }
 }

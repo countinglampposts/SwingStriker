@@ -21,6 +21,7 @@ namespace Swing.UI
 
         private ReactiveProperty<int> index = new ReactiveProperty<int>();
         private int usedIndex = 0;
+        private CompositeDisposable disposables = new CompositeDisposable();
 
         public void Init(IScrollableAsset scrollableAsset)
         {
@@ -40,31 +41,41 @@ namespace Swing.UI
             index.Value = 0;
         }
 
-        public void InitController(Guid deviceID)
+        public IDisposable BindToDevice(Guid deviceID)
         {
+            disposables = new CompositeDisposable();
+            Debug.Log("Binding Asset Scroller");
             Observable.EveryUpdate()
-                      .TakeUntilDestroy(this)
                       .Where(_ => enabled)
-                      .Select(_ => InputManager.Devices.First(device => device.GUID == deviceID))
+                      .Select(_ => InputManager.Devices.FirstOrDefault(device => device.GUID == deviceID))
+                      .Debug()
                       .Where(device => device != null)
                       .Select(device => device.RightStickX < -.9f || device.LeftStickX < -.9f || device.DPadX < -.9f)
                       .DistinctUntilChanged()
                       .Where(isTriggered => isTriggered)
-                      .Subscribe(_ => leftButton.onClick.Invoke());
+                      .Subscribe(_ => leftButton.onClick.Invoke())
+                      .AddTo(disposables);
 
             Observable.EveryUpdate()
-                      .TakeUntilDestroy(this)
                       .Where(_ => enabled)
-                      .Select(_ => InputManager.Devices.First(device => device.GUID == deviceID))
+                      .Select(_ => InputManager.Devices.FirstOrDefault(device => device.GUID == deviceID))
                       .Where(device => device != null)
                       .Select(device => device.RightStickX > .9f || device.LeftStickX > .9f || device.DPadX > .9f)
                       .DistinctUntilChanged()
                       .Where(isTriggered => isTriggered)
-                      .Subscribe(_ => rightButton.onClick.Invoke());
+                      .Subscribe(_ => rightButton.onClick.Invoke())
+                      .AddTo(disposables);
+
+            return disposables;
         }
 
         public int CurrentIndex(){
             return usedIndex;
+        }
+
+        private void OnDestroy()
+        {
+            disposables.Dispose();
         }
     }
 }

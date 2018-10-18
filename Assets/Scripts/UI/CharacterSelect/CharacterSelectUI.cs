@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Zenject;
 using InControl;
 using System;
+using UniRx;
 
 namespace Swing.UI
 {
@@ -52,80 +53,127 @@ namespace Swing.UI
         [Inject] private CharacterCollection characters;
         [Inject] private TeamsData teams;
 
+        public bool isClaimed { get; private set; }
         public bool isSelecting { get; private set; }
         public bool isReady { get; private set; }
 
+        private CompositeDisposable disposables = new CompositeDisposable();
+
         private Guid deviceID;
 
-        public void Init(Guid deviceID)
+        private void Start()
         {
-            this.deviceID = deviceID;
-
-            UIUtils.AddGamepadButtonPressToButton(signInScreen.nextButton, 0, deviceID);
-            signInScreen.nextButton.onClick.AddListener(() =>
-            {
-                signInScreen.root.SetActive(false);
-                characterSelectScreen.root.SetActive(true);
-                isSelecting = true;
-            });
-
-
-
-            // Init Character Screen
-            UIUtils.AddGamepadButtonPressToButton(characterSelectScreen.nextButton, 0, deviceID);
-            characterSelectScreen.nextButton.onClick.AddListener(() =>
-            {
-                characterSelectScreen.root.SetActive(false);
-                teamSelectScreen.root.SetActive(true);
-            });
-
-            UIUtils.AddGamepadButtonPressToButton(characterSelectScreen.backButton, 1, deviceID);
-            characterSelectScreen.backButton.onClick.AddListener(() =>
-            {
-                characterSelectScreen.root.SetActive(false);
-                signInScreen.root.SetActive(true);
-                isSelecting = false;
-            });
-
             characterSelectScreen.assetScroller.Init(characters);
-            characterSelectScreen.assetScroller.InitController(deviceID);
-
-
-
-            // Init team screen 
-            UIUtils.AddGamepadButtonPressToButton(teamSelectScreen.nextButton, 0, deviceID);
-            teamSelectScreen.nextButton.onClick.AddListener(() =>
-            {
-                teamSelectScreen.root.SetActive(false);
-                readyScreen.root.SetActive(true);
-                isReady = true;
-            });
-
-            UIUtils.AddGamepadButtonPressToButton(teamSelectScreen.backButton, 1, deviceID);
-            teamSelectScreen.backButton.onClick.AddListener(() =>
-            {
-                teamSelectScreen.root.SetActive(false);
-                characterSelectScreen.root.SetActive(true);
-            });
-
             teamSelectScreen.assetScroller.Init(teams);
-            teamSelectScreen.assetScroller.InitController(deviceID);
 
+            ResetUIElements();
+        }
 
-
-            // Init ready screen
-            UIUtils.AddGamepadButtonPressToButton(readyScreen.backButton, 1, deviceID);
-            readyScreen.backButton.onClick.AddListener(() =>
-            {
-                readyScreen.root.SetActive(false);
-                teamSelectScreen.root.SetActive(true);
-                isReady = false;
-            });
-
+        private void ResetUIElements()
+        {
             signInScreen.root.SetActive(true);
             characterSelectScreen.root.SetActive(false);
             teamSelectScreen.root.SetActive(false);
             readyScreen.root.SetActive(false);
+        }
+
+        public void BindToDevice(Guid deviceID)
+        {
+            Debug.Log("Binding select UI");
+            if (isClaimed) Debug.LogError("Trying to set a new deviceID for claimed CharacterSelectUI");
+
+            isClaimed = true;
+
+            this.deviceID = deviceID;
+
+            UIUtils.AddGamepadButtonPressToButton(signInScreen.nextButton, 0, deviceID)
+                   .AddTo(disposables);
+            signInScreen.nextButton.onClick.AsObservable()
+                        .Subscribe(_ =>
+                        {
+                            signInScreen.root.SetActive(false);
+                            characterSelectScreen.root.SetActive(true);
+                            isSelecting = true;
+                        })
+                   .AddTo(disposables);
+
+            // Init Character Screen
+            UIUtils.AddGamepadButtonPressToButton(characterSelectScreen.nextButton, 0, deviceID)
+                   .AddTo(disposables);
+            characterSelectScreen.nextButton.onClick.AsObservable()
+                        .Subscribe(_ =>
+                        {
+                            characterSelectScreen.root.SetActive(false);
+                            teamSelectScreen.root.SetActive(true);
+                        })
+                   .AddTo(disposables);
+
+            UIUtils.AddGamepadButtonPressToButton(characterSelectScreen.backButton, 1, deviceID)
+                   .AddTo(disposables);
+            characterSelectScreen.backButton.onClick.AsObservable()
+                        .Subscribe(_ =>
+                        {
+                            characterSelectScreen.root.SetActive(false);
+                            signInScreen.root.SetActive(true);
+                            isSelecting = false;
+                        })
+                   .AddTo(disposables);
+            characterSelectScreen.assetScroller.BindToDevice(deviceID)
+                   .AddTo(disposables);
+
+
+
+            // Init team screen 
+            UIUtils.AddGamepadButtonPressToButton(teamSelectScreen.nextButton, 0, deviceID)
+                   .AddTo(disposables);
+            teamSelectScreen.nextButton.onClick.AsObservable()
+                        .Subscribe(_ =>
+                        {
+                            teamSelectScreen.root.SetActive(false);
+                            readyScreen.root.SetActive(true);
+                            isReady = true;
+                        })
+                   .AddTo(disposables);
+
+            UIUtils.AddGamepadButtonPressToButton(teamSelectScreen.backButton, 1, deviceID)
+                   .AddTo(disposables);
+            teamSelectScreen.backButton.onClick.AsObservable()
+                        .Subscribe(_ =>
+                        {
+                            teamSelectScreen.root.SetActive(false);
+                            characterSelectScreen.root.SetActive(true);
+                        })
+                   .AddTo(disposables);
+
+            teamSelectScreen.assetScroller.BindToDevice(deviceID)
+                   .AddTo(disposables);
+
+
+
+            // Init ready screen
+            UIUtils.AddGamepadButtonPressToButton(readyScreen.backButton, 1, deviceID)
+                   .AddTo(disposables);
+            readyScreen.backButton.onClick.AsObservable()
+                        .Subscribe(_ =>
+                        {
+                            readyScreen.root.SetActive(false);
+                            teamSelectScreen.root.SetActive(true);
+                            isReady = false;
+                        })
+                   .AddTo(disposables);
+
+            Observable.FromEvent<InputDevice>(d => InputManager.OnDeviceDetached += d, d => InputManager.OnDeviceDetached += d)
+                      .Where(device => device.GUID == deviceID)
+                      .Subscribe(_ => {
+                          isReady = false;
+                          isSelecting = false;
+                          isClaimed = false;
+
+                          disposables.Clear();
+
+                          ResetUIElements();
+                      })
+                      .AddTo(disposables);
         }
 
         public PlayerData GetPlayerData(){
@@ -135,6 +183,11 @@ namespace Swing.UI
                 team = teams.teams[teamSelectScreen.assetScroller.CurrentIndex()],
                 deviceID = deviceID
             };
+        }
+
+        private void OnDestroy()
+        {
+            disposables.Dispose();
         }
     }
 }
