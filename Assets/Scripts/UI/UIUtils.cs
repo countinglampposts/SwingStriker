@@ -37,7 +37,7 @@ namespace Swing.UI
                           }
                           return false;
                       })
-                      .Delay(TimeSpan.FromSeconds(.1f))
+                      .DelayFrame(1)
                       .Subscribe(_=>button.onClick.Invoke());
         }
     }

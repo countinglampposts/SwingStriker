@@ -1698,8 +1698,8 @@ MonoBehaviour:
   root: {fileID: 114250153146029506}
   settings:
     breakforce: 1250
-    ropeSpringFrequency: 1.1
-    grapplingDistance: 50
+    ropeSpringFrequency: 1
+    grapplingDistance: 35
     mass: 0.5
     collideWithSelf: 1
     drag: 0.05
