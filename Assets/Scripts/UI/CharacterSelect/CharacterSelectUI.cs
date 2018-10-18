@@ -63,8 +63,58 @@ namespace Swing.UI
 
         private void Start()
         {
+            // Init scrollers
             characterSelectScreen.assetScroller.Init(characters);
             teamSelectScreen.assetScroller.Init(teams);
+
+
+            // Bind button actions
+            signInScreen.nextButton.onClick.AsObservable()
+                        .TakeUntilDestroy(this)
+                        .Subscribe(_ =>
+                        {
+                            signInScreen.root.SetActive(false);
+                            characterSelectScreen.root.SetActive(true);
+                            isSelecting = true;
+                        });
+            characterSelectScreen.nextButton.onClick.AsObservable()
+                        .TakeUntilDestroy(this)
+                        .Subscribe(_ =>
+                        {
+                            characterSelectScreen.root.SetActive(false);
+                            teamSelectScreen.root.SetActive(true);
+                        });
+            characterSelectScreen.backButton.onClick.AsObservable()
+                        .TakeUntilDestroy(this)
+                        .Subscribe(_ =>
+                        {
+                            characterSelectScreen.root.SetActive(false);
+                            signInScreen.root.SetActive(true);
+                            isSelecting = false;
+                        });
+            teamSelectScreen.nextButton.onClick.AsObservable()
+                        .TakeUntilDestroy(this)
+                        .Subscribe(_ =>
+                        {
+                            teamSelectScreen.root.SetActive(false);
+                            readyScreen.root.SetActive(true);
+                            isReady = true;
+                        });
+            teamSelectScreen.backButton.onClick.AsObservable()
+                        .TakeUntilDestroy(this)
+                        .Subscribe(_ =>
+                        {
+                            teamSelectScreen.root.SetActive(false);
+                            characterSelectScreen.root.SetActive(true);
+                        });
+            readyScreen.backButton.onClick.AsObservable()
+                        .TakeUntilDestroy(this)
+                        .Subscribe(_ =>
+                        {
+                            readyScreen.root.SetActive(false);
+                            teamSelectScreen.root.SetActive(true);
+                            isReady = false;
+                        });
 
             ResetUIElements();
         }
@@ -85,80 +135,27 @@ namespace Swing.UI
 
             this.deviceID = deviceID;
 
-            UIUtils.AddGamepadButtonPressToButton(signInScreen.nextButton, 0, deviceID)
-                   .AddTo(disposables);
-            signInScreen.nextButton.onClick.AsObservable()
-                        .Subscribe(_ =>
-                        {
-                            signInScreen.root.SetActive(false);
-                            characterSelectScreen.root.SetActive(true);
-                            isSelecting = true;
-                        })
+            UIUtils.BindToDevice(signInScreen.nextButton, 0, deviceID)
                    .AddTo(disposables);
 
             // Init Character Screen
-            UIUtils.AddGamepadButtonPressToButton(characterSelectScreen.nextButton, 0, deviceID)
+            UIUtils.BindToDevice(characterSelectScreen.nextButton, 0, deviceID)
                    .AddTo(disposables);
-            characterSelectScreen.nextButton.onClick.AsObservable()
-                        .Subscribe(_ =>
-                        {
-                            characterSelectScreen.root.SetActive(false);
-                            teamSelectScreen.root.SetActive(true);
-                        })
-                   .AddTo(disposables);
-
-            UIUtils.AddGamepadButtonPressToButton(characterSelectScreen.backButton, 1, deviceID)
-                   .AddTo(disposables);
-            characterSelectScreen.backButton.onClick.AsObservable()
-                        .Subscribe(_ =>
-                        {
-                            characterSelectScreen.root.SetActive(false);
-                            signInScreen.root.SetActive(true);
-                            isSelecting = false;
-                        })
+            UIUtils.BindToDevice(characterSelectScreen.backButton, 1, deviceID)
                    .AddTo(disposables);
             characterSelectScreen.assetScroller.BindToDevice(deviceID)
                    .AddTo(disposables);
 
-
-
             // Init team screen 
-            UIUtils.AddGamepadButtonPressToButton(teamSelectScreen.nextButton, 0, deviceID)
+            UIUtils.BindToDevice(teamSelectScreen.nextButton, 0, deviceID)
                    .AddTo(disposables);
-            teamSelectScreen.nextButton.onClick.AsObservable()
-                        .Subscribe(_ =>
-                        {
-                            teamSelectScreen.root.SetActive(false);
-                            readyScreen.root.SetActive(true);
-                            isReady = true;
-                        })
+            UIUtils.BindToDevice(teamSelectScreen.backButton, 1, deviceID)
                    .AddTo(disposables);
-
-            UIUtils.AddGamepadButtonPressToButton(teamSelectScreen.backButton, 1, deviceID)
-                   .AddTo(disposables);
-            teamSelectScreen.backButton.onClick.AsObservable()
-                        .Subscribe(_ =>
-                        {
-                            teamSelectScreen.root.SetActive(false);
-                            characterSelectScreen.root.SetActive(true);
-                        })
-                   .AddTo(disposables);
-
             teamSelectScreen.assetScroller.BindToDevice(deviceID)
                    .AddTo(disposables);
 
-
-
             // Init ready screen
-            UIUtils.AddGamepadButtonPressToButton(readyScreen.backButton, 1, deviceID)
-                   .AddTo(disposables);
-            readyScreen.backButton.onClick.AsObservable()
-                        .Subscribe(_ =>
-                        {
-                            readyScreen.root.SetActive(false);
-                            teamSelectScreen.root.SetActive(true);
-                            isReady = false;
-                        })
+            UIUtils.BindToDevice(readyScreen.backButton, 1, deviceID)
                    .AddTo(disposables);
 
             Observable.FromEvent<InputDevice>(d => InputManager.OnDeviceDetached += d, d => InputManager.OnDeviceDetached += d)

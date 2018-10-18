@@ -14,10 +14,10 @@ namespace Swing.UI
     {
         public static IDisposable AddGamepadButtonPressToButton(Button button, int actionIndex)
         {
-            return AddGamepadButtonPressToButton(button, actionIndex, Guid.Empty);
+            return BindToDevice(button, actionIndex, Guid.Empty);
         }
 
-        public static IDisposable AddGamepadButtonPressToButton(Button button, int actionIndex, Guid deviceID)
+        public static IDisposable BindToDevice(Button button, int actionIndex, Guid deviceID)
         {
             return Observable.EveryUpdate()
                       .TakeUntilDestroy(button)
