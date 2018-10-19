@@ -38,10 +38,10 @@ namespace Swing.Character
                              anchorRigidbody.isKinematic = true;
 
                              var joint = anchor.gameObject.AddComponent<SpringJoint2D>();
-                             joint.anchor = anchor.transform.InverseTransformPoint(hitPosition);
                              joint.autoConfigureDistance = false;
+                             joint.anchor = anchor.transform.InverseTransformPoint(hitPosition);
                              joint.distance = 0;
-                             joint.dampingRatio = 1;
+                             joint.dampingRatio = 1f;
                              joint.frequency = settings.ropeSpringFrequency;
                              joint.enableCollision = true;
 
@@ -76,36 +76,6 @@ namespace Swing.Character
                      .TakeUntilDestroy(this)
                      .Where(_ => currentRope != null)
                      .Subscribe(_ => Destroy(currentRope));
-        }
-
-
-        private GameObject ConnectRope(Rigidbody2D launcher, Vector3 direction, int mask)
-        {
-            var hit = Physics2D.Raycast(launcher.position, direction, settings.grapplingDistance, mask);
-
-            Vector3 hitPosition = hit.point;
-
-            if (hit.collider == null)
-                return null;
-
-            var anchor = new GameObject("GrapplingAnchor");
-            anchor.transform.position = hitPosition;
-            var anchorRigidbody = anchor.AddComponent<Rigidbody2D>();
-            anchorRigidbody.isKinematic = true;
-
-            var joint = anchor.gameObject.AddComponent<SpringJoint2D>();
-            joint.anchor = anchor.transform.InverseTransformPoint(hitPosition);
-            joint.autoConfigureDistance = false;
-            joint.distance = 0;
-            joint.dampingRatio = 1;
-            joint.frequency = settings.ropeSpringFrequency;
-            joint.enableCollision = true;
-
-            joint.connectedBody = launcher;
-
-            container.Inject(anchor.AddComponent<RopeEffect>());
-
-            return anchor;
         }
 
         private void OnDestroy()

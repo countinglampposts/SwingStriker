@@ -6,14 +6,14 @@ using UniRx;
 
 namespace Swing.Character
 {
-    [RequireComponent(typeof(HingeJoint2D))]
+    [RequireComponent(typeof(AnchoredJoint2D))]
     public class Bloodsplosion : MonoBehaviour
     {
         [Inject] CharacterSettings settings;
 
         void OnJointBreak2D(Joint2D brokenJoint)
         {
-            var joint = GetComponent<HingeJoint2D>();
+            var joint = GetComponent<AnchoredJoint2D>();
             var other = joint.connectedBody.transform;
             var otherJointPosition = other.TransformPoint(joint.connectedAnchor);
 

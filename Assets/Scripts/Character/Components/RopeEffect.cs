@@ -15,7 +15,7 @@ namespace Swing.Character
         {
             var lineRenderer = Instantiate(settings.ropeEffect.gameObject,transform).GetComponent<LineRenderer>();
 
-            var joint = GetComponent<SpringJoint2D>();
+            var joint = GetComponent<AnchoredJoint2D>();
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
                       .Where(_ => enabled)

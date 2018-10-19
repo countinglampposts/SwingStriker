@@ -16,8 +16,6 @@ namespace Swing.Character
         [SerializeField]
         public float mass;
         [SerializeField]
-        public bool collideWithSelf;
-        [SerializeField]
         public float drag;
         [SerializeField]
         public float gravity;
