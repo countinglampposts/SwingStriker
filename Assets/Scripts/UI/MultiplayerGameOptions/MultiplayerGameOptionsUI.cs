@@ -38,7 +38,7 @@ namespace Swing.UI
         private GameObject nextUI;
 
         [Inject] LevelCollection levels;
-        [Inject] LevelTimeOptions levelTimeOptions;
+        [Inject] GameTimeOptions gameTimeOptions;
         [Inject] DiContainer container;
 
         private void Start()
@@ -59,7 +59,7 @@ namespace Swing.UI
                               timeSelectMenu.root.SetActive(true);
                           });
 
-            timeSelectMenu.scroller.Init(levelTimeOptions);
+            timeSelectMenu.scroller.Init(gameTimeOptions);
             timeSelectMenu.scroller.BindToAllDevices();
 
             UIUtils.BindToAllDevices(timeSelectMenu.backButton, 1);
@@ -76,9 +76,9 @@ namespace Swing.UI
                           .TakeUntilDestroy(this)
                           .Subscribe(_ =>
                           {
-                              var levelTime = levelTimeOptions.levelTimes[timeSelectMenu.scroller.CurrentIndex()];
-                              container.Unbind(levelTime.GetType());
-                              container.BindInstance(levelTime);
+                              var gameTime = gameTimeOptions.levelTimes[timeSelectMenu.scroller.CurrentIndex()];
+                              container.Unbind(gameTime.GetType());
+                              container.BindInstance(gameTime);
 
                               gameObject.SetActive(false);
                               nextUI.SetActive(true);

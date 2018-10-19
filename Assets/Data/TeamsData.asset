@@ -14,5 +14,7 @@ MonoBehaviour:
   teams:
   - id: 0
     color: {r: 1, g: 0, b: 0, a: 1}
+    name: Red
   - id: 1
     color: {r: 0, g: 0, b: 1, a: 1}
+    name: Blue

@@ -23,12 +23,13 @@ namespace Swing.Player
     {
         public int id;
         public Color color;
+        public string name;
 
         public string displayName
         {
             get
             {
-                return id.ToString();
+                return name;
             }
         }
     }

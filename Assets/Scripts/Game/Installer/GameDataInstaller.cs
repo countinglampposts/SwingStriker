@@ -14,7 +14,7 @@ namespace Swing.Game
         [SerializeField] private CharacterCollection characters;
         [SerializeField] private TeamsData teams;
         [SerializeField] private SplitScreenLayouts layouts;
-        [SerializeField] private LevelTimeOptions timeOptions;
+        [SerializeField] private GameTimeOptions timeOptions;
 
         public override void InstallBindings()
         {

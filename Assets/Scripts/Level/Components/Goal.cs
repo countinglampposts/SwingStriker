@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using UniRx;
+using UniRx.Triggers;
 using Swing.Player;
 using System.Linq;
+using Swing.Game;
 
 namespace Swing.Level
 {
-    public class GoalScoredSignal{
-        public int team; 
-    }
-    public class BallResetSignal { }
 
     [RequireComponent(typeof(Renderer))]
     public class Goal : MonoBehaviour
@@ -25,28 +23,33 @@ namespace Swing.Level
 
         private void Start()
         {
+            signalBus.GetStream<GameEndsSignal>()
+                     .TakeUntilDestroy(this)
+                     .Subscribe(_ => locked = true);
+
             signalBus.GetStream<GoalScoredSignal>()
                      .TakeUntilDestroy(this)
+                     .TakeUntil(signalBus.GetStream<GameEndsSignal>())
                      .Subscribe(_ => locked = true);
 
             signalBus.GetStream<BallResetSignal>()
                      .TakeUntilDestroy(this)
+                     .TakeUntil(signalBus.GetStream<GameEndsSignal>())
                      .Subscribe(_ => locked = false);
+
+            gameObject.OnTriggerEnter2DAsObservable()
+                      .TakeUntilDestroy(this)
+                      .Where(_ => !locked)
+                      .Where(collision => collision.gameObject == gameBall.gameObject)
+                      .Select(_ => teamsData.teams.FirstOrDefault(element => element.id != team).id)
+                      .Subscribe(scoringTeamId => signalBus.Fire(new GoalScoredSignal() { team = scoringTeamId }));
+
 
             if (teamsData.teams.Length > 0)
             {
                 Color color = teamsData.teams.First(element => element.id == team).color;
                 color.a = .5f;
                 GetComponent<Renderer>().material.color = color;
-            }
-        }
-
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            if(!locked && collision.gameObject == gameBall.gameObject)
-            {
-                var scoringTeamId = (teamsData.teams.Length > 0)? teamsData.teams.First(element => element.id != team).id : 0;
-                signalBus.Fire(new GoalScoredSignal() { team = scoringTeamId });
             }
         }
     }

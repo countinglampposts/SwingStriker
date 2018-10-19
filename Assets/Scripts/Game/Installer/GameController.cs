@@ -11,33 +11,89 @@ using InControl;
 
 namespace Swing.Game
 {
-    public class GameController : MonoBehaviour
+    public class GameEndsSignal { }
+
+    public class GoalScoredSignal
+    {
+        public int team;
+    }
+
+    public class BallResetSignal { }
+
+    public class GameController : MonoInstaller
     {
         [Inject] private LevelAsset levelAsset;
         [Inject] private PlayerData[] playersData;
-        [Inject] private LevelTime time;
+        [Inject] private GameTime time;
         [Inject] private SplitScreenLayouts layouts;
-        [Inject] DiContainer container;
+        [Inject] private GameTime gameTime;
 
-        public void Start()
+        public override void InstallBindings()
         {
-            var levelContext = container.CreateSubContainer();
+            Container.DeclareSignal<GameEndsSignal>();
+            Container.DeclareSignal<GoalScoredSignal>();
+            Container.DeclareSignal<BallResetSignal>();
+
+            var signalBus = Container.Resolve<SignalBus>();
+            // Init the state
+            var state = new GameState();
+
+            // Init the timer logic
+            state.secondsRemaining.Value = gameTime.seconds;
+            Observable.Interval(TimeSpan.FromSeconds(1))
+                      .TakeUntil(signalBus.GetStream<GameEndsSignal>())
+                      .Subscribe(_ => state.secondsRemaining.Value--);
+            state.secondsRemaining
+                 .TakeUntilDestroy(this)
+                 .Where(timeRemaining => timeRemaining <= 0)
+                 .Where(_ => state.scores.HasMax(score => score.Value))
+                 .Subscribe(_ => signalBus.Fire<GameEndsSignal>());
+            signalBus.GetStream<GameEndsSignal>()
+                     .TakeUntilDestroy(this)
+                     .Subscribe(_ =>
+                     {
+                         Observable.Timer(TimeSpan.FromSeconds(10))
+                                   .TakeUntilDestroy(this)
+                                   .Subscribe(__ => Application.LoadLevel(Application.loadedLevel));
+                     });
+            Observable.EveryUpdate()
+                      .Where(_=> Input.GetKeyDown(KeyCode.E))
+                      .First()
+                      .Subscribe(_ => state.secondsRemaining.Value = 1);
+
+            // Init the score keeping
+            foreach (var a in playersData.Select(player => player.team.id).Distinct()){
+                state.scores.Add(a, 0);
+            }
+            signalBus.GetStream<GoalScoredSignal>()
+                     .TakeUntilDestroy(this)
+                     .Subscribe(signal => {
+                        int teamID = signal.team;
+                        if (!state.scores.ContainsKey(teamID)) state.scores.Add(teamID, 0);
+                        state.scores[teamID]++; 
+            });
+
+            Container.BindInstance(state);
+
+            // Init the level
+            var levelContext = Container.CreateSubContainer();
             var level = levelContext.InstantiatePrefab(levelAsset.prefab).GetComponent<LevelInstaller>();
 
+            // Init the players
             var layout = layouts.layouts.First(a => a.settings.Length == playersData.Length);
             var spawned = new List<Tuple<PlayerData, GameObject>>();
 
-            for (int a = 0; a < layout.settings.Length; a++)
+            for (int a = 0; a < playersData.Length; a++)
             {
                 var playerData = playersData[a];
-                var instance = SpawnPlayer(playerData, layout.settings[a], level);
+                var instance = InitializePlayer(playerData, layout.settings[a], level);
 
                 spawned.Add(new Tuple<PlayerData, GameObject>(playerData, instance));
             }
             level.ResolvePlayerSpawn(spawned);
         }
 
-        private GameObject SpawnPlayer(PlayerData playerData, CameraSettings cameraSettings, LevelInstaller level){
+        private GameObject InitializePlayer(PlayerData playerData, CameraSettings cameraSettings, LevelInstaller level){
             DiContainer playerContext = null;
             CharacterState characterState = null;
             GameObject instance = null;
@@ -45,7 +101,7 @@ namespace Swing.Game
             Action MakeNewPlayer = null;
             MakeNewPlayer = () =>
             {
-                playerContext = container.CreateSubContainer();
+                playerContext = Container.CreateSubContainer();
                 characterState = new CharacterState();
                 playerContext.DeclareSignal<ResetPlayerSignal>();
                 playerContext.BindInstance(characterState);
@@ -62,12 +118,13 @@ namespace Swing.Game
                              Observable.Timer(TimeSpan.FromSeconds(3f))
                                        .Subscribe(__ => {
                                            characterState.isCorpse.Value = true;
+                                           Observable.Timer(TimeSpan.FromSeconds(30))
+                                                     .Subscribe(___ => GameObject.Destroy(oldInstance));
+
                                            //----RESETS ALL VALUES-----
                                            MakeNewPlayer();
 
                                            level.ResolvePlayerSpawn(new List<Tuple<PlayerData, GameObject>> { new Tuple<PlayerData, GameObject>(playerData, instance) });
-                                           Observable.Timer(TimeSpan.FromSeconds(30))
-                                                     .Subscribe(___ => GameObject.Destroy(oldInstance));
                                        });
 
                          });

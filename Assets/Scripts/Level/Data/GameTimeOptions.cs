@@ -6,9 +6,9 @@ using UnityEngine;
 namespace Swing.Level
 {
     [CreateAssetMenu(menuName = "Swing/LevelTimeOptions")]
-    public class LevelTimeOptions : ScriptableObject, IScrollableAsset
+    public class GameTimeOptions : ScriptableObject, IScrollableAsset
     {
-        public LevelTime[] levelTimes;
+        public GameTime[] levelTimes;
         public IEnumerable<IDisplayAsset> assets
         {
             get
@@ -19,7 +19,7 @@ namespace Swing.Level
     }
 
     [System.Serializable]
-    public struct LevelTime : IDisplayAsset
+    public struct GameTime : IDisplayAsset
     {
         public int seconds;
         public string displayName;

@@ -4,11 +4,10 @@ using UnityEngine;
 using Zenject;
 using UniRx;
 using System;
+using Swing.Game;
 
 namespace Swing.Level
 {
-    public class RestartLevelSignal { };
-
     public class LevelController :IInitializable, IDisposable
     {
         [Inject] SignalBus signalBus;
@@ -23,11 +22,6 @@ namespace Swing.Level
 
         public void Initialize()
         {
-            Observable.EveryUpdate()
-                      .Where(_=> Input.GetKey(KeyCode.R))
-                      .Subscribe(_=> signalBus.Fire<RestartLevelSignal>())
-                      .AddTo(disposables);
-
             signalBus.GetStream<GoalScoredSignal>()
                      .Subscribe(_ =>
                      {
@@ -41,10 +35,6 @@ namespace Swing.Level
                                    signalBus.Fire<BallResetSignal>();
                                });
                      })
-                     .AddTo(disposables);
-
-            signalBus.GetStream<RestartLevelSignal>()
-                     .Subscribe(_=> Application.LoadLevel(Application.loadedLevel))
                      .AddTo(disposables);
         }
 

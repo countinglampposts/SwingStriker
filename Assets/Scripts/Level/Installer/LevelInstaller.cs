@@ -29,10 +29,6 @@ namespace Swing.Level
 
         public override void InstallBindings()
         {
-            Container.DeclareSignal<GoalScoredSignal>();
-            Container.DeclareSignal<BallResetSignal>();
-            Container.DeclareSignal<RestartLevelSignal>();
-
             Container.BindInterfacesAndSelfTo<LevelController>()
                      .AsSingle()
                      .NonLazy();

@@ -54,6 +54,7 @@ namespace Swing.Character
 
                              Observable.EveryUpdate()
                                        .TakeUntilDestroy(this)
+                                       .TakeUntilDestroy(currentRope)
                                        .TakeUntil(signalBus.GetStream<GrapplingReleasedSignal>())
                                        .Select(__ => characterState.aimDirection.Value)
                                        .Subscribe(direction =>
