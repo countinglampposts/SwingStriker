@@ -1698,7 +1698,7 @@ MonoBehaviour:
   root: {fileID: 114250153146029506}
   settings:
     breakforce: 2000
-    ropeSpringFrequency: 1
+    ropeSpringFrequency: 1.1
     grapplingDistance: 25
     mass: 1
     collideWithSelf: 1
@@ -2004,7 +2004,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1882858632572936}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 926252c8c57734f99a845dc0023c8127, type: 3}
   m_Name: 

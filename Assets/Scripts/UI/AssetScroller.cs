@@ -50,7 +50,7 @@ namespace Swing.UI
         {
             disposables = new CompositeDisposable();
             Observable.EveryUpdate()
-                      .Where(_ => enabled)
+                      .Where(_ => gameObject.activeInHierarchy && gameObject.activeSelf)
                       .Select(_ => (deviceID == Guid.Empty)? InputManager.ActiveDevice : InputManager.Devices.FirstOrDefault(device => device.GUID == deviceID))
                       .Where(device => device != null)
                       .Select(device => device.RightStickX < -.9f || device.LeftStickX < -.9f || device.DPadX < -.9f)
@@ -60,7 +60,7 @@ namespace Swing.UI
                       .AddTo(disposables);
 
             Observable.EveryUpdate()
-                      .Where(_ => enabled)
+                      .Where(_ => gameObject.activeInHierarchy && gameObject.activeSelf)
                       .Select(_ => (deviceID == Guid.Empty) ? InputManager.ActiveDevice : InputManager.Devices.FirstOrDefault(device => device.GUID == deviceID))
                       .Where(device => device != null)
                       .Select(device => device.RightStickX > .9f || device.LeftStickX > .9f || device.DPadX > .9f)

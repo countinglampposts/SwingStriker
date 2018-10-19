@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd2a87b2231e04cc69eecb889bf16db9, type: 3}
-  m_Name: Level1
+  m_Name: Simple
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1704185641444824, guid: e82cedcc16bad4bcbb64b89f40d040a3, type: 2}
-  displayName: Straight Edge
+  prefab: {fileID: 1715030307418382, guid: 99863c196a0ae485885da5309c46819b, type: 2}
+  displayName: Simple
