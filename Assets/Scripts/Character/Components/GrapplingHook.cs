@@ -23,8 +23,53 @@ namespace Swing.Character
                      .TakeUntilDestroy(this)
                      .Subscribe(_ =>
                      {
-                        if (currentRope != null) Destroy(currentRope);
-                        currentRope = ConnectRope(GetComponent<Rigidbody2D>(), characterState.aimDirection.Value, settings.grapplingMask.value);
+                         if (currentRope != null) Destroy(currentRope);
+
+                         var hit = Physics2D.Raycast(transform.position, characterState.aimDirection.Value, settings.grapplingDistance, settings.grapplingMask.value);
+
+                         if (hit.transform != null)
+                         {
+                             Vector3 hitPosition = hit.point;
+
+                             var anchor = new GameObject("GrapplingAnchor");
+                             anchor.transform.position = hitPosition;
+
+                             var anchorRigidbody = anchor.AddComponent<Rigidbody2D>();
+                             anchorRigidbody.isKinematic = true;
+
+                             var joint = anchor.gameObject.AddComponent<SpringJoint2D>();
+                             joint.anchor = anchor.transform.InverseTransformPoint(hitPosition);
+                             joint.autoConfigureDistance = false;
+                             joint.distance = 0;
+                             joint.dampingRatio = 1;
+                             joint.frequency = settings.ropeSpringFrequency;
+                             joint.enableCollision = true;
+
+                             var rigidbody = GetComponent<Rigidbody2D>();
+                             joint.connectedBody = rigidbody;
+
+                             container.Inject(anchor.AddComponent<RopeEffect>());
+
+                             currentRope = anchor;
+
+                             Observable.EveryUpdate()
+                                       .TakeUntilDestroy(this)
+                                       .TakeUntil(signalBus.GetStream<GrapplingReleasedSignal>())
+                                       .Select(__ => characterState.aimDirection.Value)
+                                       .Subscribe(direction =>
+                                       {
+                                           var ropeDirection = (anchor.transform.position - transform.position).normalized;
+                                           var aimDirection = characterState.aimDirection.Value.normalized;
+                                           var ropeDot = Vector2.Dot(aimDirection, ropeDirection);
+                                           joint.distance -= ropeDot * settings.ropeClimbSpeed * Time.deltaTime;
+
+                                           var left = Vector2.Perpendicular(ropeDirection);
+                                           rigidbody.AddForce(settings.swingForce * left * Vector2.Dot(left, aimDirection));
+
+                                           var right = -Vector2.Perpendicular(ropeDirection);
+                                           rigidbody.AddForce(settings.swingForce * right * Vector2.Dot(right, aimDirection));
+                                       });
+                         }
                      });
 
             signalBus.GetStream<GrapplingReleasedSignal>()

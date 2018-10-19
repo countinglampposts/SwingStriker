@@ -22,6 +22,10 @@ namespace Swing.Character
         [SerializeField]
         public float gravity;
         [SerializeField]
+        public float ropeClimbSpeed;
+        [SerializeField]
+        public float swingForce;
+        [SerializeField]
         public GameObject bloodsplosionEffect;
         [SerializeField]
         public LineRenderer ropeEffect;
