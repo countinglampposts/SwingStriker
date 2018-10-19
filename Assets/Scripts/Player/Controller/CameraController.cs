@@ -35,6 +35,9 @@ namespace Swing.Player
                       cameraPosition.y = rootPosition.y;
 
                       movedCamera.transform.position = cameraPosition;
+
+                      var rootRigidbody = root.rootBodyPart.GetComponent<Rigidbody2D>();
+                      movedCamera.orthographicSize = Mathf.Lerp(movedCamera.orthographicSize, 5 + rootRigidbody.velocity.magnitude/3f , 3f * Time.deltaTime);
                   });
         }
     }
