@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd2a87b2231e04cc69eecb889bf16db9, type: 3}
-  m_Name: JaimePoop
+  m_Name: Bloop
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
-  displayName: 
+  prefab: {fileID: 1264258041347942, guid: 029a13cc29068499cb1ee33886a86755, type: 2}
+  displayName: Bloop
