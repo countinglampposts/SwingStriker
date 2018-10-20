@@ -39,6 +39,7 @@ namespace Swing.Character
 
                              var joint = anchor.gameObject.AddComponent<SpringJoint2D>();
                              joint.autoConfigureDistance = false;
+                             joint.autoConfigureConnectedAnchor = false;
                              joint.anchor = anchor.transform.InverseTransformPoint(hitPosition);
                              joint.distance = 0;
                              joint.dampingRatio = 1f;
@@ -55,20 +56,30 @@ namespace Swing.Character
                              Observable.EveryUpdate()
                                        .TakeUntilDestroy(this)
                                        .TakeUntilDestroy(currentRope)
+                                       .TakeUntil(characterState.localPlayerControl.Where(isControlled => !isControlled))
                                        .TakeUntil(signalBus.GetStream<GrapplingReleasedSignal>())
                                        .Select(__ => characterState.aimDirection.Value)
                                        .Subscribe(direction =>
                                        {
+
                                            var ropeDirection = (anchor.transform.position - transform.position).normalized;
                                            var aimDirection = characterState.aimDirection.Value.normalized;
                                            var ropeDot = Vector2.Dot(aimDirection, ropeDirection);
-                                           joint.distance -= ropeDot * settings.ropeClimbSpeed * Time.deltaTime;
 
                                            var left = Vector2.Perpendicular(ropeDirection);
                                            rigidbody.AddForce(settings.swingForce * left * Vector2.Dot(left, aimDirection));
 
                                            var right = -Vector2.Perpendicular(ropeDirection);
                                            rigidbody.AddForce(settings.swingForce * right * Vector2.Dot(right, aimDirection));
+
+                                           /*joint.connectedBody = null;
+                                           var originalPosition = joint.transform.position;
+                                           joint.transform.position = joint.transform.position + ropeDirection * 100f;//ropeDot * settings.ropeClimbSpeed * Time.deltaTime;
+                                           joint.connectedBody = rigidbody;
+                                           joint.transform.position = originalPosition;
+                                           joint.distance = 0;*/
+
+                                           joint.distance -= ropeDot * settings.ropeClimbSpeed * Time.deltaTime;
                                        });
                          }
                      });
