@@ -53,7 +53,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 0
+        width: 0.5
         height: 0.5
     - mask:
         serializedVersion: 2
@@ -63,7 +63,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 0
         y: 0.5
-        width: 0
+        width: 0.5
         height: 0.5
     - mask:
         serializedVersion: 2

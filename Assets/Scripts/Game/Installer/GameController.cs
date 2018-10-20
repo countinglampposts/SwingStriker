@@ -57,24 +57,30 @@ namespace Swing.Game
                                    .Subscribe(__ => Application.LoadLevel(Application.loadedLevel));
                      });
             Observable.EveryUpdate()
-                      .Where(_=> Input.GetKeyDown(KeyCode.E))
+                      .Where(_ => Input.GetKeyDown(KeyCode.E))
                       .First()
                       .Subscribe(_ => state.secondsRemaining.Value = 1);
 
             // Init the score keeping
-            foreach (var a in playersData.Select(player => player.team.id).Distinct()){
+            foreach (var a in playersData.Select(player => player.team.id).Distinct())
+            {
                 state.scores.Add(a, 0);
             }
             signalBus.GetStream<GoalScoredSignal>()
                      .TakeUntilDestroy(this)
-                     .Subscribe(signal => {
-                        int teamID = signal.team;
-                        if (!state.scores.ContainsKey(teamID)) state.scores.Add(teamID, 0);
-                        state.scores[teamID]++; 
-            });
+                     .Subscribe(signal =>
+                     {
+                         int teamID = signal.team;
+                         if (!state.scores.ContainsKey(teamID)) state.scores.Add(teamID, 0);
+                         state.scores[teamID]++;
+                     });
 
             Container.BindInstance(state);
 
+        }
+
+        private void Start()
+        {
             // Init the level
             var levelContext = Container.CreateSubContainer();
             var level = levelContext.InstantiatePrefab(levelAsset.prefab).GetComponent<LevelInstaller>();
@@ -128,6 +134,7 @@ namespace Swing.Game
                                        });
 
                          });
+
             };
 
             MakeNewPlayer();

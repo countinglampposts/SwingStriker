@@ -23,15 +23,18 @@ namespace Swing.Player
                       .Subscribe(device =>
                       {
                           var direction = new Vector2(device.RightStickX, device.RightStickY).normalized;
-                          state.aimDirection.Value = direction;
-                          if (device.RightTrigger.WasPressed)
+                          if (direction.magnitude > .2f)
                           {
-                              signalBus.Fire<GrapplingFiredSignal>();
-                          }
+                              state.aimDirection.Value = direction;
+                              if (device.RightTrigger.WasPressed)
+                              {
+                                  signalBus.Fire<GrapplingFiredSignal>();
+                              }
 
-                          if (device.RightTrigger.WasReleased)
-                          {
-                              signalBus.Fire<GrapplingReleasedSignal>();
+                              if (device.RightTrigger.WasReleased)
+                              {
+                                  signalBus.Fire<GrapplingReleasedSignal>();
+                              }
                           }
                       });
         }

@@ -9,7 +9,7 @@ namespace Swing.Character
     public class CharacterInstaller : MonoInstaller
     {
         [SerializeField]
-        private Camera playerCamera;
+        private CameraController playerCameraPrefab;
         [SerializeField]
         private BodyRoot root;
         [SerializeField]
@@ -20,11 +20,18 @@ namespace Swing.Character
             Container.DeclareSignal<GrapplingFiredSignal>();
             Container.DeclareSignal<GrapplingReleasedSignal>();
             Container.DeclareSignal<SuicideSignal>();
+            Container.DeclareSignal<RumbleTriggeredSignal>();
 
-            Container.BindInstance(settings).AsSingle();
+            Container.BindInstance(settings)
+                     .AsSingle();
 
-            Container.Bind<Camera>().FromInstance(playerCamera);
-            Container.Bind<BodyRoot>().FromInstance(root);
+            Container.Bind<BodyRoot>()
+                     .FromInstance(root)
+                     .AsSingle();
+
+            // TODO
+            var instance = Container.InstantiatePrefab(playerCameraPrefab);
+            Container.BindInstance(instance.GetComponentInChildren<Camera>());
         }
     }
 }

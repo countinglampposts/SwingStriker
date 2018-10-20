@@ -26,7 +26,7 @@ namespace Swing.Player
                       .Select(_ => Input.mousePosition)
                       .Buffer(60)
                       .Select(positions => positions.Skip(1).Select((next, index) => next - positions[index]).Average(delta => delta.magnitude))
-                      .Select(avg => avg > 5)
+                      .Select(avg => avg > 1)
                       .DistinctUntilChanged()
                       .Subscribe(enabled => mouseEnabled = enabled);
 

@@ -11,24 +11,6 @@ Prefab:
   m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1199853010713462}
   m_IsPrefabAsset: 1
---- !u!1 &1130129537314292
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4524748048275916}
-  - component: {fileID: 20183587413481346}
-  - component: {fileID: 81404314758457634}
-  - component: {fileID: 114484256589183876}
-  m_Layer: 0
-  m_Name: PlayerCamera
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1162172888470324
 GameObject:
   m_ObjectHideFlags: 1
@@ -411,7 +393,7 @@ Transform:
   - {fileID: 4820941689767158}
   - {fileID: 4356672116847990}
   m_Father: {fileID: 4625188448756766}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4235676240559954
 Transform:
@@ -530,19 +512,6 @@ Transform:
   m_Father: {fileID: 4074242202383674}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4524748048275916
-Transform:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1130129537314292}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4625188448756766}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4555657709576176
 Transform:
   m_ObjectHideFlags: 1
@@ -566,7 +535,6 @@ Transform:
   m_LocalPosition: {x: -2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4524748048275916}
   - {fileID: 4074242202383674}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -610,46 +578,6 @@ Transform:
   m_Father: {fileID: 4074242202383674}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!20 &20183587413481346
-Camera:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1130129537314292}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.20754719, g: 0.20754719, b: 0.20754719, a: 0}
-  m_projectionMatrixMode: 1
-  m_SensorSize: {x: 36, y: 24}
-  m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 1
-  orthographic size: 8
-  m_Depth: -1
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: 0.022
 --- !u!23 &23051180983067296
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -1505,13 +1433,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!81 &81404314758457634
-AudioListener:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1130129537314292}
-  m_Enabled: 1
 --- !u!114 &114070628278228002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1673,17 +1594,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c78a63f13cc954b6ba503f8f53a19429, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &114484256589183876
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1130129537314292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 728a654e1b8b4483f831004caad2a27d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114574158249615622
@@ -1865,7 +1775,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b53645996c5b458f8fda1520ed6f4f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 20183587413481346}
+  playerCameraPrefab: {fileID: 114759186991338902, guid: 4ffc708d67d6647dfab0b3e641bd18f5,
+    type: 2}
   root: {fileID: 114191997676132708}
   settings:
     breakforce: 1000

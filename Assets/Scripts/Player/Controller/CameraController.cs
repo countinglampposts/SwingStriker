@@ -8,8 +8,9 @@ namespace Swing.Player
 {
     public class CameraController : MonoBehaviour
     {
+        [SerializeField] Camera movedCamera;
+
         [Inject] BodyRoot root;
-        [Inject] Camera movedCamera;
         [Inject] CameraSettings cameraSettings;
         [Inject] CharacterState state;
 
@@ -28,13 +29,14 @@ namespace Swing.Player
                   .Where(_ => state.localPlayerControl.Value)
                   .Subscribe(_ =>
                   {
-                      Vector3 cameraPosition = movedCamera.transform.position;
+                      Vector3 cameraPosition = transform.position;
                       Vector3 rootPosition = root.rootBodyPart.transform.position;
 
                       cameraPosition.x = rootPosition.x;
                       cameraPosition.y = rootPosition.y;
+                      cameraPosition.z = -10;
 
-                      movedCamera.transform.position = cameraPosition;
+                      transform.position = cameraPosition;
 
                       var rootRigidbody = root.rootBodyPart.GetComponent<Rigidbody2D>();
                       movedCamera.orthographicSize = Mathf.Lerp(movedCamera.orthographicSize, 5 + rootRigidbody.velocity.magnitude/3f , 3f * Time.deltaTime);
