@@ -19,6 +19,7 @@ namespace Swing.Character
         {
             Container.DeclareSignal<GrapplingFiredSignal>();
             Container.DeclareSignal<GrapplingReleasedSignal>();
+            Container.DeclareSignal<SuicideSignal>();
 
             Container.BindInstance(settings).AsSingle();
 

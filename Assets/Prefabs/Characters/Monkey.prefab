@@ -201,6 +201,7 @@ GameObject:
   - component: {fileID: 114743325545663474}
   - component: {fileID: 114430124147768648}
   - component: {fileID: 114168878548591896}
+  - component: {fileID: 114216809428879588}
   m_Layer: 9
   m_Name: Monkey
   m_TagString: Untagged
@@ -1759,6 +1760,17 @@ MonoBehaviour:
   pivot: {x: 0, y: 0.5, z: 0}
   children:
   - {fileID: 114596171886988912}
+--- !u!114 &114216809428879588
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1547931621830964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c78a63f13cc954b6ba503f8f53a19429, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114267413393991500
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1799,7 +1811,6 @@ MonoBehaviour:
     ropeSpringFrequency: 1.1
     grapplingDistance: 15
     mass: 1
-    collideWithSelf: 1
     drag: 0.05
     gravity: 0.9
     ropeClimbSpeed: 5

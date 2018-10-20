@@ -21,6 +21,7 @@ namespace Swing.Character
         {
             signalBus.GetStream<GrapplingFiredSignal>()
                      .TakeUntilDestroy(this)
+                     .Where(_ => characterState.localPlayerControl.Value)
                      .Subscribe(_ =>
                      {
                          if (currentRope != null) Destroy(currentRope);
@@ -56,12 +57,11 @@ namespace Swing.Character
                              Observable.EveryUpdate()
                                        .TakeUntilDestroy(this)
                                        .TakeUntilDestroy(currentRope)
-                                       .TakeUntil(characterState.localPlayerControl.Where(isControlled => !isControlled))
                                        .TakeUntil(signalBus.GetStream<GrapplingReleasedSignal>())
+                                       .Where(__ => characterState.localPlayerControl.Value)
                                        .Select(__ => characterState.aimDirection.Value)
                                        .Subscribe(direction =>
                                        {
-
                                            var ropeDirection = (anchor.transform.position - transform.position).normalized;
                                            var aimDirection = characterState.aimDirection.Value.normalized;
                                            var ropeDot = Vector2.Dot(aimDirection, ropeDirection);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using UniRx;
+using System;
 
 namespace Swing.Character
 {
@@ -10,15 +11,43 @@ namespace Swing.Character
     public class Bloodsplosion : MonoBehaviour
     {
         [Inject] CharacterSettings settings;
+        [Inject] SignalBus signalBus;
+
+        private bool dead = false;
+
+        private void Start()
+        {
+            signalBus.GetStream<SuicideSignal>()
+               .TakeUntilDestroy(this)
+               .Subscribe(__ => BreakEffect(true));
+        }
 
         void OnJointBreak2D(Joint2D brokenJoint)
         {
+            BreakEffect(false);
+        }
+
+        private void BreakEffect(bool destroyJoint){
+            if (dead) return;
+
             var joint = GetComponent<AnchoredJoint2D>();
+            var jointPosition = transform.TransformPoint(joint.anchor);
             var other = joint.connectedBody.transform;
             var otherJointPosition = other.TransformPoint(joint.connectedAnchor);
+            var otherJointDirection = (otherJointPosition - other.position).normalized;
 
-            AutoDestructionParticleSystem(Instantiate(settings.bloodsplosionEffect, transform.TransformPoint(joint.anchor),transform.rotation, transform));
-            AutoDestructionParticleSystem(Instantiate(settings.bloodsplosionEffect, otherJointPosition, Quaternion.LookRotation(otherJointPosition - other.position), other));
+            AutoDestructionParticleSystem(Instantiate(settings.bloodsplosionEffect, jointPosition, transform.rotation, transform));
+            AutoDestructionParticleSystem(Instantiate(settings.bloodsplosionEffect, otherJointPosition, Quaternion.LookRotation(otherJointDirection), other));
+
+            if (destroyJoint)
+            {
+                joint.enabled = false;
+                float suicideExplosionForce = 250f;
+                joint.GetComponent<Rigidbody2D>().AddForceAtPosition(transform.forward * suicideExplosionForce, jointPosition);
+                other.GetComponent<Rigidbody2D>().AddForceAtPosition(otherJointDirection * suicideExplosionForce, otherJointPosition);
+            }
+
+            dead = true;
         }
 
         void AutoDestructionParticleSystem(GameObject gameObject){

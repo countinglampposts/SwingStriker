@@ -4,6 +4,7 @@ using Swing.Player;
 using UnityEngine;
 using Zenject;
 using UniRx;
+using UniRx.Triggers;
 
 namespace Swing.Character
 {
@@ -12,16 +13,9 @@ namespace Swing.Character
         [Inject] private SignalBus signalBus;
         [Inject] private CharacterState state;
 
-        private void Start()
-        {
-            state.localPlayerControl
-                 .TakeUntilDestroy(this)
-                 .Subscribe(localControl => enabled = localControl);
-        }
-
         private void OnJointBreak2D(Joint2D joint)
         {
-            if(enabled) signalBus.Fire<ResetPlayerSignal>();
+            if(state.localPlayerControl.Value) signalBus.Fire<PlayerKilledSignal>();
         }
     }
 }

@@ -21,7 +21,8 @@ namespace Swing.Player
         {
             bool mouseEnabled = true;
             Observable.EveryUpdate()
-                      .TakeUntilDestroy(this)
+                      .TakeUntilDestroy(this) 
+                      .Where(_ => state.localPlayerControl.Value)
                       .Select(_ => Input.mousePosition)
                       .Buffer(60)
                       .Select(positions => positions.Skip(1).Select((next, index) => next - positions[index]).Average(delta => delta.magnitude))
@@ -31,31 +32,24 @@ namespace Swing.Player
 
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
+                      .Where(_ => state.localPlayerControl.Value)
                       .Where(_ => mouseEnabled)
                       .Where(_ => playerCamera.pixelRect.Contains(Input.mousePosition))
-                      .Subscribe(_ =>
-                      {
-                          state.aimDirection.Value = playerCamera.ScreenToWorldPoint(Input.mousePosition) - bodyRoot.rootBodyPart.transform.position;
-                      });
+                      .Subscribe(_ => state.aimDirection.Value = playerCamera.ScreenToWorldPoint(Input.mousePosition) - bodyRoot.rootBodyPart.transform.position);
 
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
+                      .Where(_ => state.localPlayerControl.Value)
                       .Where(_ => Input.GetKeyDown(KeyCode.Mouse0))
                       .Where(_ => playerCamera.pixelRect.Contains(Input.mousePosition))
-                      .Where(_ => enabled)
                       .Subscribe(_ => signalBus.Fire<GrapplingFiredSignal>());
 
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
+                      .Where(_ => state.localPlayerControl.Value)
                       .Where(_ => Input.GetKeyUp(KeyCode.Mouse0))
                       .Where(_ => playerCamera.pixelRect.Contains(Input.mousePosition))
-                      .Where(_ => enabled)
                       .Subscribe(_ => signalBus.Fire(new GrapplingReleasedSignal()));
-        }
-
-        public void Disable()
-        {
-            enabled = false;
         }
     }
 }

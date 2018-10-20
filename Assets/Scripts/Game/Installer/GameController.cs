@@ -103,13 +103,13 @@ namespace Swing.Game
             {
                 playerContext = Container.CreateSubContainer();
                 characterState = new CharacterState();
-                playerContext.DeclareSignal<ResetPlayerSignal>();
+                playerContext.DeclareSignal<PlayerKilledSignal>();
                 playerContext.BindInstance(characterState);
                 playerContext.BindInstance(playerData);
                 playerContext.BindInstance(cameraSettings);
                 instance = playerContext.InstantiatePrefab(playerData.character.prefab);
                 playerContext.Resolve<SignalBus>()
-                         .GetStream<ResetPlayerSignal>()
+                         .GetStream<PlayerKilledSignal>()
                          .Subscribe(_ =>
                          {
                              characterState.localPlayerControl.Value = false;

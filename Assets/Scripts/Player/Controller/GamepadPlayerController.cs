@@ -3,6 +3,7 @@ using UnityEngine;
 using Zenject;
 using Swing.Character;
 using System.Linq;
+using UniRx;
 
 namespace Swing.Player
 {
@@ -12,23 +13,27 @@ namespace Swing.Player
         [Inject] PlayerData playerData;
         [Inject] CharacterState state;
 
-        private void Update()
+        private void Start()
         {
-            var inputDevice = InputManager.Devices.FirstOrDefault(device => device.GUID == playerData.deviceID);
-            if (state.localPlayerControl.Value == true && inputDevice != null)
-            {
-                var direction = new Vector2(inputDevice.RightStickX, inputDevice.RightStickY).normalized;
-                state.aimDirection.Value = direction;
-                if (inputDevice.RightTrigger.WasPressed)
-                {
-                    signalBus.Fire<GrapplingFiredSignal>();
-                }
+            Observable.EveryUpdate()
+                      .TakeUntilDestroy(this)
+                      .Where(_ => state.localPlayerControl.Value)
+                      .Select(_ => InputManager.Devices.FirstOrDefault(device => device.GUID == playerData.deviceID))
+                      .Where(device => device != null)
+                      .Subscribe(device =>
+                      {
+                          var direction = new Vector2(device.RightStickX, device.RightStickY).normalized;
+                          state.aimDirection.Value = direction;
+                          if (device.RightTrigger.WasPressed)
+                          {
+                              signalBus.Fire<GrapplingFiredSignal>();
+                          }
 
-                if (inputDevice.RightTrigger.WasReleased)
-                {
-                    signalBus.Fire<GrapplingReleasedSignal>();
-                }
-            }
+                          if (device.RightTrigger.WasReleased)
+                          {
+                              signalBus.Fire<GrapplingReleasedSignal>();
+                          }
+                      });
         }
     }
 }
