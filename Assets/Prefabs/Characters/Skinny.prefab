@@ -1715,7 +1715,7 @@ MonoBehaviour:
     physicsMaterial: {fileID: 6200000, guid: 5b70a68aebb9a45a98c73f0900cc7644, type: 2}
     grapplingMask:
       serializedVersion: 2
-      m_Bits: 1536
+      m_Bits: 1024
 --- !u!114 &114132042341316970
 MonoBehaviour:
   m_ObjectHideFlags: 1
