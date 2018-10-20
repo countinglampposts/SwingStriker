@@ -37,6 +37,12 @@ namespace Swing.Level
                                    .TakeUntilDestroy(this)
                                    .TakeUntil(signalBus.GetStream<GameEndsSignal>())
                                    .Subscribe(__ => centerTextUI.enabled = false);
+                         Observable.Interval(TimeSpan.FromSeconds(1))
+                                   .TakeUntilDestroy(this)
+                                   .TakeUntil(signalBus.GetStream<GameEndsSignal>())
+                                   .TakeWhile(interval => interval <= 5)
+                                   .Skip(1)
+                                   .Subscribe(interval => centerTextUI.text = (4 - interval).ToString());
                      });
             signalBus.GetStream<GameEndsSignal>()
                      .TakeUntilDestroy(this)
