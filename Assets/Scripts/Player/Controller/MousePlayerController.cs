@@ -3,6 +3,10 @@ using Zenject;
 using UniRx;
 using Swing.Character;
 using Swing.Game;
+using UniRx.Diagnostics;
+using System;
+using System.Linq;
+using InControl;
 
 namespace Swing.Player
 {
@@ -15,12 +19,19 @@ namespace Swing.Player
 
         private void Start()
         {
-            state.localPlayerControl
-                 .TakeUntilDestroy(this)
-                 .Subscribe(localControl => enabled = localControl);
+            bool mouseEnabled = true;
+            Observable.EveryUpdate()
+                      .TakeUntilDestroy(this)
+                      .Select(_ => Input.mousePosition)
+                      .Buffer(60)
+                      .Select(positions => positions.Skip(1).Select((next, index) => next - positions[index]).Average(delta => delta.magnitude))
+                      .Select(avg => avg > 5)
+                      .DistinctUntilChanged()
+                      .Subscribe(enabled => mouseEnabled = enabled);
 
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
+                      .Where(_ => mouseEnabled)
                       .Where(_ => playerCamera.pixelRect.Contains(Input.mousePosition))
                       .Subscribe(_ =>
                       {
