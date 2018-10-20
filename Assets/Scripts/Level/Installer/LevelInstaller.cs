@@ -58,6 +58,12 @@ namespace Swing.Level
             foreach(var a in spawnPoints){
                 if(a.spawnPoint != null) Gizmos.DrawWireSphere(a.spawnPoint.position, .5f);
             }
+            if(ball.restartPoint != null)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(ball.restartPoint.position, .5f);
+                Gizmos.color = Color.white;
+            }
         }
     }
 }
