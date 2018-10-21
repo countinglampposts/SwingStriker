@@ -30,6 +30,8 @@ namespace Swing.Character
         private void BreakEffect(bool destroyJoint){
             if (dead) return;
 
+            signalBus.Fire(new RumbleTriggeredSignal { magnitude = 3f });
+
             var joint = GetComponent<AnchoredJoint2D>();
             var jointPosition = transform.TransformPoint(joint.anchor);
             var other = joint.connectedBody.transform;

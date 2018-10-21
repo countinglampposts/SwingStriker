@@ -54,8 +54,6 @@ namespace Swing.Character
 
                              currentRope = anchor;
 
-                             signalBus.Fire(new RumbleTriggeredSignal { magnitude = 1.5f });
-
                              Observable.EveryUpdate()
                                        .TakeUntilDestroy(this)
                                        .TakeUntilDestroy(currentRope)
