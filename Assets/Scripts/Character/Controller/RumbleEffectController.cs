@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Swing.Player;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -17,6 +18,10 @@ namespace Swing.Character
 
         private void Start()
         {
+            signalBus.GetStream<PlayerKilledSignal>()
+                     .TakeUntilDestroy(this)
+                     .Subscribe(_ => signalBus.Fire(new RumbleTriggeredSignal { magnitude = 3f }));
+
             float currentRumble = 0;
             float maxRumbleMagnitude = .05f;
             float rumbleFrquency = 60;// in rotations per second
