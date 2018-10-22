@@ -22,6 +22,8 @@ namespace Swing.Game
 
     public class GameController : MonoInstaller
     {
+        [SerializeField] private GameCameraController cameraControllerPrefab;
+
         [Inject] private LevelAsset levelAsset;
         [Inject] private PlayerData[] playersData;
         [Inject] private GameTime time;
@@ -36,6 +38,37 @@ namespace Swing.Game
             Container.DeclareSignal<GoalScoredSignal>();
             Container.DeclareSignal<BallResetSignal>();
 
+            Container.BindInstance(gameState);
+            Container.BindInstance(new GameCameraState());
+
+            // HACK
+            var newCamera = Container.InstantiatePrefab(cameraControllerPrefab).GetComponentInChildren<Camera>();
+            Container.BindInstance(newCamera);
+        }
+
+        private void Start()
+        {
+            InitGameState();
+
+            // Init the level
+            var levelContext = Container.CreateSubContainer();
+            var level = levelContext.InstantiatePrefab(levelAsset.prefab).GetComponent<LevelInstaller>();
+
+            // Init the players
+            var layout = layouts.layouts.First(a => a.settings.Length == playersData.Length);
+            var spawned = new List<Tuple<PlayerData, GameObject>>();
+
+            for (int a = 0; a < playersData.Length; a++)
+            {
+                var playerData = playersData[a];
+                var instance = InitializePlayer(playerData, layout.settings[a], level);
+
+                spawned.Add(new Tuple<PlayerData, GameObject>(playerData, instance));
+            }
+            level.ResolvePlayerSpawn(spawned);
+        }
+
+        private void InitGameState(){
             var signalBus = Container.Resolve<SignalBus>();
             // Init the state
 
@@ -81,29 +114,6 @@ namespace Swing.Game
                          if (!gameState.scores.ContainsKey(teamID)) gameState.scores.Add(teamID, 0);
                          gameState.scores[teamID]++;
                      });
-
-            Container.BindInstance(gameState);
-
-        }
-
-        private void Start()
-        {
-            // Init the level
-            var levelContext = Container.CreateSubContainer();
-            var level = levelContext.InstantiatePrefab(levelAsset.prefab).GetComponent<LevelInstaller>();
-
-            // Init the players
-            var layout = layouts.layouts.First(a => a.settings.Length == playersData.Length);
-            var spawned = new List<Tuple<PlayerData, GameObject>>();
-
-            for (int a = 0; a < playersData.Length; a++)
-            {
-                var playerData = playersData[a];
-                var instance = InitializePlayer(playerData, layout.settings[a], level);
-
-                spawned.Add(new Tuple<PlayerData, GameObject>(playerData, instance));
-            }
-            level.ResolvePlayerSpawn(spawned);
         }
 
         private GameObject InitializePlayer(PlayerData playerData, CameraSettings cameraSettings, LevelInstaller level){

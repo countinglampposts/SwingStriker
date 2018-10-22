@@ -24,6 +24,8 @@ namespace Swing.Character
         [SerializeField]
         public float swingForce;
         [SerializeField]
+        public float initialGrapplingDistanceRatio;
+        [SerializeField]
         public GameObject bloodsplosionEffect;
         [SerializeField]
         public LineRenderer ropeEffect;

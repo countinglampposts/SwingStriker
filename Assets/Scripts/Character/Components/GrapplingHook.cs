@@ -42,7 +42,7 @@ namespace Swing.Character
                              joint.autoConfigureDistance = false;
                              joint.autoConfigureConnectedAnchor = false;
                              joint.anchor = anchor.transform.InverseTransformPoint(hitPosition);
-                             joint.distance = 0;
+                    joint.distance = Vector2.Distance(hitPosition,transform.position) * settings.initialGrapplingDistanceRatio;
                              joint.dampingRatio = 1f;
                              joint.frequency = settings.ropeSpringFrequency;
                              joint.enableCollision = true;
@@ -74,7 +74,7 @@ namespace Swing.Character
 
                                            var distanceDelta = ropeDot * settings.ropeClimbSpeed * Time.deltaTime;
 
-                                           if (joint.frequency > settings.ropeSpringFrequency) joint.distance -= distanceDelta;
+                                           if (joint.frequency <= settings.ropeSpringFrequency) joint.distance -= distanceDelta;
                                            if (joint.distance <= 0.1f) joint.frequency += distanceDelta * .1f;
                                        });
                          }

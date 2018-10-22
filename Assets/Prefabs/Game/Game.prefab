@@ -378,6 +378,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 608cc0e4b1c314a18821b68571ff44ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraControllerPrefab: {fileID: 114929657088042582, guid: a85954ac9d29947bca822f12d964eee3,
+    type: 2}
 --- !u!114 &114453998409795058
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -29,9 +29,9 @@ namespace Swing.Character
                      .FromInstance(root)
                      .AsSingle();
 
-            // TODO
-            var instance = Container.InstantiatePrefab(playerCameraPrefab);
-            Container.BindInstance(instance.GetComponentInChildren<Camera>());
+            // This is to activate split screen view
+            /*var instance = Container.InstantiatePrefab(playerCameraPrefab);
+            Container.BindInstance(instance.GetComponentInChildren<Camera>());*/
         }
     }
 }

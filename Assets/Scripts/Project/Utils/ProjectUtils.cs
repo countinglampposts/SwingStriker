@@ -4,6 +4,7 @@ using UnityEngine;
 using Zenject;
 using UniRx;
 using System;
+using System.Linq;
 
 namespace Swing
 {
@@ -48,6 +49,14 @@ namespace Swing
                 }
             }
             return maxValue;
+        }
+
+        public static Rect CreateRectFromContainingPoints(Vector2[] points, float buffer = 0){
+            var xMin = points.Min(p => p.x);
+            var xMax = points.Max(p => p.x);
+            var yMin = points.Min(p => p.y);
+            var yMax = points.Max(p => p.y);
+            return Rect.MinMaxRect(xMin - buffer, yMin - buffer, xMax + buffer, yMax + buffer);
         }
     }
 }

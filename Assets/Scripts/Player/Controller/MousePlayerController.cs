@@ -19,6 +19,7 @@ namespace Swing.Player
 
         private void Start()
         {
+            Debug.Log(playerCamera);
             bool mouseEnabled = true;
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this) 

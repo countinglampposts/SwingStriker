@@ -237,6 +237,7 @@ GameObject:
   - component: {fileID: 23924694184423390}
   - component: {fileID: 114204132126281104}
   - component: {fileID: 114246454675475760}
+  - component: {fileID: 114879947183200914}
   m_Layer: 9
   m_Name: Chest
   m_TagString: Untagged
@@ -1629,6 +1630,7 @@ MonoBehaviour:
     gravity: 1
     ropeClimbSpeed: 5
     swingForce: 25
+    initialGrapplingDistanceRatio: 0.5
     bloodsplosionEffect: {fileID: 1248047097124180, guid: 13d2a5f6019394802a217c5c58f4289e,
       type: 2}
     ropeEffect: {fileID: 120737986554554048, guid: e752f7f35b7344b529448196adb03172,
@@ -1937,6 +1939,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 926252c8c57734f99a845dc0023c8127, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114879947183200914
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1771980315038114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e9f16cc07a6e49358e21f0c5c853dd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114895144887042468
