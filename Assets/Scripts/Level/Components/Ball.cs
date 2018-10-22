@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using UniRx;
+using UniRx.Triggers;
 using System;
 using Swing.Game;
 
@@ -13,10 +14,14 @@ namespace Swing.Level
     {
         [Inject] SignalBus signalBus;
         [Inject] Transform restartPoint;
+        [Inject] GameCameraState gameCameraState;
 
         public void Start()
         {
-            Reset();
+            gameCameraState.pointsOfInterest.Add(transform);
+            gameObject.OnDestroyAsObservable()
+                      .First()
+                      .Subscribe(_ => gameCameraState.pointsOfInterest.Remove(transform));
 
             signalBus.GetStream<GoalScoredSignal>()
                      .TakeUntilDestroy(this)
@@ -29,6 +34,8 @@ namespace Swing.Level
                                     Reset();
                                 });
                      });
+
+            Reset();
         }
 
         private void Reset()
