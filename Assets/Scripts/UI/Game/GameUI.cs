@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Swing.Game;
 using Swing.Player;
 using UniRx;
 using UnityEngine;
@@ -9,13 +6,14 @@ using UnityEngine.UI;
 using Zenject;
 using System.Linq;
 
-namespace Swing.Level
+namespace Swing.Game
 {
-    public class LevelUIController : MonoBehaviour
+    public class GameUI : MonoBehaviour
     {
         [SerializeField] private Text scoreTextUI;
         [SerializeField] private Text timerTextUI;
         [SerializeField] private Text centerTextUI;
+        [SerializeField] private GameObject root;
 
         [Inject] SignalBus signalBus;
         [Inject] GameState gameState;
@@ -28,6 +26,10 @@ namespace Swing.Level
 
         private void Start()
         {
+            gameState.isPaused
+                     .TakeUntilDestroy(this)
+                     .Subscribe(isPaused => root.SetActive(!isPaused));
+
             signalBus.GetStream<GoalScoredSignal>()
                      .TakeUntilDestroy(this)
                      .Subscribe(_=> {
