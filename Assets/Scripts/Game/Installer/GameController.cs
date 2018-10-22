@@ -57,6 +57,7 @@ namespace Swing.Game
                                    .TakeUntilDestroy(this)
                                    .Subscribe(__ => Application.LoadLevel(Application.loadedLevel));
                      });
+
             // Debug Commands
             Observable.EveryUpdate()
                       .Where(_ => Input.GetKeyDown(KeyCode.E))
@@ -124,20 +125,23 @@ namespace Swing.Game
                 var playerKilledStream = playerContext.Resolve<SignalBus>()
                                                       .GetStream<PlayerKilledSignal>();
                 gameState.isPaused
-                         .TakeUntil(playerKilledStream)
+                         .TakeUntilDestroy(instance)
                          .Subscribe(isPaused => characterState.localPlayerControl.Value = !isPaused);
 
                 playerKilledStream
                          .First()
+                         .TakeUntilDestroy(instance)
                          .Subscribe(_ =>
                          {
                              characterState.localPlayerControl.Value = false;
 
                              var oldInstance = instance;
                              Observable.Timer(TimeSpan.FromSeconds(3f))
+                                       .TakeUntilDestroy(oldInstance)
                                        .Subscribe(__ => {
                                            characterState.isCorpse.Value = true;
                                            Observable.Timer(TimeSpan.FromSeconds(30))
+                                                     .TakeUntilDestroy(oldInstance)
                                                      .Subscribe(___ => GameObject.Destroy(oldInstance));
 
                                            //----RESETS ALL VALUES-----
