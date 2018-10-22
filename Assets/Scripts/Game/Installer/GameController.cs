@@ -41,9 +41,10 @@ namespace Swing.Game
             Container.BindInstance(gameState);
             Container.BindInstance(new GameCameraState());
 
-            // HACK
-            var newCamera = Container.InstantiatePrefab(cameraControllerPrefab).GetComponentInChildren<Camera>();
-            Container.BindInstance(newCamera);
+            Container.Bind<Camera>()
+                     .FromComponentInNewPrefab(cameraControllerPrefab)
+                     .AsSingle()
+                     .NonLazy();
         }
 
         private void Start()
