@@ -72,14 +72,10 @@ namespace Swing.Character
                                            var right = -Vector2.Perpendicular(ropeDirection);
                                            rigidbody.AddForce(settings.swingForce * right * Vector2.Dot(right, aimDirection));
 
-                                           /*joint.connectedBody = null;
-                                           var originalPosition = joint.transform.position;
-                                           joint.transform.position = joint.transform.position + ropeDirection * 100f;//ropeDot * settings.ropeClimbSpeed * Time.deltaTime;
-                                           joint.connectedBody = rigidbody;
-                                           joint.transform.position = originalPosition;
-                                           joint.distance = 0;*/
+                                           var distanceDelta = ropeDot * settings.ropeClimbSpeed * Time.deltaTime;
 
-                                           joint.distance -= ropeDot * settings.ropeClimbSpeed * Time.deltaTime;
+                                           if (joint.frequency > settings.ropeSpringFrequency) joint.distance -= distanceDelta;
+                                           if (joint.distance <= 0.1f) joint.frequency += distanceDelta * .1f;
                                        });
                          }
                      });
