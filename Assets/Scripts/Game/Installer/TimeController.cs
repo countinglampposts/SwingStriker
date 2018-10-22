@@ -17,6 +17,7 @@ namespace Swing.Game
                 .Subscribe(isPaused => Time.timeScale = (isPaused) ? 0 : 1);
 
             Observable.EveryUpdate()
+                      .TakeUntilDestroy(this)
                       .Where(_ => InputManager.ActiveDevice.CommandWasPressed || Input.GetKeyDown(KeyCode.P))
                       .Subscribe(_ => state.isPaused.Value = !state.isPaused.Value);
         }

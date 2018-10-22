@@ -28,6 +28,8 @@ namespace Swing.Game
         [Inject] private SplitScreenLayouts layouts;
         [Inject] private GameTime gameTime;
 
+        private GameState gameState = new GameState();
+
         public override void InstallBindings()
         {
             Container.DeclareSignal<GameEndsSignal>();
@@ -36,17 +38,16 @@ namespace Swing.Game
 
             var signalBus = Container.Resolve<SignalBus>();
             // Init the state
-            var state = new GameState();
 
             // Init the timer logic
-            state.secondsRemaining.Value = gameTime.seconds;
+            gameState.secondsRemaining.Value = gameTime.seconds;
             Observable.Interval(TimeSpan.FromSeconds(1))
                       .TakeUntil(signalBus.GetStream<GameEndsSignal>())
-                      .Subscribe(_ => state.secondsRemaining.Value--);
-            state.secondsRemaining
+                      .Subscribe(_ => gameState.secondsRemaining.Value--);
+            gameState.secondsRemaining
                  .TakeUntilDestroy(this)
                  .Where(timeRemaining => timeRemaining <= 0)
-                 .Where(_ => state.scores.HasMax(score => score.Value))
+                 .Where(_ => gameState.scores.HasMax(score => score.Value))
                  .Subscribe(_ => signalBus.Fire<GameEndsSignal>());
             signalBus.GetStream<GameEndsSignal>()
                      .TakeUntilDestroy(this)
@@ -56,26 +57,31 @@ namespace Swing.Game
                                    .TakeUntilDestroy(this)
                                    .Subscribe(__ => Application.LoadLevel(Application.loadedLevel));
                      });
+            // Debug Commands
             Observable.EveryUpdate()
                       .Where(_ => Input.GetKeyDown(KeyCode.E))
                       .First()
-                      .Subscribe(_ => state.secondsRemaining.Value = 1);
+                      .Subscribe(_ => gameState.secondsRemaining.Value = 1);
+            Observable.EveryUpdate()
+                      .Where(_ => Input.GetKeyDown(KeyCode.R))
+                      .First()
+                      .Subscribe(_ => Application.LoadLevel(Application.loadedLevel));
 
             // Init the score keeping
             foreach (var a in playersData.Select(player => player.team.id).Distinct())
             {
-                state.scores.Add(a, 0);
+                gameState.scores.Add(a, 0);
             }
             signalBus.GetStream<GoalScoredSignal>()
                      .TakeUntilDestroy(this)
                      .Subscribe(signal =>
                      {
                          int teamID = signal.team;
-                         if (!state.scores.ContainsKey(teamID)) state.scores.Add(teamID, 0);
-                         state.scores[teamID]++;
+                         if (!gameState.scores.ContainsKey(teamID)) gameState.scores.Add(teamID, 0);
+                         gameState.scores[teamID]++;
                      });
 
-            Container.BindInstance(state);
+            Container.BindInstance(gameState);
 
         }
 
@@ -114,8 +120,15 @@ namespace Swing.Game
                 playerContext.BindInstance(playerData);
                 playerContext.BindInstance(cameraSettings);
                 instance = playerContext.InstantiatePrefab(playerData.character.prefab);
-                playerContext.Resolve<SignalBus>()
-                         .GetStream<PlayerKilledSignal>()
+
+                var playerKilledStream = playerContext.Resolve<SignalBus>()
+                                                      .GetStream<PlayerKilledSignal>();
+                gameState.isPaused
+                         .TakeUntil(playerKilledStream)
+                         .Subscribe(isPaused => characterState.localPlayerControl.Value = !isPaused);
+
+                playerKilledStream
+                         .First()
                          .Subscribe(_ =>
                          {
                              characterState.localPlayerControl.Value = false;
@@ -134,6 +147,8 @@ namespace Swing.Game
                                        });
 
                          });
+
+
 
             };
 
