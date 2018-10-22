@@ -42,7 +42,7 @@ namespace Swing.Character
                              joint.autoConfigureDistance = false;
                              joint.autoConfigureConnectedAnchor = false;
                              joint.anchor = anchor.transform.InverseTransformPoint(hitPosition);
-                    joint.distance = Vector2.Distance(hitPosition,transform.position) * settings.initialGrapplingDistanceRatio;
+                             joint.distance = Vector2.Distance(hitPosition,transform.position) * settings.initialGrapplingDistanceRatio;
                              joint.dampingRatio = 1f;
                              joint.frequency = settings.ropeSpringFrequency;
                              joint.enableCollision = true;

@@ -8,11 +8,6 @@ using Zenject;
 
 namespace Swing.Level
 {
-    [System.Serializable]
-    public struct GameBall{
-        public GameObject gameObject;
-        public Transform restartPoint;
-    }
 
     [System.Serializable]
     public struct SpawnPoint{
@@ -23,17 +18,19 @@ namespace Swing.Level
     public class LevelInstaller : MonoInstaller
     {
         [SerializeField]
-        public SpawnPoint[] spawnPoints;
+        private GameObject ballPrefab;
         [SerializeField]
-        private GameBall ball;
+        private Transform ballReset;
+        [SerializeField]
+        public SpawnPoint[] spawnPoints;
 
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<LevelController>()
+            Container.Bind<Ball>()
+                     .FromComponentInNewPrefab(ballPrefab)
                      .AsSingle()
+                     .WithArguments(ballReset)
                      .NonLazy();
-
-            Container.BindInstance(ball);
         }
 
         public void ResolvePlayerSpawn(List<Tuple<PlayerData,GameObject>> spawned){
@@ -58,10 +55,10 @@ namespace Swing.Level
             foreach(var a in spawnPoints){
                 if(a.spawnPoint != null) Gizmos.DrawWireSphere(a.spawnPoint.position, .5f);
             }
-            if(ball.restartPoint != null)
+            if(ballReset != null)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(ball.restartPoint.position, .5f);
+                Gizmos.DrawWireSphere(ballReset.position, .5f);
                 Gizmos.color = Color.white;
             }
         }

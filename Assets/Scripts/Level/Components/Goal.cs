@@ -15,9 +15,9 @@ namespace Swing.Level
     public class Goal : MonoBehaviour
     {
         [SerializeField] int team;
-        [Inject] GameBall gameBall;
         [Inject] SignalBus signalBus;
         [Inject] TeamsData teamsData;
+        [Inject] Ball ball;
 
         private bool locked;
 
@@ -40,7 +40,7 @@ namespace Swing.Level
             gameObject.OnTriggerEnter2DAsObservable()
                       .TakeUntilDestroy(this)
                       .Where(_ => !locked)
-                      .Where(collision => collision.gameObject == gameBall.gameObject)
+                      .Where(collision => collision.gameObject == ball.gameObject)
                       .Select(_ => teamsData.teams.FirstOrDefault(element => element.id != team).id)
                       .Subscribe(scoringTeamId => signalBus.Fire(new GoalScoredSignal() { team = scoringTeamId }));
 
