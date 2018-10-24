@@ -36,18 +36,26 @@ namespace Swing.Level
                                 .TakeUntilDestroy(this)
                                 .Subscribe(__ =>
                                 {
-                                    signalBus.Fire(new TimeSlowSignal { slowTime = 2f });
+                                    //signalBus.Fire(new TimeSlowSignal { slowTime = 2f });
                                     Reset();
                                 });
                      });
 
+            bool slowingEffectActive = true;
+            signalBus.GetStream<GoalScoredSignal>()
+                     .Select(_ => true)
+                     .Merge(signalBus.GetStream<BallResetSignal>().Select(_ => false))
+                     .TakeUntilDestroy(this)
+                     .Subscribe(isBetweenScoreAndReset => slowingEffectActive = !isBetweenScoreAndReset);
+
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
+                      .Where(_ => slowingEffectActive)
                       .Select(_ => Physics2D.CircleCast(transform.position, collider.bounds.extents.x, rigidBody.velocity, rigidBody.velocity.magnitude, pathCastingMask.value))
                       .Where(hit => hit.collider != null)
                       // HACK
                       .Where(hit => hit.collider.gameObject.GetComponent<Goal>() != null)
-                      .Subscribe(hit => signalBus.Fire(new TimeSlowSignal { slowTime = .5f }));
+                      .Subscribe(hit => signalBus.Fire(new TimeSlowSignal { slowTime = .1f }));
 
             Reset();
         }

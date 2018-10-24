@@ -38,12 +38,12 @@ namespace Swing.Character
                              var anchor = new GameObject("GrapplingAnchor");
                              anchor.transform.position = hitPosition;
 
-                             gameCameraState.pointsOfInterest.Add(anchor.transform);
+                             /*gameCameraState.pointsOfInterest.Add(anchor.transform);
                              anchor.OnDestroyAsObservable()
                                    .Merge(gameObject.OnDestroyAsObservable())
                                    .Merge(characterState.isCorpse.Where(isCorpse => isCorpse).Select(__ => Unit.Default))
                                    .First()
-                                   .Subscribe(__ => gameCameraState.pointsOfInterest.Remove(anchor.transform));
+                                   .Subscribe(__ => gameCameraState.pointsOfInterest.Remove(anchor.transform));*/
 
                              var anchorRigidbody = anchor.AddComponent<Rigidbody2D>();
                              anchorRigidbody.isKinematic = true;

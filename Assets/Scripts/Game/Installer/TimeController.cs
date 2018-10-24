@@ -31,6 +31,9 @@ namespace Swing.Game
 
             float goalTimeScale = 1f;
             float endSlowdownTime = 0f;
+            state.isPaused
+                 .TakeUntilDestroy(this)
+                 .Subscribe(_ => Time.timeScale = goalTimeScale);
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
                       .Select(_ => (state.isPaused.Value) ? 0 : Mathf.Lerp(Time.timeScale, (Time.time < endSlowdownTime) ? goalTimeScale : 1, 8 * Time.deltaTime))
