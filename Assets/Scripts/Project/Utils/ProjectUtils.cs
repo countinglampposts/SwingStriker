@@ -58,5 +58,23 @@ namespace Swing
             var yMax = points.Max(p => p.y);
             return Rect.MinMaxRect(xMin - buffer, yMin - buffer, xMax + buffer, yMax + buffer);
         }
+
+        public static Rect CreateEncapsulatingRect(this Rect rect, float aspectRatio){
+            var returnedRect = new Rect();
+
+            if(rect.width/rect.height < aspectRatio){
+                // use height
+                returnedRect.height = rect.height;
+                returnedRect.width = rect.height * aspectRatio;
+            }else{
+                // use width
+                returnedRect.height = rect.width / aspectRatio;
+                returnedRect.width = rect.width;
+            }
+
+            returnedRect.center = rect.center;
+
+            return returnedRect;
+        }
     }
 }
