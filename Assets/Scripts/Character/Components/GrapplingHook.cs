@@ -83,8 +83,7 @@ namespace Swing.Character
 
                                            var distanceDelta = ropeDot * settings.ropeClimbSpeed * Time.deltaTime;
 
-                                           if (joint.frequency <= settings.ropeSpringFrequency) joint.distance -= distanceDelta;
-                                           if (joint.distance <= 0.1f) joint.frequency += distanceDelta * .1f;
+                                           joint.distance -= distanceDelta;
                                        });
                          }
                      });

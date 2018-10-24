@@ -1167,14 +1167,14 @@ MonoBehaviour:
   root: {fileID: 114181403921610522}
   settings:
     breakforce: 4000
-    ropeSpringFrequency: 1.5
+    ropeSpringFrequency: 5
     grapplingDistance: 15
     mass: 3
     drag: 1
     gravity: 2
     ropeClimbSpeed: 5
     swingForce: 40
-    initialGrapplingDistanceRatio: 0.3
+    initialGrapplingDistanceRatio: 1
     bloodsplosionEffect: {fileID: 1248047097124180, guid: 13d2a5f6019394802a217c5c58f4289e,
       type: 2}
     ropeEffect: {fileID: 120737986554554048, guid: e752f7f35b7344b529448196adb03172,
