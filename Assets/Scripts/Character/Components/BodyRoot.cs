@@ -34,6 +34,7 @@ namespace Swing.Character
                 child.GetComponent<Collider2D>().sharedMaterial = settings.physicsMaterial;
                 var gameObject = child.gameObject;
                 var rigidBody = gameObject.AddComponent<Rigidbody2D>();
+                rigidBody.interpolation = RigidbodyInterpolation2D.Interpolate;
                 //rigidBody.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
                 rigidBody.mass = settings.mass;
                 rigidBody.drag = rigidBody.angularDrag = settings.drag;

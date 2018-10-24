@@ -7,6 +7,8 @@ using System;
 
 namespace Swing.Character
 {
+    public class JointBrokenSignal{}
+
     [RequireComponent(typeof(AnchoredJoint2D))]
     public class Bloodsplosion : MonoBehaviour
     {
@@ -29,6 +31,7 @@ namespace Swing.Character
 
         private void BreakEffect(bool destroyJoint){
             if (dead) return;
+            signalBus.Fire<JointBrokenSignal>();
 
             signalBus.Fire(new RumbleTriggeredSignal { magnitude = 3f });
 

@@ -21,6 +21,7 @@ namespace Swing.Character
             Container.DeclareSignal<GrapplingReleasedSignal>();
             Container.DeclareSignal<SuicideSignal>();
             Container.DeclareSignal<RumbleTriggeredSignal>();
+            Container.DeclareSignal<JointBrokenSignal>();
 
             Container.BindInstance(settings)
                      .AsSingle();
@@ -28,6 +29,10 @@ namespace Swing.Character
             Container.Bind<BodyRoot>()
                      .FromInstance(root)
                      .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<GoreSlowController>()
+                     .AsSingle()
+                     .NonLazy();
 
             // This is to activate split screen view
             /*var instance = Container.InstantiatePrefab(playerCameraPrefab);

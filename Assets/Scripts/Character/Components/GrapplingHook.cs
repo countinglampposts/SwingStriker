@@ -40,7 +40,9 @@ namespace Swing.Character
 
                              gameCameraState.pointsOfInterest.Add(anchor.transform);
                              anchor.OnDestroyAsObservable()
-                                   .TakeUntilDestroy(this)
+                                   .Merge(gameObject.OnDestroyAsObservable())
+                                   .Merge(characterState.isCorpse.Where(isCorpse => isCorpse).Select(__ => Unit.Default))
+                                   .First()
                                    .Subscribe(__ => gameCameraState.pointsOfInterest.Remove(anchor.transform));
 
                              var anchorRigidbody = anchor.AddComponent<Rigidbody2D>();
