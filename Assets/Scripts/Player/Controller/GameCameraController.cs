@@ -28,7 +28,7 @@ namespace Swing.Game
                       .TakeUntilDestroy(this)
                       .Select(_ => cameraState.pointsOfInterest
                                               .Where(pt => pt != null)
-                                              .Select(pt => (Vector2)pt.position).ToArray())
+                                              .Select(pt => (Vector2)pt.position))
                       .Select(pts => ProjectUtils.CreateRectFromContainingPoints(pts))
                       .Select(rect => rect.CreateEncapsulatingRect(controlledCamera.aspect))
                       .Subscribe(rect => {
@@ -51,7 +51,7 @@ namespace Swing.Game
         {
             var pts = cameraState.pointsOfInterest
                                  .Where(pt => pt != null)
-                                 .Select(pt => (Vector2)pt.position).ToArray();
+                                 .Select(pt => (Vector2)pt.position);
             var rect = ProjectUtils.CreateRectFromContainingPoints(pts);
             var aRect = rect.CreateEncapsulatingRect(controlledCamera.aspect);
 

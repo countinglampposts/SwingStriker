@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using Zenject;
 using UniRx;
+using UniRx.Triggers;
+using Swing.Game;
 
 namespace Swing.Character
 {
@@ -14,6 +16,7 @@ namespace Swing.Character
         [Inject] private CharacterSettings settings;
         [Inject] private DiContainer container;
         [Inject] private CharacterState characterState;
+        [Inject] private GameCameraState gameCameraState;
 
         private GameObject currentRope;
 
@@ -34,6 +37,11 @@ namespace Swing.Character
 
                              var anchor = new GameObject("GrapplingAnchor");
                              anchor.transform.position = hitPosition;
+
+                             gameCameraState.pointsOfInterest.Add(anchor.transform);
+                             anchor.OnDestroyAsObservable()
+                                   .TakeUntilDestroy(this)
+                                   .Subscribe(__ => gameCameraState.pointsOfInterest.Remove(anchor.transform));
 
                              var anchorRigidbody = anchor.AddComponent<Rigidbody2D>();
                              anchorRigidbody.isKinematic = true;
@@ -62,6 +70,7 @@ namespace Swing.Character
                                        .Select(__ => characterState.aimDirection.Value)
                                        .Subscribe(direction =>
                                        {
+
                                            var ropeDirection = (anchor.transform.position - transform.position).normalized;
                                            var aimDirection = characterState.aimDirection.Value.normalized;
                                            var ropeDot = Vector2.Dot(aimDirection, ropeDirection);
