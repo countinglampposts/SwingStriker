@@ -15,6 +15,7 @@ namespace Swing.Player
 
         private void Start()
         {
+            bool grapplingHookExtended = false;
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
                       .Where(_ => state.localPlayerControl.Value)
@@ -22,17 +23,19 @@ namespace Swing.Player
                       .Where(device => device != null)
                       .Subscribe(device =>
                       {
-                          var direction = new Vector2(device.RightStickX, device.RightStickY).normalized;
+                          var direction = new Vector2(device.RightStickX + device.LeftStickX, device.RightStickY + device.LeftStickY).normalized;
                           if (direction.magnitude > .2f)
                           {
                               state.aimDirection.Value = direction;
-                              if (device.RightTrigger.WasPressed)
+                              if (!grapplingHookExtended && (device.RightTrigger.WasPressed || device.LeftTrigger.WasPressed))
                               {
+                                  grapplingHookExtended = true;
                                   signalBus.Fire<GrapplingFiredSignal>();
                               }
 
-                              if (device.RightTrigger.WasReleased)
+                              if (grapplingHookExtended && (device.RightTrigger.WasReleased || device.LeftTrigger.WasReleased))
                               {
+                                  grapplingHookExtended = false;
                                   signalBus.Fire<GrapplingReleasedSignal>();
                               }
                           }
