@@ -72,7 +72,6 @@ namespace Swing.Character
                                        .Select(__ => characterState.aimDirection.Value)
                                        .Subscribe(direction =>
                                        {
-
                                            var ropeDirection = (anchor.transform.position - transform.position).normalized;
                                            var aimDirection = characterState.aimDirection.Value.normalized;
                                            var ropeDot = Vector2.Dot(aimDirection, ropeDirection);
@@ -86,6 +85,7 @@ namespace Swing.Character
                                            var distanceDelta = ropeDot * settings.ropeClimbSpeed * Time.deltaTime;
 
                                            joint.distance -= distanceDelta;
+                                           if (joint.distance < .1f) joint.frequency += distanceDelta * .5f;
                                        });
                          }
                      });
