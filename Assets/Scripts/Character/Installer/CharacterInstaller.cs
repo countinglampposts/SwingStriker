@@ -33,6 +33,15 @@ namespace Swing.Character
             Container.BindInterfacesAndSelfTo<GoreSlowController>()
                      .AsSingle()
                      .NonLazy();
+            Container.BindInterfacesAndSelfTo<SuicideController>()
+                     .AsSingle()
+                     .NonLazy();
+            Container.BindInterfacesAndSelfTo<MousePlayerController>()
+                     .AsSingle()
+                     .NonLazy();
+            Container.BindInterfacesAndSelfTo<GamepadPlayerController>()
+                     .AsSingle()
+                     .NonLazy();
 
             // This is to activate split screen view
             /*var instance = Container.InstantiatePrefab(playerCameraPrefab);

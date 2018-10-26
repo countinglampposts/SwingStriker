@@ -11,17 +11,17 @@ using Zenject;
 namespace Swing.Character
 {
     public class SuicideSignal{}
-    public class SuicideController : MonoBehaviour
+    public class SuicideController : IInitializable, IDisposable
     {
         [Inject] SignalBus signalBus;
         [Inject] PlayerData playerData;
         [Inject] CharacterState state;
 
-        private void Start()
-        {
+        CompositeDisposable disposables = new CompositeDisposable();
 
+        public void Initialize()
+        {
             Observable.Timer(TimeSpan.FromSeconds(15))
-                      .TakeUntilDestroy(this)
                       .Subscribe(_ =>
                       {
                           Func<bool> buttonsPressed = () => {
@@ -32,7 +32,6 @@ namespace Swing.Character
                           };
                           
                           Observable.EveryUpdate()
-                                    .TakeUntilDestroy(this)
                                     .Select(__ => buttonsPressed())
                                     .DistinctUntilChanged()
                                     .Where(pressed => pressed)
@@ -41,8 +40,15 @@ namespace Swing.Character
                                     {
                                         signalBus.Fire<SuicideSignal>();
                                         signalBus.Fire<PlayerKilledSignal>();
-                                    });
-                      });
+                                    })
+                                    .AddTo(disposables);
+                      })
+                      .AddTo(disposables);
+        }
+
+        public void Dispose()
+        {
+            disposables.Dispose();
         }
     }
 }

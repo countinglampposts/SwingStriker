@@ -4,9 +4,11 @@ using UniRx;
 using Swing.Character;
 using System.Linq;
 using Swing.Game;
+using System;
 
 namespace Swing.Player
 {
+    [Obsolete]
     public class TouchPlayerController : MonoBehaviour
     {
         [Inject] private Camera playerCamera;

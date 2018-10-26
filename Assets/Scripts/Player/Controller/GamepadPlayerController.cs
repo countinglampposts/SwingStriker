@@ -7,17 +7,18 @@ using UniRx;
 
 namespace Swing.Player
 {
-    public class GamepadPlayerController : MonoBehaviour
+    public class GamepadPlayerController : IInitializable
     {
         [Inject] SignalBus signalBus;
         [Inject] PlayerData playerData;
         [Inject] CharacterState state;
 
-        private void Start()
+        private CompositeDisposable disposables = new CompositeDisposable();
+
+        public void Initialize()
         {
             bool grapplingHookExtended = false;
             Observable.EveryUpdate()
-                      .TakeUntilDestroy(this)
                       .Where(_ => state.localPlayerControl.Value)
                       .Select(_ => InputManager.Devices.FirstOrDefault(device => device.GUID == playerData.deviceID))
                       .Where(device => device != null)
@@ -39,7 +40,13 @@ namespace Swing.Player
                                   signalBus.Fire<GrapplingReleasedSignal>();
                               }
                           }
-                      });
+                      })
+                      .AddTo(disposables);
+        }
+
+        public void Dispose()
+        {
+            disposables.Dispose();
         }
     }
 }
