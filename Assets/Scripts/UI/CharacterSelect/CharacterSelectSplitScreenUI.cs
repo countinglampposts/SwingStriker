@@ -38,7 +38,7 @@ namespace Swing.UI
                       .Select(_ => selectUIs.Any(ui => ui.isSelecting) && selectUIs.Where(ui => ui.isSelecting).All(ui => ui.isReady))
                       .DistinctUntilChanged()
                       .Subscribe(showButton => goButton.gameObject.SetActive(showButton));
-            UIUtils.BindToAllDevices(goButton, 0);
+            UIUtils.BindToAllDevices(goButton, 0, guid => selectUIs.First(selectUI => selectUI.deviceID == guid).isReady);
             goButton.onClick.AddListener(() =>
             {
                 var players = selectUIs.Where(ui => ui.isReady).Select(ui => ui.GetPlayerData()).ToArray();

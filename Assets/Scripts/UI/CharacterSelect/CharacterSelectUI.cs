@@ -59,7 +59,7 @@ namespace Swing.UI
 
         private CompositeDisposable disposables = new CompositeDisposable();
 
-        private Guid deviceID;
+        public Guid deviceID { get; private set; }
 
         private void Start()
         {

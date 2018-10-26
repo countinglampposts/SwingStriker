@@ -17,13 +17,19 @@ namespace Swing.UI
             return BindToDevice(button, actionIndex, Guid.Empty);
         }
 
-        public static IDisposable BindToDevice(Button button, int actionIndex, Guid deviceID)
+        public static IDisposable BindToAllDevices(Button button, int actionIndex, Func<Guid, bool> predicate)
+        {
+            return BindToDevice(button, actionIndex, Guid.Empty, predicate);
+        }
+
+        public static IDisposable BindToDevice(Button button, int actionIndex, Guid deviceID, Func<Guid,bool> predicate = null)
         {
             return Observable.EveryUpdate()
                       .TakeUntilDestroy(button)
                       .Where(_ => button.gameObject.activeSelf && button.gameObject.activeInHierarchy)
                       .Select(_ => (deviceID == Guid.Empty)? InputManager.ActiveDevice : InputManager.Devices.FirstOrDefault(device => device.GUID == deviceID))
                       .Where(device => device != null)
+                      .Where(device => (predicate == null) || predicate(device.GUID))
                       .Where(device => { switch (actionIndex)
                           {
                               case 0:
