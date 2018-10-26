@@ -37,8 +37,14 @@ namespace Swing.UI
                       .Where(_ => gameObject.activeInHierarchy && gameObject.activeSelf)
                       .Select(_ => selectUIs.Any(ui => ui.isSelecting) && selectUIs.Where(ui => ui.isSelecting).All(ui => ui.isReady))
                       .DistinctUntilChanged()
-                      .Subscribe(showButton => goButton.gameObject.SetActive(showButton));
-            UIUtils.BindToAllDevices(goButton, 0, guid => selectUIs.First(selectUI => selectUI.deviceID == guid).isReady);
+                      .Subscribe(goButton.gameObject.SetActive);
+
+            UIUtils.BindToAllDevices(goButton, 0, guid => { 
+                // This is a check that a joining player cannot start the game by accident
+                var ui = selectUIs.FirstOrDefault(selectUI => selectUI.deviceID == guid);
+                return ui != null && ui.isReady;
+            });
+
             goButton.onClick.AddListener(() =>
             {
                 var players = selectUIs.Where(ui => ui.isReady).Select(ui => ui.GetPlayerData()).ToArray();
@@ -53,7 +59,7 @@ namespace Swing.UI
                       .TakeUntilDestroy(this)
                       .Where(_ => gameObject.activeInHierarchy && gameObject.activeSelf)
                       .Select(_ => selectUIs.All(ui => !ui.isSelecting))
-                      .Subscribe(showButton => backButton.gameObject.SetActive(showButton));
+                      .Subscribe(backButton.gameObject.SetActive);
             UIUtils.BindToAllDevices(backButton, 1);
             backButton.onClick.AddListener(() =>
             {
