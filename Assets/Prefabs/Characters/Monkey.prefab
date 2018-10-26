@@ -181,10 +181,6 @@ GameObject:
   - component: {fileID: 4823561734725956}
   - component: {fileID: 114170623628363834}
   - component: {fileID: 114285715270363368}
-  - component: {fileID: 114743325545663474}
-  - component: {fileID: 114430124147768648}
-  - component: {fileID: 114168878548591896}
-  - component: {fileID: 114216809428879588}
   m_Layer: 9
   m_Name: Monkey
   m_TagString: Untagged
@@ -1651,17 +1647,6 @@ MonoBehaviour:
   - {fileID: 114940283701356264}
   - {fileID: 114295747565483566}
   - {fileID: 114611224425795744}
---- !u!114 &114168878548591896
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1547931621830964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b4ce2a08d6454c2bb3fcfe2f5704b43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114170623628363834
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1693,17 +1678,6 @@ MonoBehaviour:
   pivot: {x: 0, y: 0.5, z: 0}
   children:
   - {fileID: 114596171886988912}
---- !u!114 &114216809428879588
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1547931621830964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c78a63f13cc954b6ba503f8f53a19429, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114267413393991500
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1784,17 +1758,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b5a1f6c7623044f5a365286a0872501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114430124147768648
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1547931621830964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0413818fc841416585ad6585af9716c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114453684136115900
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1861,17 +1824,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pivot: {x: 0, y: 0.5, z: 0}
   children: []
---- !u!114 &114743325545663474
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1547931621830964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 926252c8c57734f99a845dc0023c8127, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114871158959900114
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Swing.Character;
 using Swing.Level;
 using Swing.Player;
+using Swing.Sound;
 using UnityEngine;
 using Zenject;
 
@@ -15,6 +16,7 @@ namespace Swing.Game
         [SerializeField] private TeamsData teams;
         [SerializeField] private SplitScreenLayouts layouts;
         [SerializeField] private GameTimeOptions timeOptions;
+        [SerializeField] private SoundAssets soundAssets;
 
         public override void InstallBindings()
         {
@@ -23,6 +25,7 @@ namespace Swing.Game
             Container.BindInstance(teams);
             Container.BindInstance(layouts);
             Container.BindInstance(timeOptions);
+            Container.BindInstance(soundAssets);
         }
     }
 }
