@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Swing.Game;
 using UniRx;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
@@ -19,9 +20,18 @@ namespace Swing.UI
         private void Start()
         {
             uiRoot.SetActive(false);
-            gameState.isPaused
-                     .TakeUntilDestroy(this)
-                     .Subscribe(isPaused => uiRoot.SetActive(isPaused));
+            var pauseStream = gameState.isPaused.TakeUntilDestroy(this);
+
+            pauseStream
+                .Subscribe(isPaused => { 
+                    uiRoot.SetActive(isPaused);
+                    EventSystem.current.sendNavigationEvents = isPaused;
+            });
+
+            pauseStream
+                .Where(isPaused => isPaused)
+                .Subscribe(_ => EventSystem.current.SetSelectedGameObject(returnButton.gameObject));
+
             returnButton.onClick.AsObservable()
                       .TakeUntilDestroy(this)
                       .Subscribe(_ => gameState.isPaused.Value = false);
