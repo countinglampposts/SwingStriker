@@ -82,6 +82,7 @@ namespace Swing.Character
                                            // Add Climbing
                                            Observable.EveryUpdate()
                                                      .TakeUntilDestroy(this)
+                                                     .TakeUntil(anchor.OnDestroyAsObservable())
                                                      .TakeUntil(signalBus.GetStream<GrapplingReleasedSignal>())
                                                      .Where(___ => characterState.localPlayerControl.Value)
                                                      .Select(___ => characterState.aimDirection.Value)
