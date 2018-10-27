@@ -16,8 +16,7 @@ namespace Swing.Character
     {
         [Inject] private CharacterSettings settings;
         [Inject] private SignalBus signalBus;
-        [Inject] private AudioMixerGroup audioMixerGroup;
-        [Inject] private SoundAssets soundAssets;
+        [Inject] private SoundPlayer soundPlayer;
 
         public Object Init(Transform startTransform, Vector3 endPoint)
         {
@@ -36,7 +35,7 @@ namespace Swing.Character
                           var drawnEndPoint = Vector2.Lerp(point, endPoint, lerp);
                           if (lerp >= 1 && !collisionEffectTriggered)
                           {
-                              AudioUtils.PlayAudioAtPosition(endPoint, soundAssets.sounds.FirstOrDefault(sound => sound.id == "Grappled").clip, audioMixerGroup);
+                              soundPlayer.PlayAudioAtPosition("Grappled", endPoint);
                               signalBus.Fire(new RumbleTriggeredSignal { magnitude = 1.5f });
                               collisionEffectTriggered = true;
                           }

@@ -9,6 +9,7 @@ using Swing.Character;
 using System;
 using InControl;
 using UnityEngine.Audio;
+using Swing.Sound;
 
 namespace Swing.Game
 {
@@ -43,6 +44,9 @@ namespace Swing.Game
             Container.BindInstance(audioMixerGroup);
             Container.BindInstance(gameState);
             Container.BindInstance(new GameCameraState());
+
+            Container.Bind<SoundPlayer>()
+                     .AsTransient();
 
             Container.Bind<Camera>()
                      .FromComponentInNewPrefab(cameraControllerPrefab)

@@ -18,8 +18,7 @@ namespace Swing.Character
     {
         [Inject] CharacterSettings settings;
         [Inject] SignalBus signalBus;
-        [Inject] AudioMixerGroup audioMixerGroup;
-        [Inject] SoundAssets sounds;
+        [Inject] SoundPlayer soundPlayer;
 
         private bool dead = false;
 
@@ -58,8 +57,7 @@ namespace Swing.Character
                 other.GetComponent<Rigidbody2D>().AddForceAtPosition(otherJointDirection * suicideExplosionForce, otherJointPosition);
             }
 
-            var clip = sounds.sounds.FirstOrDefault(asset => asset.id == "Bloodsplosion").clip;
-            AudioUtils.PlayAudioOnObject(gameObject, clip, audioMixerGroup);
+            soundPlayer.PlayAudioOnObject("Bloodsplosion", gameObject);
 
             dead = true;
         }

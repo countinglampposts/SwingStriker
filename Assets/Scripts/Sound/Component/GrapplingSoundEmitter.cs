@@ -11,15 +11,14 @@ namespace Swing.Sound
 {
     public class GrapplingSoundEmitter : MonoBehaviour
     {
-        [Inject] private SoundAssets sounds;
         [Inject] private SignalBus signalBus;
-        [Inject] private AudioMixerGroup audioMixerGroup;
+        [Inject] private SoundPlayer soundPlayer;
 
         private void Start()
         {
             signalBus.GetStream<GrapplingFiredSignal>()
                      .TakeUntilDestroy(this)
-                     .Subscribe(_ => AudioUtils.PlayAudioOnObject(gameObject, sounds.sounds.FirstOrDefault(sound => sound.id == "Grappling").clip, audioMixerGroup));
+                     .Subscribe(_ => soundPlayer.PlayAudioOnObject("Grappling",gameObject));
         }
     }
 }
