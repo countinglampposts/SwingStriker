@@ -1826,12 +1826,12 @@ MonoBehaviour:
   settings:
     breakforce: 1750
     ropeSpringFrequency: 1.5
-    grapplingDistance: 15
+    grapplingDistance: 20
     mass: 1
     drag: 0.05
     gravity: 0.9
-    ropeClimbSpeed: 5
-    swingForce: 25
+    ropeClimbSpeed: 6
+    swingForce: 30
     initialGrapplingDistanceRatio: 0.5
     grapplingHookSpeed: 70
     bloodsplosionEffect: {fileID: 1248047097124180, guid: 13d2a5f6019394802a217c5c58f4289e,

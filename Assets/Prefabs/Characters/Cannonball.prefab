@@ -1260,14 +1260,14 @@ MonoBehaviour:
     type: 2}
   root: {fileID: 114181403921610522}
   settings:
-    breakforce: 4000
-    ropeSpringFrequency: 2
-    grapplingDistance: 15
+    breakforce: 5000
+    ropeSpringFrequency: 1
+    grapplingDistance: 25
     mass: 3
     drag: 1
     gravity: 2
-    ropeClimbSpeed: 5
-    swingForce: 40
+    ropeClimbSpeed: 10
+    swingForce: 60
     initialGrapplingDistanceRatio: 0.5
     grapplingHookSpeed: 50
     bloodsplosionEffect: {fileID: 1248047097124180, guid: 13d2a5f6019394802a217c5c58f4289e,
