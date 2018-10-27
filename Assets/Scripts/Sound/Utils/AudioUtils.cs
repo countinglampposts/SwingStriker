@@ -11,12 +11,16 @@ namespace Swing.Sound
     {
         public static void PlayAudioOnObject(GameObject playedFrom, AudioClip clip, AudioMixerGroup audioMixerGroup = null){
             var audioSource = playedFrom.AddComponent<AudioSource>();
+
             audioSource.outputAudioMixerGroup = audioMixerGroup;
             audioSource.PlayOneShot(clip);
+
+            var audioFinishedStream = Observable.EveryUpdate()
+                      .Where(_ => audioSource != null && !audioSource.isPlaying);
+
             Observable.EveryUpdate()
                       .TakeUntil(audioSource.OnDestroyAsObservable())
-                      .Where(_ => audioSource != null && !audioSource.isPlaying)
-                      .First()
+                      .TakeUntil(audioFinishedStream)
                       .Subscribe(_ => GameObject.Destroy(audioSource));
         }
     }
