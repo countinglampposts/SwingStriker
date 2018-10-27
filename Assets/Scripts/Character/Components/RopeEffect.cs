@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using UniRx.Triggers;
 using Zenject;
 using UnityEngine.Audio;
 using Swing.Sound;
 using System.Linq;
+using UniRx.Diagnostics;
 
 namespace Swing.Character
 {
@@ -17,32 +19,32 @@ namespace Swing.Character
         [Inject] private AudioMixerGroup audioMixerGroup;
         [Inject] private SoundAssets soundAssets;
 
-        private void Start()
+        public Object Init(Transform startTransform, Vector3 endPoint)
         {
-            var lineRenderer = Instantiate(settings.ropeEffect.gameObject,transform).GetComponent<LineRenderer>();
-            var joint = GetComponent<AnchoredJoint2D>();
+            var effectObject = Instantiate(settings.ropeEffect.gameObject, transform);
+            var lineRenderer = effectObject.GetComponent<LineRenderer>();
             var launchTime = Time.time;
             var collisionEffectTriggered = false;
 
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
-                      .Where(_ => enabled)
-                      .Where(_ => joint.connectedBody != null)
+                      .Where(_ => lineRenderer != null)
                       .Subscribe(_ => {
-                          var point = joint.connectedBody.transform.TransformPoint(joint.connectedAnchor);
-                          var otherPoint = joint.transform.TransformPoint(joint.anchor);
-                          var distance = Vector2.Distance(point, otherPoint);
+                          var point = startTransform.position;
+                          var distance = Vector2.Distance(point, endPoint);
                           var lerp = settings.grapplingHookSpeed * (Time.time - launchTime) / distance;
-                          otherPoint = Vector2.Lerp(point, otherPoint, lerp);
+                          var drawnEndPoint = Vector2.Lerp(point, endPoint, lerp);
                           if (lerp >= 1 && !collisionEffectTriggered)
                           {
-                              AudioUtils.PlayAudioOnObject(joint.gameObject, soundAssets.sounds.FirstOrDefault(sound => sound.id == "Grappled").clip, audioMixerGroup);
+                              AudioUtils.PlayAudioAtPosition(endPoint, soundAssets.sounds.FirstOrDefault(sound => sound.id == "Grappled").clip, audioMixerGroup);
                               signalBus.Fire(new RumbleTriggeredSignal { magnitude = 1.5f });
                               collisionEffectTriggered = true;
                           }
 
-                          lineRenderer.SetPositions(new Vector3[]{point,otherPoint});
+                          lineRenderer.SetPositions(new Vector3[]{point, drawnEndPoint });
              });
+
+            return effectObject;
         }
     }
 }

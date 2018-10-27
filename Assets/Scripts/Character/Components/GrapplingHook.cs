@@ -5,6 +5,8 @@ using UniRx.Triggers;
 using Swing.Game;
 using Swing.Sound;
 using System.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace Swing.Character
 {
@@ -20,7 +22,7 @@ namespace Swing.Character
         [Inject] private CharacterState characterState;
         [Inject] private GameCameraState gameCameraState;
 
-        private GameObject currentRope;
+        private List<UnityEngine.Object> currentRope = new List<UnityEngine.Object>();
 
         private void Start()
         {
@@ -29,91 +31,95 @@ namespace Swing.Character
                      .Where(_ => characterState.localPlayerControl.Value)
                      .Subscribe(_ =>
                      {
-                         if (currentRope != null) Destroy(currentRope);
+                         DestroyRope();
 
                          var hit = Physics2D.Raycast(transform.position, characterState.aimDirection.Value, settings.grapplingDistance, settings.grapplingMask.value);
 
                          if (hit.transform != null)
                          {
                              Vector3 hitPosition = hit.point;
+                             float distance = Vector2.Distance(hitPosition, transform.position);
 
-                             var anchor = new GameObject("GrapplingAnchor");
-                             anchor.transform.position = hitPosition;
+                             float time = distance / settings.grapplingHookSpeed;
 
-                             /*gameCameraState.pointsOfInterest.Add(anchor.transform);
-                             anchor.OnDestroyAsObservable()
-                                   .Merge(gameObject.OnDestroyAsObservable())
-                                   .Merge(characterState.isCorpse.Where(isCorpse => isCorpse).Select(__ => Unit.Default))
-                                   .First()
-                                   .Subscribe(__ => gameCameraState.pointsOfInterest.Remove(anchor.transform));*/
+                             var ropeEffect = container.InstantiateComponent<RopeEffect>( gameObject);
 
-                             var anchorRigidbody = anchor.AddComponent<Rigidbody2D>();
-                             anchorRigidbody.isKinematic = true;
+                             currentRope.Add(ropeEffect.Init(transform, hitPosition));
+                             currentRope.Add(ropeEffect);
 
-                             var joint = anchor.gameObject.AddComponent<SpringJoint2D>();
-                             joint.autoConfigureDistance = false;
-                             joint.autoConfigureConnectedAnchor = false;
-                             joint.anchor = anchor.transform.InverseTransformPoint(hitPosition);
-                             joint.distance = Vector2.Distance(hitPosition,transform.position) * settings.initialGrapplingDistanceRatio;
-                             joint.dampingRatio = 1f;
-                             joint.frequency = settings.ropeSpringFrequency;
-                             joint.enableCollision = true;
-
-                             var rigidbody = GetComponent<Rigidbody2D>();
-                             joint.connectedBody = rigidbody;
-
-                             container.Inject(anchor.AddComponent<RopeEffect>());
-
-                             currentRope = anchor;
-
-                             Observable.EveryUpdate()
-                                       .TakeUntilDestroy(this)
-                                       .TakeUntilDestroy(currentRope)
+                             Observable.Timer(TimeSpan.FromSeconds(time))
                                        .TakeUntil(signalBus.GetStream<GrapplingReleasedSignal>())
-                                       .Where(__ => characterState.localPlayerControl.Value)
-                                       .Select(__ => characterState.aimDirection.Value)
-                                       .Subscribe(direction =>
+                                       .TakeUntilDestroy(this)
+                                       .Subscribe(__ =>
                                        {
-                                           var ropeDirection = (anchor.transform.position - transform.position).normalized;
-                                           var aimDirection = characterState.aimDirection.Value.normalized;
-                                           var ropeDot = Vector2.Dot(aimDirection, ropeDirection);
+                                           var anchor = new GameObject("GrapplingAnchor");
+                                           anchor.transform.position = hitPosition;
 
-                                           var left = Vector2.Perpendicular(ropeDirection);
-                                           rigidbody.AddForce(settings.swingForce * left * Vector2.Dot(left, aimDirection));
+                                           /*gameCameraState.pointsOfInterest.Add(anchor.transform);
+                                           anchor.OnDestroyAsObservable()
+                                                 .Merge(gameObject.OnDestroyAsObservable())
+                                                 .Merge(characterState.isCorpse.Where(isCorpse => isCorpse).Select(__ => Unit.Default))
+                                                 .First()
+                                                 .Subscribe(__ => gameCameraState.pointsOfInterest.Remove(anchor.transform));*/
 
-                                           var right = -Vector2.Perpendicular(ropeDirection);
-                                           rigidbody.AddForce(settings.swingForce * right * Vector2.Dot(right, aimDirection));
+                                           var anchorRigidbody = anchor.AddComponent<Rigidbody2D>();
+                                           anchorRigidbody.isKinematic = true;
 
-                                           var distanceDelta = ropeDot * settings.ropeClimbSpeed * Time.deltaTime;
+                                           var joint = anchor.gameObject.AddComponent<SpringJoint2D>();
+                                           joint.autoConfigureDistance = false;
+                                           joint.autoConfigureConnectedAnchor = false;
+                                           joint.anchor = anchor.transform.InverseTransformPoint(hitPosition);
+                                           joint.distance = Vector2.Distance(hitPosition, transform.position) * settings.initialGrapplingDistanceRatio;
+                                           joint.dampingRatio = 1f;
+                                           joint.frequency = settings.ropeSpringFrequency;
+                                           joint.enableCollision = true;
 
-                                           joint.distance -= distanceDelta;
-                                           if (joint.distance < .1f) joint.frequency += distanceDelta * .5f;
+                                           var rigidbody = GetComponent<Rigidbody2D>();
+                                           joint.connectedBody = rigidbody;
+
+                                           currentRope.Add(anchor.gameObject);
+
+                                           // Add Climbing
+                                           Observable.EveryUpdate()
+                                                     .TakeUntilDestroy(this)
+                                                     .TakeUntil(signalBus.GetStream<GrapplingReleasedSignal>())
+                                                     .Where(___ => characterState.localPlayerControl.Value)
+                                                     .Select(___ => characterState.aimDirection.Value)
+                                                     .Subscribe(direction =>
+                                                     {
+                                                         var ropeDirection = (anchor.transform.position - transform.position).normalized;
+                                                         var aimDirection = characterState.aimDirection.Value.normalized;
+                                                         var ropeDot = Vector2.Dot(aimDirection, ropeDirection);
+
+                                                         var left = Vector2.Perpendicular(ropeDirection);
+                                                         rigidbody.AddForce(settings.swingForce * left * Vector2.Dot(left, aimDirection));
+
+                                                         var right = -Vector2.Perpendicular(ropeDirection);
+                                                         rigidbody.AddForce(settings.swingForce * right * Vector2.Dot(right, aimDirection));
+
+                                                         var distanceDelta = ropeDot * settings.ropeClimbSpeed * Time.deltaTime;
+
+                                                         joint.distance -= distanceDelta;
+                                                         if (joint.distance < .1f) joint.frequency += distanceDelta * .5f;
+                                                     });
                                        });
                          }
-                     });
+            });
 
             signalBus.GetStream<GrapplingReleasedSignal>()
                      .TakeUntilDestroy(this)
                      .Where(_ => currentRope != null)
-                     .Subscribe(_ => Destroy(currentRope));
+                     .Subscribe(_ => DestroyRope());
         }
 
         private void OnDestroy()
         {
-            if (currentRope != null) Destroy(currentRope);
+            if (currentRope != null) DestroyRope();
         }
 
-        private void OnDrawGizmos()
-        {
-            if(currentRope != null){
-                Vector3 position = currentRope.transform.position;
-                float iconSize = .1f;
-                Gizmos.DrawLine(position + Vector3.up * iconSize, position - Vector3.up * iconSize);
-                Gizmos.DrawLine(position + Vector3.back * iconSize, position - Vector3.back * iconSize);
-                Gizmos.DrawLine(position + Vector3.right * iconSize, position - Vector3.right * iconSize);
-
-                Gizmos.DrawLine(currentRope.transform.position, transform.position);
-            }
+        private void DestroyRope(){
+            currentRope.ForEach(Destroy);
+            currentRope.Clear();
         }
     }
 }
