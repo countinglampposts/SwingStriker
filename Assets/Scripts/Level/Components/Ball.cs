@@ -13,7 +13,7 @@ namespace Swing.Level
     public class Ball : MonoBehaviour
     {
         [Inject] SignalBus signalBus;
-        [Inject] Transform restartPoint;
+        [Inject] Transform resetPoint;
         [Inject] GameCameraState gameCameraState;
 
         [SerializeField] LayerMask pathCastingMask;
@@ -32,15 +32,17 @@ namespace Swing.Level
                      .TakeUntilDestroy(this)
                      .Subscribe(_ =>
                      {
+                         gameCameraState.pointsOfInterest.Add(resetPoint);
                          Observable.Timer(TimeSpan.FromSeconds(5))
                                 .TakeUntilDestroy(this)
                                 .Subscribe(__ =>
                                 {
-                                    //signalBus.Fire(new TimeSlowSignal { slowTime = 2f });
+                                    gameCameraState.pointsOfInterest.Remove(resetPoint);
                                     Reset();
                                 });
                      });
 
+            // Add the toggling of the slowdown effect
             bool slowingEffectActive = true;
             signalBus.GetStream<GoalScoredSignal>()
                      .Select(_ => true)
@@ -48,6 +50,7 @@ namespace Swing.Level
                      .TakeUntilDestroy(this)
                      .Subscribe(isBetweenScoreAndReset => slowingEffectActive = !isBetweenScoreAndReset);
 
+            // Init the slowdown effect
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
                       .Where(_ => slowingEffectActive)
@@ -62,7 +65,7 @@ namespace Swing.Level
 
         private void Reset()
         {
-            transform.position = restartPoint.position;
+            transform.position = resetPoint.position;
             var ridigBody = GetComponent<Rigidbody2D>();
             ridigBody.velocity = Vector2.zero;
             ridigBody.angularVelocity = 0;
