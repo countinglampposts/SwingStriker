@@ -27,12 +27,9 @@ namespace Swing.Sound
             audioSource.outputAudioMixerGroup = audioMixerGroup;
             audioSource.PlayOneShot(clip);
 
-            var audioFinishedStream = Observable.EveryUpdate()
-                      .Where(_ => audioSource != null && !audioSource.isPlaying);
-
             Observable.EveryUpdate()
-                      .TakeUntil(audioSource.OnDestroyAsObservable())
-                      .TakeUntil(audioFinishedStream)
+                      .TakeUntilDestroy(audioSource)
+                      .First(_ => !audioSource.isPlaying)
                       .Subscribe(_ => GameObject.Destroy(destroyedObject));
         }
     }

@@ -19,7 +19,7 @@ namespace Swing.Sound
         {
             signalBus.GetStream<GrapplingFiredSignal>()
                      .TakeUntilDestroy(this)
-                     .Subscribe(_ => AudioUtils.PlayAudioAtPosition(transform.position, sounds.sounds.FirstOrDefault(sound => sound.id == "Grappling").clip, audioMixerGroup));
+                     .Subscribe(_ => AudioUtils.PlayAudioOnObject(gameObject, sounds.sounds.FirstOrDefault(sound => sound.id == "Grappling").clip, audioMixerGroup));
         }
     }
 }
