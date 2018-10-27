@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 201a6485f005d4b8d8a98fbf48adf096, type: 3}
   m_Name: Hit
   m_EditorClassIdentifier: 
-  id: 
+  id: Hit
   clip: {fileID: 0}

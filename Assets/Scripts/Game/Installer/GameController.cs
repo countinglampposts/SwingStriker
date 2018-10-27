@@ -8,6 +8,7 @@ using UniRx;
 using Swing.Character;
 using System;
 using InControl;
+using UnityEngine.Audio;
 
 namespace Swing.Game
 {
@@ -23,6 +24,7 @@ namespace Swing.Game
     public class GameController : MonoInstaller
     {
         [SerializeField] private GameCameraController cameraControllerPrefab;
+        [SerializeField] private AudioMixerGroup audioMixerGroup;
 
         [Inject] private LevelAsset levelAsset;
         [Inject] private PlayerData[] playersData;
@@ -38,6 +40,7 @@ namespace Swing.Game
             Container.DeclareSignal<GoalScoredSignal>();
             Container.DeclareSignal<BallResetSignal>();
 
+            Container.BindInstance(audioMixerGroup);
             Container.BindInstance(gameState);
             Container.BindInstance(new GameCameraState());
 

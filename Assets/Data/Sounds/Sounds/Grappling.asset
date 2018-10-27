@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 201a6485f005d4b8d8a98fbf48adf096, type: 3}
   m_Name: Grappling
   m_EditorClassIdentifier: 
-  id: 
-  clip: {fileID: 0}
+  id: Grappling
+  clip: {fileID: 8300000, guid: 8c7e56667e3fb4f0fb486fc7ac5db386, type: 3}

@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 201a6485f005d4b8d8a98fbf48adf096, type: 3}
   m_Name: Bloodsplosion
   m_EditorClassIdentifier: 
-  id: 
-  clip: {fileID: 0}
+  id: Bloodsplosion
+  clip: {fileID: 8300000, guid: b99307e4f212f4038ba5a09ffc04ad00, type: 3}

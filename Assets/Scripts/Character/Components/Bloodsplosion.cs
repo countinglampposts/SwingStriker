@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using UniRx;
+using UniRx.Triggers;
 using System;
+using UnityEngine.Audio;
+using Swing.Sound;
+using System.Linq;
 
 namespace Swing.Character
 {
@@ -14,6 +18,8 @@ namespace Swing.Character
     {
         [Inject] CharacterSettings settings;
         [Inject] SignalBus signalBus;
+        [Inject] AudioMixerGroup audioMixerGroup;
+        [Inject] SoundAssets sounds;
 
         private bool dead = false;
 
@@ -31,8 +37,8 @@ namespace Swing.Character
 
         private void BreakEffect(bool destroyJoint){
             if (dead) return;
-            signalBus.Fire<JointBrokenSignal>();
 
+            signalBus.Fire<JointBrokenSignal>();
             signalBus.Fire(new RumbleTriggeredSignal { magnitude = 3f });
 
             var joint = GetComponent<AnchoredJoint2D>();
@@ -51,6 +57,9 @@ namespace Swing.Character
                 joint.GetComponent<Rigidbody2D>().AddForceAtPosition(transform.forward * suicideExplosionForce, jointPosition);
                 other.GetComponent<Rigidbody2D>().AddForceAtPosition(otherJointDirection * suicideExplosionForce, otherJointPosition);
             }
+
+            var clip = sounds.sounds.FirstOrDefault(asset => asset.id == "Bloodsplosion").clip;
+            AudioUtils.PlayAudioOnObject(gameObject, clip, audioMixerGroup);
 
             dead = true;
         }

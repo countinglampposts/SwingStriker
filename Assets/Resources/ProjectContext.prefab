@@ -58,6 +58,7 @@ MonoBehaviour:
   teams: {fileID: 11400000, guid: 1017d9437ff0c4f62864a0813823d9e7, type: 2}
   layouts: {fileID: 11400000, guid: f2bc14742eb95423abe12bd1d6b90fb7, type: 2}
   timeOptions: {fileID: 11400000, guid: bd52ef9934c244f209aa208edc7c08ed, type: 2}
+  soundAssets: {fileID: 11400000, guid: 01da148bc31994dabbb34124b03b9aeb, type: 2}
 --- !u!114 &114644168325571496
 MonoBehaviour:
   m_ObjectHideFlags: 1

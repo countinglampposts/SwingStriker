@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using InControl;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Audio;
 using Zenject;
 
 namespace Swing.Game
@@ -13,6 +14,7 @@ namespace Swing.Game
 
     public class TimeController : MonoInstaller
     {
+        [SerializeField] private AudioMixer gameMixer;
         [Inject] private GameState state;
 
         public override void InstallBindings()
@@ -36,8 +38,11 @@ namespace Swing.Game
                  .Subscribe(_ => Time.timeScale = goalTimeScale);
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
-                      .Select(_ => (state.isPaused.Value) ? 0 : Mathf.Lerp(Time.timeScale, (Time.time < endSlowdownTime) ? goalTimeScale : 1, 8 * Time.deltaTime))
-                      .Subscribe(timeScale => Time.timeScale = timeScale);
+                      .Select(_ => (state.isPaused.Value) ? 0 : Mathf.SmoothStep(Time.timeScale, (Time.time < endSlowdownTime) ? goalTimeScale : 1, 8 * Time.deltaTime))
+                      .Subscribe(timeScale => {
+                          gameMixer.SetFloat("GamePitch", timeScale);
+                          Time.timeScale = timeScale; 
+            });
             signalBus.GetStream<TimeSlowSignal>()
                      .TakeUntilDestroy(this)
                      .Subscribe(signal => {

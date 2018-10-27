@@ -3,6 +3,8 @@ using Zenject;
 using UniRx;
 using UniRx.Triggers;
 using Swing.Game;
+using Swing.Sound;
+using System.Linq;
 
 namespace Swing.Character
 {
