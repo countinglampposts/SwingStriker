@@ -21,6 +21,7 @@ namespace Swing.Character
         [Inject] private DiContainer container;
         [Inject] private CharacterState characterState;
         [Inject] private GameCameraState gameCameraState;
+        [Inject] private SoundPlayer soundPlayer;
 
         private List<UnityEngine.Object> currentRope = new List<UnityEngine.Object>();
 
@@ -79,11 +80,18 @@ namespace Swing.Character
 
                                            currentRope.Add(anchor.gameObject);
 
+                                           var climbSoundDisposable = soundPlayer.PlaySound("Climbing", transform);
+
+                                           var endStream = this.OnDestroyAsObservable()
+                                                               .Merge(anchor.OnDestroyAsObservable())
+                                                               .Merge(signalBus.GetStream<GrapplingReleasedSignal>().Select(___=>Unit.Default));
+                                           endStream
+                                               .First()
+                                               .Subscribe(___ => climbSoundDisposable.Dispose());
+
                                            // Add Climbing
                                            Observable.EveryUpdate()
-                                                     .TakeUntilDestroy(this)
-                                                     .TakeUntil(anchor.OnDestroyAsObservable())
-                                                     .TakeUntil(signalBus.GetStream<GrapplingReleasedSignal>())
+                                                     .TakeUntil(endStream)
                                                      .Where(___ => characterState.localPlayerControl.Value)
                                                      .Select(___ => characterState.aimDirection.Value)
                                                      .Subscribe(direction =>

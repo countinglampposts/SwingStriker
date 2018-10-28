@@ -57,7 +57,7 @@ namespace Swing.Character
                 other.GetComponent<Rigidbody2D>().AddForceAtPosition(otherJointDirection * suicideExplosionForce, otherJointPosition);
             }
 
-            soundPlayer.PlayAudioOnObject("Bloodsplosion", gameObject);
+            soundPlayer.PlaySound("Bloodsplosion", transform);
 
             dead = true;
         }

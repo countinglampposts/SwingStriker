@@ -18,7 +18,7 @@ namespace Swing.Sound
         {
             signalBus.GetStream<GrapplingFiredSignal>()
                      .TakeUntilDestroy(this)
-                     .Subscribe(_ => soundPlayer.PlayAudioOnObject("Grappling",gameObject));
+                     .Subscribe(_ => soundPlayer.PlaySound("Grappling",transform));
         }
     }
 }

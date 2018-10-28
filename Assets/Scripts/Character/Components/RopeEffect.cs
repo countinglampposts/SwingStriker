@@ -35,7 +35,7 @@ namespace Swing.Character
                           var drawnEndPoint = Vector2.Lerp(point, endPoint, lerp);
                           if (lerp >= 1 && !collisionEffectTriggered)
                           {
-                              soundPlayer.PlayAudioAtPosition("Grappled", endPoint);
+                              soundPlayer.PlaySound("Grappled", endPoint);
                               signalBus.Fire(new RumbleTriggeredSignal { magnitude = 1.5f });
                               collisionEffectTriggered = true;
                           }
