@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
-namespace Swing.Character
+namespace Swing.Replay
 {
     public struct ReplayData{
         public List<TransformFrame> frames;
