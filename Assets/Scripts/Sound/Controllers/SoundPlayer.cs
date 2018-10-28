@@ -33,12 +33,12 @@ namespace Swing.Sound
                 GameObject createdObject = new GameObject("AudioSource");
                 createdObject.transform.parent = parent;
                 createdObject.transform.localPosition = position;
+
                 var audioSource = createdObject.AddComponent<AudioSource>();
                 audioSource.outputAudioMixerGroup = audioMixerGroup;
+                audioSource.PlayOneShot(soundAsset.clip);
 
                 Action destroyAction = () => { if (createdObject != null) GameObject.Destroy(createdObject); };
-
-                audioSource.PlayOneShot(soundAsset.clip);
 
                 return Observable.Timer(TimeSpan.FromSeconds(soundAsset.clip.length))
                           .Subscribe(_ => destroyAction())

@@ -381,6 +381,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraControllerPrefab: {fileID: 114929657088042582, guid: a85954ac9d29947bca822f12d964eee3,
     type: 2}
+  audioMixerGroup: {fileID: 243700895071785310, guid: b50c53ef984954b09b6ff6a9346be5c8,
+    type: 2}
 --- !u!114 &114453998409795058
 MonoBehaviour:
   m_ObjectHideFlags: 1
