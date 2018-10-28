@@ -38,6 +38,8 @@ namespace Swing.Character
 
                          if (hit.transform != null)
                          {
+                             soundPlayer.PlaySound("Grappling", transform);
+
                              Vector3 hitPosition = hit.point;
                              float distance = Vector2.Distance(hitPosition, transform.position);
 
@@ -53,6 +55,8 @@ namespace Swing.Character
                                        .TakeUntilDestroy(this)
                                        .Subscribe(__ =>
                                        {
+                                           soundPlayer.PlaySound("Grappled", hitPosition);
+
                                            var anchor = new GameObject("GrapplingAnchor");
                                            anchor.transform.position = hitPosition;
 

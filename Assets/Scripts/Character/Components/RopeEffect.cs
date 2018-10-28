@@ -5,7 +5,6 @@ using UniRx;
 using UniRx.Triggers;
 using Zenject;
 using UnityEngine.Audio;
-using Swing.Sound;
 using System.Linq;
 using UniRx.Diagnostics;
 
@@ -16,7 +15,6 @@ namespace Swing.Character
     {
         [Inject] private CharacterSettings settings;
         [Inject] private SignalBus signalBus;
-        [Inject] private SoundPlayer soundPlayer;
 
         public Object Init(Transform startTransform, Vector3 endPoint)
         {
@@ -35,7 +33,6 @@ namespace Swing.Character
                           var drawnEndPoint = Vector2.Lerp(point, endPoint, lerp);
                           if (lerp >= 1 && !collisionEffectTriggered)
                           {
-                              soundPlayer.PlaySound("Grappled", endPoint);
                               signalBus.Fire(new RumbleTriggeredSignal { magnitude = 1.5f });
                               collisionEffectTriggered = true;
                           }
