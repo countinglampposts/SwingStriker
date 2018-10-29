@@ -14,36 +14,49 @@ namespace Swing.Sound
         [Inject] AudioMixerGroup audioMixerGroup;
         [Inject] SoundAssets assets;
 
-        public IDisposable PlaySound(string clipId, Vector3 position)
+        public IDisposable PlaySound(string assetId, Vector3 position, bool loop = false)
         {
-            return PlaySound(clipId, null, position);
+            return PlaySound(assetId, null, position);
         }
 
-        public IDisposable PlaySound(string clipId, Transform parent)
+        public IDisposable PlaySound(string assetId, Transform parent, bool loop = false)
         {
-            return PlaySound(clipId, parent, Vector3.zero);
+            return PlaySound(assetId, parent, Vector3.zero);
         }
 
-        public IDisposable PlaySound(string clipId, Transform parent, Vector3 position)
+        public IDisposable PlaySound(string assetId, Transform parent, Vector3 localPosition, bool loop = false)
         {
-            var soundAsset = assets.sounds.FirstOrDefault(asset => asset.id == clipId);
+            var soundAsset = assets.sounds.FirstOrDefault(asset => asset.id == assetId);
 
             if (soundAsset != null)
             {
                 GameObject createdObject = new GameObject("AudioSource");
                 createdObject.transform.parent = parent;
-                createdObject.transform.localPosition = position;
+                createdObject.transform.localPosition = localPosition;
 
                 var audioSource = createdObject.AddComponent<AudioSource>();
                 audioSource.outputAudioMixerGroup = audioMixerGroup;
-                audioSource.PlayOneShot(soundAsset.clip);
 
                 Action destroyAction = () => { if (createdObject != null) GameObject.Destroy(createdObject); };
+                if (loop)
+                {
+                    audioSource.clip = soundAsset.clip;
+                    audioSource.loop = true;
+                    audioSource.Play();
 
-                return Observable.Timer(TimeSpan.FromSeconds(soundAsset.clip.length))
-                          .Subscribe(_ => destroyAction())
-                          .AddTo(Disposable.Create(destroyAction));
+                    return Disposable.Create(destroyAction);
+                }
+                else
+                {
+                    audioSource.PlayOneShot(soundAsset.clip);
+
+                    return Observable.Timer(TimeSpan.FromSeconds(soundAsset.clip.length))
+                              .Subscribe(_ => destroyAction())
+                              .AddTo(Disposable.Create(destroyAction));
+                }
+
             }
+            Debug.LogWarning("Could not find sound asset of id " + assetId);
             return Disposable.Empty;
         }
     }
