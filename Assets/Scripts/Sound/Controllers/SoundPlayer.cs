@@ -52,7 +52,7 @@ namespace Swing.Sound
 
                     return Observable.Timer(TimeSpan.FromSeconds(soundAsset.clip.length))
                               .Subscribe(_ => destroyAction())
-                              .AddTo(Disposable.Create(destroyAction));
+                              .CreateComposite(Disposable.Create(destroyAction));
                 }
 
             }

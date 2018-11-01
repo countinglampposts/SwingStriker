@@ -77,7 +77,7 @@ namespace Swing
             return returnedRect;
         }
 
-        public static CompositeDisposable AddTo(this IDisposable disposable, IDisposable other){
+        public static CompositeDisposable CreateComposite(this IDisposable disposable, IDisposable other){
             CompositeDisposable disposables = new CompositeDisposable();
             disposable.AddTo(disposables);
             other.AddTo(disposables);
