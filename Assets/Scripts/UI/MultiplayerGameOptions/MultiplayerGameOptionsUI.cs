@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using UniRx;
+using System.Linq;
 
 namespace Swing.UI
 {
@@ -37,12 +38,13 @@ namespace Swing.UI
         [SerializeField]
         private GameObject nextUI;
 
-        [Inject] LevelCollection levels;
+        [Inject] LevelCollection[] levelCollections;
         [Inject] GameTimeOptions gameTimeOptions;
         [Inject] DiContainer container;
 
         private void Start()
         {
+            var levels = levelCollections.First(l => l.id == "MP");
             levelSelectMenu.scroller.Init(levels);
             levelSelectMenu.scroller.BindToAllDevices();
 

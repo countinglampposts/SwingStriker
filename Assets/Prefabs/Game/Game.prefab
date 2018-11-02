@@ -383,6 +383,7 @@ MonoBehaviour:
     type: 2}
   audioMixerGroup: {fileID: 243700895071785310, guid: b50c53ef984954b09b6ff6a9346be5c8,
     type: 2}
+  test: {fileID: 1231265148910222, guid: 6e4a4121c914d411d87de605460af863, type: 2}
 --- !u!114 &114453998409795058
 MonoBehaviour:
   m_ObjectHideFlags: 1

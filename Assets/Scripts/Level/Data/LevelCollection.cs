@@ -8,6 +8,7 @@ namespace Swing.Level
     [CreateAssetMenu(menuName = "Swing/LevelCollection")]
     public class LevelCollection : ScriptableObject, IScrollableAsset
     {
+        public string id;
         public LevelAsset[] levels;
 
         public IEnumerable<LevelAsset> assets

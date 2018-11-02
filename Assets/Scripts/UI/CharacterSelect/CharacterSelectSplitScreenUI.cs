@@ -9,6 +9,7 @@ using Zenject;
 using Swing.Game;
 using UniRx.Diagnostics;
 using UnityEngine.UI;
+using Swing.Game.Soccer;
 
 namespace Swing.UI
 {
@@ -25,7 +26,7 @@ namespace Swing.UI
         [SerializeField]
         private GameObject backRoot;
         [SerializeField]
-        private GameController controller;
+        private SoccerController controller;
 
         [Inject] DiContainer container;
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Swing.Character;
 using UnityEngine;
 
 namespace Swing.Level
@@ -9,6 +10,7 @@ namespace Swing.Level
     {
         public GameObject prefab;
         public string displayName;
+        public CharacterAsset player;
 
         string IDisplayAsset.displayName
         {
