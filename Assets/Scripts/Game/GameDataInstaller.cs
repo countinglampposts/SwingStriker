@@ -9,7 +9,7 @@ using Zenject;
 
 namespace Swing.Game.Soccer
 {
-    public class SoccerDataInstaller : MonoInstaller
+    public class GameDataInstaller : MonoInstaller
     {
         [SerializeField] private CharacterCollection characters;
         [SerializeField] private TeamsData teams;

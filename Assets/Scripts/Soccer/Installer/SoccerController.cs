@@ -22,30 +22,21 @@ namespace Swing.Game.Soccer
 
     public class BallResetSignal { }
 
-    public class SoccerController : MonoInstaller
+    public class SoccerController : IInitializable, IDisposable
     {
         [Inject] private LevelAsset levelAsset;
         [Inject] private PlayerData[] playersData;
         [Inject] private GameTime gameTime;
-        [Inject] private GameState gameState;
+        [Inject] private PlayerLifeController playerLifeController;
+        [Inject] private SpawnPointGroup spawnPointGroup;
+        [Inject] private SoccerState soccerState;
+        [Inject] private DiContainer container;
 
-        private SoccerState soccerState = new SoccerState();
+        private CompositeDisposable disposables = new CompositeDisposable();
 
-        public override void InstallBindings()
-        {
-            Container.DeclareSignal<GameEndsSignal>();
-            Container.DeclareSignal<GoalScoredSignal>();
-            Container.DeclareSignal<BallResetSignal>();
-
-            Container.BindInstance(soccerState);
-        }
-
-        private void Start()
+        public void Initialize()
         {
             InitGameState();
-
-            // Init the level
-            var spawnPoints = Container.InstantiatePrefab(levelAsset.prefab).GetComponent<SpawnPointGroup>();
 
             // Init the players
             var spawned = new List<Tuple<PlayerData, GameObject>>();
@@ -53,15 +44,15 @@ namespace Swing.Game.Soccer
             for (int a = 0; a < playersData.Length; a++)
             {
                 var playerData = playersData[a];
-                var instance = ProjectUtils.InitializePlayer(playerData, spawnPoints,gameState,Container);
+                var instance = playerLifeController.InitializePlayer(playerData);
 
                 spawned.Add(new Tuple<PlayerData, GameObject>(playerData, instance));
             }
-            spawnPoints.ResolvePlayerSpawn(spawned);
+            spawnPointGroup.ResolvePlayerSpawn(spawned);
         }
 
         private void InitGameState(){
-            var signalBus = Container.Resolve<SignalBus>();
+            var signalBus = container.Resolve<SignalBus>();
             // Init the state
 
             // Init the timer logic
@@ -70,18 +61,18 @@ namespace Swing.Game.Soccer
                       .TakeUntil(signalBus.GetStream<GameEndsSignal>())
                       .Subscribe(_ => soccerState.secondsRemaining.Value--);
             soccerState.secondsRemaining
-                 .TakeUntilDestroy(this)
-                 .Where(timeRemaining => timeRemaining <= 0)
-                 .Where(_ => soccerState.scores.HasMax(score => score.Value))
-                 .Subscribe(_ => signalBus.Fire<GameEndsSignal>());
+                       .Where(timeRemaining => timeRemaining <= 0)
+                       .Where(_ => soccerState.scores.HasMax(score => score.Value))
+                       .Subscribe(_ => signalBus.Fire<GameEndsSignal>())
+                       .AddTo(disposables);
             signalBus.GetStream<GameEndsSignal>()
-                     .TakeUntilDestroy(this)
                      .Subscribe(_ =>
                      {
                          Observable.Timer(TimeSpan.FromSeconds(10))
-                                   .TakeUntilDestroy(this)
-                                   .Subscribe(__ => Application.LoadLevel(Application.loadedLevel));
-                     });
+                                   .Subscribe(__ => Application.LoadLevel(Application.loadedLevel))
+                                   .AddTo(disposables);
+                     })
+                     .AddTo(disposables);
 
             // Debug Commands
             Observable.EveryUpdate()
@@ -99,13 +90,18 @@ namespace Swing.Game.Soccer
                 soccerState.scores.Add(a, 0);
             }
             signalBus.GetStream<GoalScoredSignal>()
-                     .TakeUntilDestroy(this)
                      .Subscribe(signal =>
                      {
                          int teamID = signal.team;
                          if (!soccerState.scores.ContainsKey(teamID)) soccerState.scores.Add(teamID, 0);
                          soccerState.scores[teamID]++;
-                     });
+                     })
+                     .AddTo(disposables);
+        }
+
+        public void Dispose()
+        {
+            disposables.Dispose();
         }
     }
 }

@@ -8518,8 +8518,7 @@ MonoBehaviour:
   backButton: {fileID: 1198849154}
   root: {fileID: 1118425858}
   backRoot: {fileID: 2115948180}
-  controller: {fileID: 114430266536700314, guid: 97768017860bd48aa954a860347f2821,
-    type: 2}
+  gamePrefab: {fileID: 1389601142817884, guid: 97768017860bd48aa954a860347f2821, type: 2}
 --- !u!1 &1129686563
 GameObject:
   m_ObjectHideFlags: 0

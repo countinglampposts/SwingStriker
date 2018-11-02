@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 4016748232021060}
   - component: {fileID: 114672645226517386}
   - component: {fileID: 114055006355552300}
-  - component: {fileID: 114430266536700314}
+  - component: {fileID: 114210528909935256}
   - component: {fileID: 114137694889177914}
   m_Layer: 0
   m_Name: SoccerGame
@@ -285,6 +285,7 @@ MonoBehaviour:
     type: 2}
   audioMixerGroup: {fileID: 243700895071785310, guid: b50c53ef984954b09b6ff6a9346be5c8,
     type: 2}
+  autoLaunch: 0
 --- !u!114 &114068312980769900
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -330,6 +331,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameMixer: {fileID: 24100000, guid: b50c53ef984954b09b6ff6a9346be5c8, type: 2}
+--- !u!114 &114210528909935256
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1389601142817884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2bbd249a756d4ecf8b260019289790c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114211980800784404
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -384,17 +396,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114430266536700314
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1389601142817884}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 608cc0e4b1c314a18821b68571ff44ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114453998409795058
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -563,7 +564,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _installers:
   - {fileID: 114055006355552300}
-  - {fileID: 114430266536700314}
+  - {fileID: 114210528909935256}
   - {fileID: 114137694889177914}
   _installerPrefabs: []
   _scriptableObjectInstallers: []

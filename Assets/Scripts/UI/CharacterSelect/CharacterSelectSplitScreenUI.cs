@@ -26,7 +26,7 @@ namespace Swing.UI
         [SerializeField]
         private GameObject backRoot;
         [SerializeField]
-        private SoccerController controller;
+        private GameObject gamePrefab;
 
         [Inject] DiContainer container;
 
@@ -51,7 +51,7 @@ namespace Swing.UI
                 var players = selectUIs.Where(ui => ui.isReady).Select(ui => ui.GetPlayerData()).ToArray();
                 container.Unbind(players.GetType());
                 container.BindInstance(players);
-                container.InstantiatePrefab(controller);
+                container.InstantiatePrefab(gamePrefab);
                 root.SetActive(false);
             });
 

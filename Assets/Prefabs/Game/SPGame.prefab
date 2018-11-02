@@ -75,7 +75,6 @@ GameObject:
   - component: {fileID: 114672645226517386}
   - component: {fileID: 114055006355552300}
   - component: {fileID: 114137694889177914}
-  - component: {fileID: 114163770811057712}
   m_Layer: 0
   m_Name: SPGame
   m_TagString: Untagged
@@ -205,6 +204,7 @@ MonoBehaviour:
     type: 2}
   audioMixerGroup: {fileID: 243700895071785310, guid: b50c53ef984954b09b6ff6a9346be5c8,
     type: 2}
+  autoLaunch: 1
 --- !u!114 &114137694889177914
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -217,17 +217,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameMixer: {fileID: 24100000, guid: b50c53ef984954b09b6ff6a9346be5c8, type: 2}
---- !u!114 &114163770811057712
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1389601142817884}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 852953be5b06f476bbcadf9bf2dfb9f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114211980800784404
 MonoBehaviour:
   m_ObjectHideFlags: 1
