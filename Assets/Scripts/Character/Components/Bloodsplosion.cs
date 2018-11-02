@@ -46,8 +46,8 @@ namespace Swing.Character
             var otherJointPosition = other.TransformPoint(joint.connectedAnchor);
             var otherJointDirection = (otherJointPosition - other.position).normalized;
 
-            AutoDestructionParticleSystem(Instantiate(settings.bloodsplosionEffect, jointPosition, transform.rotation, transform));
-            AutoDestructionParticleSystem(Instantiate(settings.bloodsplosionEffect, otherJointPosition, Quaternion.LookRotation(otherJointDirection), other));
+            Instantiate(settings.bloodsplosionEffect, jointPosition, transform.rotation, transform).GetComponent<ParticleSystem>().AutoDestruct();
+            Instantiate(settings.bloodsplosionEffect, otherJointPosition, Quaternion.LookRotation(otherJointDirection), other).GetComponent<ParticleSystem>().AutoDestruct();
 
             if (destroyJoint)
             {
@@ -60,15 +60,6 @@ namespace Swing.Character
             soundPlayer.PlaySound("Bloodsplosion", transform);
 
             dead = true;
-        }
-
-        void AutoDestructionParticleSystem(GameObject gameObject){
-            var ps = gameObject.GetComponent<ParticleSystem>();
-            Observable.EveryUpdate()
-                      .TakeUntilDestroy(gameObject)
-                      .Skip(5)
-                      .Where(_ => ps.particleCount == 0)
-                      .Subscribe(_ => Destroy(gameObject));
         }
     }
 }

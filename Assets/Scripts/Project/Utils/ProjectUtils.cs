@@ -83,5 +83,31 @@ namespace Swing
             other.AddTo(disposables);
             return disposables;
         }
+
+        public static void AddExplosionForce(float explosionForce, Vector3 explosionPosition, float explosionRadius, int layerMask)
+        {
+            var hits = Physics2D.CircleCastAll(explosionPosition, explosionRadius, Vector2.zero,0,layerMask);
+            foreach(var h in hits){
+                if(h.rigidbody != null){
+                    h.rigidbody.AddExplosionForce(explosionForce, explosionPosition, explosionRadius);
+                }
+            }
+        }
+
+        public static void AddExplosionForce(this Rigidbody2D body, float explosionForce, Vector3 explosionPosition, float explosionRadius)
+        {
+            var dir = (body.transform.position - explosionPosition);
+            float wearoff = 1 - (dir.magnitude / explosionRadius);
+            body.AddForce(dir.normalized * explosionForce * wearoff);
+        }
+
+        public static void AutoDestruct(this ParticleSystem ps)
+        {
+            Observable.EveryUpdate()
+                      .TakeUntilDestroy(ps)
+                      .Skip(5)
+                      .Where(_ => ps.particleCount == 0)
+                      .Subscribe(_ => GameObject.Destroy(ps.gameObject));
+        }
     }
 }

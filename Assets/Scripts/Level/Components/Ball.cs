@@ -17,6 +17,8 @@ namespace Swing.Level
         [Inject] GameCameraState gameCameraState;
 
         [SerializeField] LayerMask pathCastingMask;
+        [SerializeField] LayerMask explosionMask;
+        [SerializeField] ParticleSystem goalExplosion;
 
         public void Start()
         {
@@ -32,6 +34,9 @@ namespace Swing.Level
                      .TakeUntilDestroy(this)
                      .Subscribe(_ =>
                      {
+                         Instantiate(goalExplosion, transform.position, transform.rotation).AutoDestruct();
+                         ProjectUtils.AddExplosionForce(1000, transform.position, 20, explosionMask.value);
+
                          gameCameraState.pointsOfInterest.Add(resetPoint);
                          Observable.Timer(TimeSpan.FromSeconds(5))
                                 .TakeUntilDestroy(this)

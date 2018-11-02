@@ -135,3 +135,8 @@ MonoBehaviour:
   pathCastingMask:
     serializedVersion: 2
     m_Bits: 4026535191
+  explosionMask:
+    serializedVersion: 2
+    m_Bits: 4026543927
+  goalExplosion: {fileID: 198251102713726432, guid: 0df9c1e50736346f98496717319cd5e4,
+    type: 2}
