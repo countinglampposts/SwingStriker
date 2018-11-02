@@ -14,6 +14,10 @@ namespace Swing
 {
     public static class ProjectUtils 
     {
+        public static void ReloadLevel(){
+            Application.LoadLevel(Application.loadedLevel);
+        }
+
         public static IObservable<T> GetStream<T>(this SignalBus signalBus){
             return Observable.FromEvent<T>(
                 action => signalBus.Subscribe<T>(action),

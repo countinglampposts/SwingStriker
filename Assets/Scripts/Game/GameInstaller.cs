@@ -11,9 +11,10 @@ namespace Swing.Game
 {
     public class GameInstaller : MonoInstaller
     {
+        [SerializeField] private bool autoLaunch;
         [SerializeField] private GameCameraController cameraControllerPrefab;
         [SerializeField] private AudioMixerGroup audioMixerGroup;
-        [SerializeField] private bool autoLaunch;
+        [SerializeField] private AudioMixer gameMixer;
 
         [Inject] LevelAsset levelAsset;
 
@@ -25,6 +26,7 @@ namespace Swing.Game
         public override void InstallBindings()
         {
             Container.BindInstance(audioMixerGroup);
+            Container.BindInstance(gameMixer);
             Container.Bind<SoundPlayer>()
                      .AsSingle();
 
@@ -43,6 +45,11 @@ namespace Swing.Game
                      .AsSingle()
                      .NonLazy();
             Container.Bind<PlayerLifeController>()
+                     .AsSingle()
+                     .NonLazy();
+
+            Container.DeclareSignal<TimeSlowSignal>();
+            Container.BindInterfacesAndSelfTo<TimeController>()
                      .AsSingle()
                      .NonLazy();
         }

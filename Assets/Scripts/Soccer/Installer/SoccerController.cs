@@ -69,7 +69,7 @@ namespace Swing.Game.Soccer
                      .Subscribe(_ =>
                      {
                          Observable.Timer(TimeSpan.FromSeconds(10))
-                                   .Subscribe(__ => Application.LoadLevel(Application.loadedLevel))
+                                   .Subscribe(__ => ProjectUtils.ReloadLevel())
                                    .AddTo(disposables);
                      })
                      .AddTo(disposables);
@@ -82,7 +82,7 @@ namespace Swing.Game.Soccer
             Observable.EveryUpdate()
                       .Where(_ => Input.GetKeyDown(KeyCode.R))
                       .First()
-                      .Subscribe(_ => Application.LoadLevel(Application.loadedLevel));
+                      .Subscribe(_ => ProjectUtils.ReloadLevel());
 
             // Init the score keeping
             foreach (var a in playersData.Select(player => player.team.id).Distinct())

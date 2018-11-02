@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using InControl;
 using UniRx;
@@ -12,48 +13,49 @@ namespace Swing.Game
         public float slowTime;
     }
 
-    public class TimeController : MonoInstaller
+    public class TimeController : IInitializable, IDisposable
     {
-        [SerializeField] private AudioMixer gameMixer;
+        [Inject] private AudioMixer gameMixer;
         [Inject] private GameState state;
+        [Inject] private SignalBus signalBus;
 
-        public override void InstallBindings()
+        private CompositeDisposable disposables = new CompositeDisposable();
+
+        public void Initialize()
         {
-            Container.DeclareSignal<TimeSlowSignal>();
-        }
-
-        private void Start()
-        {
-            var signalBus = Container.Resolve<SignalBus>();
-
             Observable.EveryUpdate()
-                      .TakeUntilDestroy(this)
                       .Where(_ => InputManager.ActiveDevice.CommandWasPressed || Input.GetKeyDown(KeyCode.P))
-                      .Subscribe(_ => state.isPaused.Value = !state.isPaused.Value);
+                      .Subscribe(_ => state.isPaused.Value = !state.isPaused.Value)
+                      .AddTo(disposables);
 
             float goalTimeScale = 1f;
             float endSlowdownTime = 0f;
             state.isPaused
-                 .TakeUntilDestroy(this)
-                 .Subscribe(_ => Time.timeScale = goalTimeScale);
+                 .Subscribe(_ => Time.timeScale = goalTimeScale)
+                 .AddTo(disposables);
             Observable.EveryUpdate()
-                      .TakeUntilDestroy(this)
                       .Select(_ => (state.isPaused.Value) ? 0 : Mathf.SmoothStep(Time.timeScale, (Time.time < endSlowdownTime) ? goalTimeScale : 1, 8 * Time.deltaTime))
                       .Subscribe(timeScale => {
                           gameMixer.SetFloat("GamePitch", timeScale);
                           Time.timeScale = timeScale; 
-            });
+                      })
+                      .AddTo(disposables);
             signalBus.GetStream<TimeSlowSignal>()
-                     .TakeUntilDestroy(this)
                      .Subscribe(signal => {
                          goalTimeScale = .4f;
                          endSlowdownTime = Time.time + signal.slowTime;
-            });
+                     })
+                     .AddTo(disposables);
 
             Observable.EveryUpdate()
-                      .TakeUntilDestroy(this)
                       .Where(_ => Input.GetKeyDown(KeyCode.T))
-                      .Subscribe(_ => signalBus.Fire(new TimeSlowSignal { slowTime = 2f }));
+                      .Subscribe(_ => signalBus.Fire(new TimeSlowSignal { slowTime = 2f }))
+                      .AddTo(disposables);
+        }
+
+        public void Dispose()
+        {
+            disposables.Dispose();
         }
     }
 }

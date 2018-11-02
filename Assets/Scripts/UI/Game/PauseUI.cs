@@ -37,7 +37,7 @@ namespace Swing.UI
                       .Subscribe(_ => gameState.isPaused.Value = false);
             quitButton.onClick.AsObservable()
                       .TakeUntilDestroy(this)
-                      .Subscribe(_ => Application.LoadLevel(Application.loadedLevel));
+                      .Subscribe(_ => ProjectUtils.ReloadLevel());
         }
     }
 }
