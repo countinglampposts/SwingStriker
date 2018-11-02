@@ -8,6 +8,7 @@ using Zenject;
 using UniRx;
 using Swing.Player;
 using System;
+using InControl;
 
 namespace Swing.UI
 {
@@ -16,9 +17,13 @@ namespace Swing.UI
         [SerializeField]
         private AssetScroller levelScroller;
         [SerializeField]
-        private Button button;
+        private Button playButton;
+        [SerializeField]
+        private Button backButton;
         [SerializeField]
         private GameObject root;
+        [SerializeField]
+        private GameObject backRoot;
         [SerializeField]
         private GameObject gamePrefab;
 
@@ -29,7 +34,7 @@ namespace Swing.UI
         {
             var levelCollection = levels.First(l => l.id == "SP");
             levelScroller.Init(levelCollection);
-            button.onClick.AsObservable()
+            playButton.onClick.AsObservable()
                   .TakeUntilDestroy(this)
                   .Subscribe(_ =>
                   {
@@ -37,11 +42,22 @@ namespace Swing.UI
                       var levelAsset = levelCollection.levels[levelScroller.CurrentIndex()];
 
                       levelSubcontainer.BindInstance(levelAsset);
-                      levelSubcontainer.BindInstance(new PlayerData { deviceID = Guid.Empty, character = levelAsset.defaultCharacter });
+                      levelSubcontainer.BindInstance(new PlayerData { deviceID = InputManager.ActiveDevice.GUID, character = levelAsset.defaultCharacter });
                       levelSubcontainer.InstantiatePrefab(gamePrefab);
 
                       root.SetActive(false);
                   });
+
+            backButton.onClick.AsObservable()
+                      .TakeUntilDestroy(this)
+                      .Subscribe(_ =>
+                      {
+                          root.SetActive(false);
+                          backRoot.SetActive(true);
+                      });
+
+            UIUtils.BindToAllDevices(playButton, 0);
+            UIUtils.BindToAllDevices(backButton, 1);
         }
     }
 }
