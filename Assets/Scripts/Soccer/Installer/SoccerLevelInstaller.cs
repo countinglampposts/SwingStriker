@@ -8,13 +8,6 @@ using Zenject;
 
 namespace Swing.Game.Soccer
 {
-
-    [System.Serializable]
-    public struct SpawnPoint{
-        public int team;
-        public Transform spawnPoint;
-    }
-
     public class SoccerLevelInstaller : MonoInstaller
     {
         [SerializeField]

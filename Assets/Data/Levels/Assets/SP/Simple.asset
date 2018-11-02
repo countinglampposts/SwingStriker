@@ -11,6 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd2a87b2231e04cc69eecb889bf16db9, type: 3}
   m_Name: Simple
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1715030307418382, guid: 99863c196a0ae485885da5309c46819b, type: 2}
+  prefab: {fileID: 1715030307418382, guid: 578cbf9f070aa4ce38f4da4c070b0c59, type: 2}
   displayName: Simple
-  defaultCharacter: {fileID: 0}
+  defaultCharacter: {fileID: 11400000, guid: cd2000dc2341c408780db67fa5f594c3, type: 2}

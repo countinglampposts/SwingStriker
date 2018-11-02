@@ -13,7 +13,6 @@ namespace Swing.Game.Soccer
     {
         [SerializeField] private CharacterCollection characters;
         [SerializeField] private TeamsData teams;
-        [SerializeField] private SplitScreenLayouts layouts;
         [SerializeField] private GameTimeOptions timeOptions;
         [SerializeField] private SoundAssets soundAssets;
         [SerializeField] private LevelCollection[] levels;
@@ -23,7 +22,6 @@ namespace Swing.Game.Soccer
             Container.BindInstance(levels);
             Container.BindInstance(characters);
             Container.BindInstance(teams);
-            Container.BindInstance(layouts);
             Container.BindInstance(timeOptions);
             Container.BindInstance(soundAssets);
         }

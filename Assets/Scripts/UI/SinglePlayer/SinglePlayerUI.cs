@@ -6,17 +6,24 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using UniRx;
+using Swing.Player;
+using System;
 
 namespace Swing.UI
 {
     public class SinglePlayerUI : MonoBehaviour
     {
         [SerializeField]
-        public AssetScroller levelScroller;
+        private AssetScroller levelScroller;
         [SerializeField]
-        public Button button;
+        private Button button;
+        [SerializeField]
+        private GameObject root;
+        [SerializeField]
+        private GameObject gamePrefab;
 
         [Inject] LevelCollection[] levels;
+        [Inject] DiContainer container;
 
         private void Start()
         {
@@ -26,7 +33,14 @@ namespace Swing.UI
                   .TakeUntilDestroy(this)
                   .Subscribe(_ =>
                   {
-                      var level = levelCollection.levels[levelScroller.CurrentIndex()];
+                      var levelSubcontainer = container.CreateSubContainer();
+                      var levelAsset = levelCollection.levels[levelScroller.CurrentIndex()];
+
+                      levelSubcontainer.BindInstance(levelAsset);
+                      levelSubcontainer.BindInstance(new PlayerData { deviceID = Guid.Empty, character = levelAsset.defaultCharacter });
+                      levelSubcontainer.InstantiatePrefab(gamePrefab);
+
+                      root.SetActive(false);
                   });
         }
     }

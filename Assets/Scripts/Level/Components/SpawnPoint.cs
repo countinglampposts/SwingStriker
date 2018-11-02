@@ -6,5 +6,6 @@ namespace Swing.Level{
     public class SpawnPoint : MonoBehaviour
     {
         public int team;
+        public bool isStart;
     }
 }

@@ -92,7 +92,6 @@ GameObject:
   - component: {fileID: 33419419858186532}
   - component: {fileID: 23580883508250528}
   - component: {fileID: 61542342515417684}
-  - component: {fileID: 114872646146775758}
   m_Layer: 0
   m_Name: Goal1
   m_TagString: Untagged
@@ -194,7 +193,6 @@ GameObject:
   - component: {fileID: 33480829535489744}
   - component: {fileID: 23476678515108514}
   - component: {fileID: 61626955984997072}
-  - component: {fileID: 114275712811210792}
   m_Layer: 0
   m_Name: Goal2
   m_TagString: Untagged
@@ -245,10 +243,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4830854913084330}
   - component: {fileID: 114679632395483048}
-  - component: {fileID: 114137973816917228}
   - component: {fileID: 114768931992850846}
   m_Layer: 10
-  m_Name: Simple
+  m_Name: SimpleSP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -985,31 +982,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &114137973816917228
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1715030307418382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a12632974febd477db90ef4a1b2ef8dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ballPrefab: {fileID: 1231265148910222, guid: 6e4a4121c914d411d87de605460af863, type: 2}
-  ballReset: {fileID: 4583279588108340}
---- !u!114 &114275712811210792
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1585479961889540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1db1fac7d7dd45b8bfcee6e14975190, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  team: 1
 --- !u!114 &114617561828075208
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1047,8 +1019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08eca9f7688a0a24685b89133b020c8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _installers:
-  - {fileID: 114137973816917228}
+  _installers: []
   _installerPrefabs: []
   _scriptableObjectInstallers: []
   _autoRun: 1
@@ -1095,15 +1066,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 0
   isStart: 0
---- !u!114 &114872646146775758
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1250226923979032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1db1fac7d7dd45b8bfcee6e14975190, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  team: 0

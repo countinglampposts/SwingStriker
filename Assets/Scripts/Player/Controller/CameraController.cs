@@ -11,14 +11,10 @@ namespace Swing.Player
         [SerializeField] Camera movedCamera;
 
         [Inject] BodyRoot root;
-        [Inject] CameraSettings cameraSettings;
         [Inject] CharacterState state;
 
         private void Start()
         {
-            movedCamera.rect = cameraSettings.viewportRect;
-            movedCamera.cullingMask = cameraSettings.mask.value;
-
             state.isCorpse
                  .Where(isCorpse => isCorpse)
                  .First()

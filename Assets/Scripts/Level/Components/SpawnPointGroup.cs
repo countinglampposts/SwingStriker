@@ -13,6 +13,11 @@ namespace Swing.Level
         [SerializeField]
         public SpawnPoint[] spawnPoints;
 
+        public void ResolvePlayerSpawn(GameObject spawned)
+        {
+            spawned.transform.position = spawnPoints.First(sp => sp.isStart).transform.position;
+        }
+
         public void ResolvePlayerSpawn(List<Tuple<PlayerData, GameObject>> spawned)
         {
             List<SpawnPoint> availiblePoint = new List<SpawnPoint>(spawnPoints);

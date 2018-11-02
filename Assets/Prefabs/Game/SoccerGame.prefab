@@ -107,10 +107,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4016748232021060}
   - component: {fileID: 114672645226517386}
+  - component: {fileID: 114055006355552300}
   - component: {fileID: 114430266536700314}
   - component: {fileID: 114137694889177914}
   m_Layer: 0
-  m_Name: Game
+  m_Name: SoccerGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -269,6 +270,21 @@ MonoBehaviour:
   m_Script: {fileID: -146154839, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114055006355552300
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1389601142817884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25dbfd1aff17d4653b7991b8309a7bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraControllerPrefab: {fileID: 114929657088042582, guid: a85954ac9d29947bca822f12d964eee3,
+    type: 2}
+  audioMixerGroup: {fileID: 243700895071785310, guid: b50c53ef984954b09b6ff6a9346be5c8,
+    type: 2}
 --- !u!114 &114068312980769900
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -379,11 +395,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 608cc0e4b1c314a18821b68571ff44ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraControllerPrefab: {fileID: 114929657088042582, guid: a85954ac9d29947bca822f12d964eee3,
-    type: 2}
-  audioMixerGroup: {fileID: 243700895071785310, guid: b50c53ef984954b09b6ff6a9346be5c8,
-    type: 2}
-  test: {fileID: 1231265148910222, guid: 6e4a4121c914d411d87de605460af863, type: 2}
 --- !u!114 &114453998409795058
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -551,6 +562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _installers:
+  - {fileID: 114055006355552300}
   - {fileID: 114430266536700314}
   - {fileID: 114137694889177914}
   _installerPrefabs: []

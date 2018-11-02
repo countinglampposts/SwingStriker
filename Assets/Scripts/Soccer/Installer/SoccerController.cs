@@ -24,16 +24,11 @@ namespace Swing.Game.Soccer
 
     public class SoccerController : MonoInstaller
     {
-        [SerializeField] private GameCameraController cameraControllerPrefab;
-        [SerializeField] private AudioMixerGroup audioMixerGroup;
-
         [Inject] private LevelAsset levelAsset;
         [Inject] private PlayerData[] playersData;
-        [Inject] private GameTime time;
-        [Inject] private SplitScreenLayouts layouts;
         [Inject] private GameTime gameTime;
+        [Inject] private GameState gameState;
 
-        private GameState gameState = new GameState();
         private SoccerState soccerState = new SoccerState();
 
         public override void InstallBindings()
@@ -42,40 +37,27 @@ namespace Swing.Game.Soccer
             Container.DeclareSignal<GoalScoredSignal>();
             Container.DeclareSignal<BallResetSignal>();
 
-            Container.BindInstance(audioMixerGroup);
             Container.BindInstance(soccerState);
-            Container.BindInstance(gameState);
-            Container.BindInstance(new GameCameraState());
-
-            Container.Bind<SoundPlayer>()
-                     .AsTransient();
-
-            Container.Bind<Camera>()
-                     .FromComponentInNewPrefab(cameraControllerPrefab)
-                     .AsSingle()
-                     .NonLazy();
         }
 
         private void Start()
         {
             InitGameState();
 
-            Debug.Log(levelAsset.prefab);
             // Init the level
-            var level = Container.InstantiatePrefab(levelAsset.prefab).GetComponent<SpawnPointGroup>();
+            var spawnPoints = Container.InstantiatePrefab(levelAsset.prefab).GetComponent<SpawnPointGroup>();
 
             // Init the players
-            var layout = layouts.layouts.First(a => a.settings.Length == playersData.Length);
             var spawned = new List<Tuple<PlayerData, GameObject>>();
 
             for (int a = 0; a < playersData.Length; a++)
             {
                 var playerData = playersData[a];
-                var instance = InitializePlayer(playerData, layout.settings[a], level);
+                var instance = ProjectUtils.InitializePlayer(playerData, spawnPoints,gameState,Container);
 
                 spawned.Add(new Tuple<PlayerData, GameObject>(playerData, instance));
             }
-            level.ResolvePlayerSpawn(spawned);
+            spawnPoints.ResolvePlayerSpawn(spawned);
         }
 
         private void InitGameState(){
@@ -124,64 +106,6 @@ namespace Swing.Game.Soccer
                          if (!soccerState.scores.ContainsKey(teamID)) soccerState.scores.Add(teamID, 0);
                          soccerState.scores[teamID]++;
                      });
-        }
-
-        private GameObject InitializePlayer(PlayerData playerData, CameraSettings cameraSettings, SpawnPointGroup level){
-            DiContainer playerContext = null;
-            CharacterState characterState = null;
-            GameObject instance = null;
-
-            Action MakeNewPlayer = null;
-            MakeNewPlayer = () =>
-            {
-                playerContext = Container.CreateSubContainer();
-                characterState = new CharacterState();
-                playerContext.DeclareSignal<PlayerKilledSignal>();
-                playerContext.BindInstance(characterState);
-                playerContext.BindInstance(playerData);
-                playerContext.BindInstance(cameraSettings);
-                instance = playerContext.InstantiatePrefab(playerData.character.prefab);
-
-                var playerKilledStream = playerContext.Resolve<SignalBus>()
-                                                      .GetStream<PlayerKilledSignal>();
-
-                // Disabled player control when paused
-                gameState.isPaused
-                         .TakeUntilDestroy(instance)
-                         .Subscribe(isPaused => characterState.localPlayerControl.Value = !isPaused);
-
-                // Reset the player when killed via recursion
-                playerKilledStream
-                         .First()
-                         .TakeUntilDestroy(instance)
-                         .Subscribe(_ =>
-                         {
-                             characterState.localPlayerControl.Value = false;
-
-                             var oldInstance = instance;
-                             Observable.Timer(TimeSpan.FromSeconds(3f))
-                                       .TakeUntilDestroy(oldInstance)
-                                       .Subscribe(__ => {
-                                           characterState.isCorpse.Value = true;
-                                           Observable.Timer(TimeSpan.FromSeconds(30))
-                                                     .TakeUntilDestroy(oldInstance)
-                                                     .Subscribe(___ => GameObject.Destroy(oldInstance));
-
-                                           //----RESETS ALL VALUES-----
-                                           MakeNewPlayer();
-
-                                           level.ResolvePlayerSpawn(new List<Tuple<PlayerData, GameObject>> { new Tuple<PlayerData, GameObject>(playerData, instance) });
-                                       });
-
-                         });
-
-
-
-            };
-
-            MakeNewPlayer();
-
-            return instance;
         }
     }
 }

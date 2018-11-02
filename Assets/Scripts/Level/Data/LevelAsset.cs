@@ -10,7 +10,7 @@ namespace Swing.Level
     {
         public GameObject prefab;
         public string displayName;
-        public CharacterAsset player;
+        public CharacterAsset defaultCharacter;
 
         string IDisplayAsset.displayName
         {

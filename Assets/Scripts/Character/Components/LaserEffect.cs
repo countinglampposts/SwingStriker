@@ -11,13 +11,11 @@ namespace Swing.Character
     {
         [Inject] private CharacterSettings settings;
         [Inject] private CharacterState state;
-        [Inject] private CameraSettings cameraSettings;
 
         private void Start()
         {
 
             var lineRenderer = Instantiate(settings.laserEffect.gameObject,transform).GetComponent<LineRenderer>();
-            lineRenderer.gameObject.layer = LayerMask.NameToLayer(cameraSettings.cullingLayer);
 
             var raycastStream = Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
