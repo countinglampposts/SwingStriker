@@ -36,12 +36,14 @@ namespace Swing.Level
                      {
                          Instantiate(goalExplosion, transform.position, transform.rotation).AutoDestruct();
                          ProjectUtils.AddExplosionForce(1000, transform.position, 20, explosionMask.value);
+                         gameObject.SetActive(false);
 
                          gameCameraState.pointsOfInterest.Add(resetPoint);
                          Observable.Timer(TimeSpan.FromSeconds(5))
                                 .TakeUntilDestroy(this)
                                 .Subscribe(__ =>
                                 {
+                                    gameObject.SetActive(true);
                                     gameCameraState.pointsOfInterest.Remove(resetPoint);
                                     Reset();
                                 });
