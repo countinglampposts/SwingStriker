@@ -74,6 +74,7 @@ GameObject:
   - component: {fileID: 4016748232021060}
   - component: {fileID: 114672645226517386}
   - component: {fileID: 114055006355552300}
+  - component: {fileID: 114921961662269366}
   m_Layer: 0
   m_Name: SPGame
   m_TagString: Untagged
@@ -379,6 +380,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _installers:
   - {fileID: 114055006355552300}
+  - {fileID: 114921961662269366}
   _installerPrefabs: []
   _scriptableObjectInstallers: []
   _autoRun: 1
@@ -424,6 +426,17 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114921961662269366
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1389601142817884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5693520684c8747ada09868bbf87b543, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114964341997884064
 MonoBehaviour:
   m_ObjectHideFlags: 1

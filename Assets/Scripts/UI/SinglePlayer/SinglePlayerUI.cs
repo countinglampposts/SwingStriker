@@ -9,6 +9,7 @@ using UniRx;
 using Swing.Player;
 using System;
 using InControl;
+using Swing.Game;
 
 namespace Swing.UI
 {
@@ -29,6 +30,7 @@ namespace Swing.UI
 
         [Inject] LevelCollection[] levels;
         [Inject] DiContainer container;
+        [Inject] LevelsController levelsController; 
 
         private void Start()
         {
@@ -38,12 +40,10 @@ namespace Swing.UI
                   .TakeUntilDestroy(this)
                   .Subscribe(_ =>
                   {
-                      var levelSubcontainer = container.CreateSubContainer();
                       var levelAsset = levelCollection.levels[levelScroller.CurrentIndex()];
+                      var playerData = new PlayerData { deviceID = InputManager.ActiveDevice.GUID, character = levelAsset.defaultCharacter };
 
-                      levelSubcontainer.BindInstance(levelAsset);
-                      levelSubcontainer.BindInstance(new PlayerData { deviceID = InputManager.ActiveDevice.GUID, character = levelAsset.defaultCharacter });
-                      levelSubcontainer.InstantiatePrefab(gamePrefab);
+                      levelsController.LaunchLevel(container, levelAsset, levelCollection, new []{ playerData});
 
                       root.SetActive(false);
                   });

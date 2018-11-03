@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Swing.Game.Soccer;
 using Swing.Level;
 using Swing.Player;
 using Swing.Sound;
@@ -18,11 +19,6 @@ namespace Swing.Game
 
         [Inject] LevelAsset levelAsset;
 
-        private void Start()
-        {
-            if(autoLaunch)Container.Resolve<PlayerLifeController>().InitializePlayer(Container.Resolve<PlayerData>());
-        }
-
         public override void InstallBindings()
         {
             Container.BindInstance(audioMixerGroup);
@@ -40,16 +36,21 @@ namespace Swing.Game
                      .AsSingle()
                      .NonLazy();
 
-            Container.Bind<SpawnPointGroup>()
-                     .FromComponentsInNewPrefab(levelAsset.prefab)
+            Container.DeclareSignal<TimeSlowSignal>();
+            Container.BindInterfacesAndSelfTo<TimeController>()
                      .AsSingle()
                      .NonLazy();
+
+            Container.Bind<SpawnPointGroup>()
+                     .FromComponentInNewPrefab(levelAsset.prefab)
+                     .AsSingle()
+                     .NonLazy()
+                     .BindInfo.InstantiatedCallback = (cw,created) => Debug.Log(created);
             Container.Bind<PlayerLifeController>()
                      .AsSingle()
                      .NonLazy();
 
-            Container.DeclareSignal<TimeSlowSignal>();
-            Container.BindInterfacesAndSelfTo<TimeController>()
+            Container.Bind<DebugCommandController>()
                      .AsSingle()
                      .NonLazy();
         }

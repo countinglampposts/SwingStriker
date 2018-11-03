@@ -13,14 +13,6 @@ using Swing.Sound;
 
 namespace Swing.Game.Soccer
 {
-    public class GameEndsSignal { }
-
-    public class GoalScoredSignal
-    {
-        public int team;
-    }
-
-    public class BallResetSignal { }
 
     public class SoccerController : IInitializable, IDisposable
     {
@@ -53,36 +45,31 @@ namespace Swing.Game.Soccer
 
         private void InitGameState(){
             var signalBus = container.Resolve<SignalBus>();
-            // Init the state
 
             // Init the timer logic
             soccerState.secondsRemaining.Value = gameTime.seconds;
             Observable.Interval(TimeSpan.FromSeconds(1))
-                      .TakeUntil(signalBus.GetStream<GameEndsSignal>())
+                      .TakeUntil(signalBus.GetStream<GameEndSignal>())
                       .Subscribe(_ => soccerState.secondsRemaining.Value--);
             soccerState.secondsRemaining
                        .Where(timeRemaining => timeRemaining <= 0)
                        .Where(_ => soccerState.scores.HasMax(score => score.Value))
-                       .Subscribe(_ => signalBus.Fire<GameEndsSignal>())
+                       .Subscribe(_ => signalBus.Fire<GameEndSignal>())
                        .AddTo(disposables);
-            signalBus.GetStream<GameEndsSignal>()
+            signalBus.GetStream<GameEndSignal>()
                      .Subscribe(_ =>
                      {
                          Observable.Timer(TimeSpan.FromSeconds(10))
-                                   .Subscribe(__ => ProjectUtils.ReloadLevel())
+                                   .Subscribe(__ => ProjectUtils.ReturnToMainMenu())
                                    .AddTo(disposables);
                      })
                      .AddTo(disposables);
-
             // Debug Commands
             Observable.EveryUpdate()
                       .Where(_ => Input.GetKeyDown(KeyCode.E))
                       .First()
                       .Subscribe(_ => soccerState.secondsRemaining.Value = 1);
-            Observable.EveryUpdate()
-                      .Where(_ => Input.GetKeyDown(KeyCode.R))
-                      .First()
-                      .Subscribe(_ => ProjectUtils.ReloadLevel());
+
 
             // Init the score keeping
             foreach (var a in playersData.Select(player => player.team.id).Distinct())

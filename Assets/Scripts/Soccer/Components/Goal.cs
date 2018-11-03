@@ -21,18 +21,18 @@ namespace Swing.Game.Soccer
 
         private void Start()
         {
-            signalBus.GetStream<GameEndsSignal>()
+            signalBus.GetStream<GameEndSignal>()
                      .TakeUntilDestroy(this)
                      .Subscribe(_ => locked = true);
 
             signalBus.GetStream<GoalScoredSignal>()
                      .TakeUntilDestroy(this)
-                     .TakeUntil(signalBus.GetStream<GameEndsSignal>())
+                     .TakeUntil(signalBus.GetStream<GameEndSignal>())
                      .Subscribe(_ => locked = true);
 
             signalBus.GetStream<BallResetSignal>()
                      .TakeUntilDestroy(this)
-                     .TakeUntil(signalBus.GetStream<GameEndsSignal>())
+                     .TakeUntil(signalBus.GetStream<GameEndSignal>())
                      .Subscribe(_ => locked = false);
 
             gameObject.OnTriggerEnter2DAsObservable()

@@ -26,6 +26,7 @@ namespace Swing.Game
             var goalSize = minSize;
             Observable.EveryUpdate()
                       .TakeUntilDestroy(this)
+                      .Where(_ => cameraState.pointsOfInterest.Count > 0)
                       .Select(_ => cameraState.pointsOfInterest
                                               .Where(pt => pt != null)
                                               .Select(pt => (Vector2)pt.position))
@@ -49,6 +50,8 @@ namespace Swing.Game
 
         private void OnDrawGizmos()
         {
+            if (cameraState.pointsOfInterest.Count == 0)
+                return;
             var pts = cameraState.pointsOfInterest
                                  .Where(pt => pt != null)
                                  .Select(pt => (Vector2)pt.position);

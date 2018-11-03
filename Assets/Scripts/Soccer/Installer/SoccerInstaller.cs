@@ -8,11 +8,18 @@ using Zenject;
 
 namespace Swing.Game.Soccer
 {
+    public class GoalScoredSignal
+    {
+        public int team;
+    }
+    public class BallResetSignal { }
+    public class GameEndSignal { }
+
     public class SoccerInstaller : MonoInstaller
     {
         public override void InstallBindings()
         {
-            Container.DeclareSignal<GameEndsSignal>();
+            Container.DeclareSignal<GameEndSignal>();
             Container.DeclareSignal<GoalScoredSignal>();
             Container.DeclareSignal<BallResetSignal>();
 

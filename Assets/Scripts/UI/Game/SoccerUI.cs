@@ -40,16 +40,16 @@ namespace Swing.UI
                          centerTextUI.enabled = true;
                          Observable.Timer(TimeSpan.FromSeconds(5))
                                    .TakeUntilDestroy(this)
-                                   .TakeUntil(signalBus.GetStream<GameEndsSignal>())
+                                   .TakeUntil(signalBus.GetStream<GameEndSignal>())
                                    .Subscribe(__ => centerTextUI.enabled = false);
                          Observable.Interval(TimeSpan.FromSeconds(1))
                                    .TakeUntilDestroy(this)
-                                   .TakeUntil(signalBus.GetStream<GameEndsSignal>())
+                                   .TakeUntil(signalBus.GetStream<GameEndSignal>())
                                    .TakeWhile(interval => interval <= 5)
                                    .Skip(1)
                                    .Subscribe(interval => centerTextUI.text = (4 - interval).ToString());
                      });
-            signalBus.GetStream<GameEndsSignal>()
+            signalBus.GetStream<GameEndSignal>()
                      .TakeUntilDestroy(this)
                      .Subscribe(_ => {
                          var winningTeam = teamsData.teams.First(selectedTeam => selectedTeam.id == soccerState.scores.MaxValueOrDefault(score => score.Value).Key);
