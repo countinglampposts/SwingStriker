@@ -41,6 +41,7 @@ namespace Swing.UI
         [Inject] LevelCollection[] levelCollections;
         [Inject] GameTimeOptions gameTimeOptions;
         [Inject] DiContainer container;
+        [Inject] LevelsController levelsController;
 
         private void Start()
         {
@@ -54,8 +55,8 @@ namespace Swing.UI
                           .Subscribe(_ =>
                           {
                               var level = levels.levels[levelSelectMenu.scroller.CurrentIndex()];
-                              container.Unbind(level.GetType());
-                              container.BindInstance(level);
+                              Debug.Log("Binding: " + level.displayName);
+                              levelsController.levelSubcontainer.BindInstance(level);
 
                               levelSelectMenu.root.SetActive(false);
                               timeSelectMenu.root.SetActive(true);
@@ -79,8 +80,7 @@ namespace Swing.UI
                           .Subscribe(_ =>
                           {
                               var gameTime = gameTimeOptions.levelTimes[timeSelectMenu.scroller.CurrentIndex()];
-                              container.Unbind(gameTime.GetType());
-                              container.BindInstance(gameTime);
+                              levelsController.levelSubcontainer.BindInstance(gameTime);
 
                               gameObject.SetActive(false);
                               nextUI.SetActive(true);

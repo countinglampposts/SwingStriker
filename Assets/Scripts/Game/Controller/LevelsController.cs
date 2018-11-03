@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Swing.Level;
 using Swing.Player;
@@ -8,31 +9,32 @@ using Zenject;
 
 namespace Swing.Game
 {
-    public class LevelsController : MonoBehaviour
+    public class LevelsController : MonoInstaller
     {
-        [SerializeField]
-        private GameObject singlePlayerPrefab;
-        [SerializeField]
-        private GameObject soccerGamePrefab;
+        [Inject] DiContainer container;
 
-        private GameObject currentLevelPrefab;
+        public DiContainer levelSubcontainer { get; private set; }
 
         private void Start()
         {
-            Observable.EveryUpdate()
-                      .Where(_ => Input.GetKeyDown(KeyCode.C))
-                      .Subscribe(_ => Destroy(currentLevelPrefab));
+            levelSubcontainer = container.CreateSubContainer();
         }
 
-        public void LaunchLevel(DiContainer container, LevelAsset levelAsset, LevelCollection levelCollection, PlayerData[] playerData)
+        public override void InstallBindings()
         {
-            Destroy(currentLevelPrefab);
+            Container.BindInstance(this);
+        }
 
-            var levelSubcontainer = container.CreateSubContainer();
-            levelSubcontainer.BindInstance(levelAsset);
-            levelSubcontainer.BindInstance(levelCollection);
-            levelSubcontainer.BindInstance(playerData);
-            currentLevelPrefab = levelSubcontainer.InstantiatePrefab(singlePlayerPrefab);
+        public IDisposable LaunchLevel()
+        {
+            var levelAsset = levelSubcontainer.Resolve<LevelAsset>();
+            var currentLevelPrefab = levelSubcontainer.InstantiatePrefab(levelAsset.gameTypePrefab);
+
+            return Disposable.Create(() =>
+            {
+                levelSubcontainer.UnbindAll();
+                Destroy(currentLevelPrefab);
+            });
         }
     }
 }

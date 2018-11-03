@@ -14,3 +14,5 @@ MonoBehaviour:
   prefab: {fileID: 1715030307418382, guid: 578cbf9f070aa4ce38f4da4c070b0c59, type: 2}
   displayName: Simple
   defaultCharacter: {fileID: 11400000, guid: cd2000dc2341c408780db67fa5f594c3, type: 2}
+  gameTypePrefab: {fileID: 1389601142817884, guid: aaee0b637a64a4f658b71925a5ee3a29,
+    type: 2}

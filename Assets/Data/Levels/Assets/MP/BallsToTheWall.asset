@@ -13,4 +13,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 1884994157921568, guid: 6dedb90ec81d24dec91f16cdb1ef3fca, type: 2}
   displayName: Balls To The Wall
-  player: {fileID: 0}
+  defaultCharacter: {fileID: 0}
+  gameTypePrefab: {fileID: 1389601142817884, guid: 97768017860bd48aa954a860347f2821,
+    type: 2}

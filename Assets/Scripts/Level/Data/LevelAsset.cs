@@ -11,6 +11,7 @@ namespace Swing.Level
         public GameObject prefab;
         public string displayName;
         public CharacterAsset defaultCharacter;
+        public GameObject gameTypePrefab;
 
         string IDisplayAsset.displayName
         {

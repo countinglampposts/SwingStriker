@@ -13,4 +13,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 1884994157921568, guid: 617e8d09491774ee6a35281fca5cf405, type: 2}
   displayName: Suck it!
-  player: {fileID: 0}
+  defaultCharacter: {fileID: 0}
+  gameTypePrefab: {fileID: 1389601142817884, guid: 97768017860bd48aa954a860347f2821,
+    type: 2}

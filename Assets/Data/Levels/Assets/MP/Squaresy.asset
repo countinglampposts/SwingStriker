@@ -13,4 +13,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 1704185641444824, guid: 996ec70e41c2643a2a6515fb1b5bad04, type: 2}
   displayName: Squaresy
-  player: {fileID: 0}
+  defaultCharacter: {fileID: 0}
+  gameTypePrefab: {fileID: 1389601142817884, guid: 97768017860bd48aa954a860347f2821,
+    type: 2}

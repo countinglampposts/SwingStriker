@@ -15,7 +15,6 @@ namespace Swing.Game.Soccer
         [SerializeField] private TeamsData teams;
         [SerializeField] private GameTimeOptions timeOptions;
         [SerializeField] private SoundAssets soundAssets;
-        [SerializeField] private LevelsController levelsController;
         [SerializeField] private LevelCollection[] levels;
 
         public override void InstallBindings()
@@ -25,7 +24,6 @@ namespace Swing.Game.Soccer
             Container.BindInstance(teams);
             Container.BindInstance(timeOptions);
             Container.BindInstance(soundAssets);
-            Container.BindInstance(levelsController);
         }
     }
 }

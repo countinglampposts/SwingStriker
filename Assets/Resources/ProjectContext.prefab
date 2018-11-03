@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 114644168325571496}
   - component: {fileID: 114741476915301706}
   - component: {fileID: 114165906490918928}
-  - component: {fileID: 114430162794100766}
   m_Layer: 0
   m_Name: ProjectContext
   m_TagString: Untagged
@@ -58,25 +57,9 @@ MonoBehaviour:
   teams: {fileID: 11400000, guid: 1017d9437ff0c4f62864a0813823d9e7, type: 2}
   timeOptions: {fileID: 11400000, guid: bd52ef9934c244f209aa208edc7c08ed, type: 2}
   soundAssets: {fileID: 11400000, guid: 01da148bc31994dabbb34124b03b9aeb, type: 2}
-  levelsController: {fileID: 114430162794100766}
   levels:
   - {fileID: 11400000, guid: 789f2c3154a7e40d9bbd0fa226e51561, type: 2}
   - {fileID: 11400000, guid: 192c0e9aa392a4f818ca3bc6edfdd911, type: 2}
---- !u!114 &114430162794100766
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1028087700777918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aedaa1f0758eb4a5b87a410983830a19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  singlePlayerPrefab: {fileID: 1389601142817884, guid: aaee0b637a64a4f658b71925a5ee3a29,
-    type: 2}
-  soccerGamePrefab: {fileID: 1389601142817884, guid: 97768017860bd48aa954a860347f2821,
-    type: 2}
 --- !u!114 &114644168325571496
 MonoBehaviour:
   m_ObjectHideFlags: 1

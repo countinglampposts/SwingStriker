@@ -13,4 +13,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 1070872714975318, guid: ea185dfdfc9904b92ac26c70e1687ef0, type: 2}
   displayName: Kushy
-  player: {fileID: 0}
+  defaultCharacter: {fileID: 0}
+  gameTypePrefab: {fileID: 1389601142817884, guid: 97768017860bd48aa954a860347f2821,
+    type: 2}

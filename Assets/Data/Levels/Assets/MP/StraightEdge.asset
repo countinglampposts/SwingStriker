@@ -13,4 +13,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 1704185641444824, guid: e82cedcc16bad4bcbb64b89f40d040a3, type: 2}
   displayName: Straight Edge
-  player: {fileID: 0}
+  defaultCharacter: {fileID: 0}
+  gameTypePrefab: {fileID: 1389601142817884, guid: 97768017860bd48aa954a860347f2821,
+    type: 2}

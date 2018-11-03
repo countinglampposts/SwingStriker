@@ -49,7 +49,7 @@ namespace Swing.Game
                      .AsSingle()
                      .NonLazy();
 
-            Container.Bind<DebugCommandController>()
+            Container.BindInterfacesAndSelfTo<DebugCommandController>()
                      .AsSingle()
                      .NonLazy();
         }

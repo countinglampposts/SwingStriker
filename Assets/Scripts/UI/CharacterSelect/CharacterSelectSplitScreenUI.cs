@@ -29,6 +29,7 @@ namespace Swing.UI
         private GameObject gamePrefab;
 
         [Inject] DiContainer container;
+        [Inject] LevelsController levelsController;
 
         private void Start()
         {
@@ -49,9 +50,8 @@ namespace Swing.UI
             goButton.onClick.AddListener(() =>
             {
                 var players = selectUIs.Where(ui => ui.isReady).Select(ui => ui.GetPlayerData()).ToArray();
-                container.Unbind(players.GetType());
-                container.BindInstance(players);
-                container.InstantiatePrefab(gamePrefab);
+                levelsController.levelSubcontainer.BindInstance(players);
+                levelsController.LaunchLevel();
                 root.SetActive(false);
             });
 
