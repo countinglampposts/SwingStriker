@@ -44,8 +44,7 @@ namespace Swing.Game
             Container.Bind<SpawnPointGroup>()
                      .FromComponentInNewPrefab(levelAsset.prefab)
                      .AsSingle()
-                     .NonLazy()
-                     .BindInfo.InstantiatedCallback = (cw,created) => Debug.Log(created);
+                     .NonLazy();
             Container.Bind<PlayerLifeController>()
                      .AsSingle()
                      .NonLazy();

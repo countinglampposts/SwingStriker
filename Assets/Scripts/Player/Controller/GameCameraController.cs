@@ -22,6 +22,9 @@ namespace Swing.Game
 
         private void Start()
         {
+            controlledRoot.transform.parent = transform;
+            controlledRoot.transform.localPosition = Vector3.zero;
+
             var goalPosition = Vector3.zero;
             var goalSize = minSize;
             Observable.EveryUpdate()

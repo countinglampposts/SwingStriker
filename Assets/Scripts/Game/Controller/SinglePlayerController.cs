@@ -21,7 +21,6 @@ namespace Swing.Game
             signalBus.GetStream<LevelWonSignal>(); //go to next level
             signalBus.GetStream<LevelLostSignal>(); //reload the level
 
-            Debug.Log("Initializing thplaer");
             playerLifeController.InitializePlayer(playerData[0]);
         }
 

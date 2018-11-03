@@ -9,8 +9,6 @@ namespace Swing.Character
     public class CharacterInstaller : MonoInstaller
     {
         [SerializeField]
-        private CameraController playerCameraPrefab;
-        [SerializeField]
         private BodyRoot root;
         [SerializeField]
         private CharacterSettings settings;
@@ -42,10 +40,6 @@ namespace Swing.Character
             Container.BindInterfacesAndSelfTo<GamepadPlayerController>()
                      .AsSingle()
                      .NonLazy();
-
-            // This is to activate split screen view
-            /*var instance = Container.InstantiatePrefab(playerCameraPrefab);
-            Container.BindInstance(instance.GetComponentInChildren<Camera>());*/
         }
     }
 }
