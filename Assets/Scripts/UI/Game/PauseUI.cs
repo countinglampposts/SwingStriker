@@ -15,6 +15,8 @@ namespace Swing.UI
         [SerializeField] private Button returnButton;
         [SerializeField] private Button quitButton;
 
+        [Inject] private LevelsController levelsController;
+
         [Inject] GameState gameState;
 
         private void Start()
@@ -37,7 +39,7 @@ namespace Swing.UI
                       .Subscribe(_ => gameState.isPaused.Value = false);
             quitButton.onClick.AsObservable()
                       .TakeUntilDestroy(this)
-                      .Subscribe(_ => ProjectUtils.ReturnToMainMenu());
+                      .Subscribe(_ => levelsController.ReturnToMainMenu());
         }
     }
 }

@@ -12,7 +12,6 @@ namespace Swing.Game
 {
     public class GameInstaller : MonoInstaller
     {
-        [SerializeField] private bool autoLaunch;
         [SerializeField] private GameCameraController cameraControllerPrefab;
         [SerializeField] private AudioMixerGroup audioMixerGroup;
         [SerializeField] private AudioMixer gameMixer;
@@ -41,11 +40,11 @@ namespace Swing.Game
                      .AsSingle()
                      .NonLazy();
 
-            Container.Bind<SpawnPointGroup>()
-                     .FromComponentInNewPrefab(levelAsset.prefab)
+            Container.Bind<PlayerCharacterFactory>()
                      .AsSingle()
                      .NonLazy();
-            Container.Bind<PlayerLifeController>()
+            Container.Bind<SpawnPointGroup>()
+                     .FromComponentInNewPrefab(levelAsset.prefab)
                      .AsSingle()
                      .NonLazy();
 

@@ -14,7 +14,7 @@ namespace Swing
 {
     public static class ProjectUtils 
     {
-        public static void ReturnToMainMenu(){
+        public static void RefreshScene(){
             Application.LoadLevel(Application.loadedLevel);
         }
 

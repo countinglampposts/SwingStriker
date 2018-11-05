@@ -10,13 +10,25 @@ using Zenject;
 
 namespace Swing.Game
 {
-    public class PlayerLifeController
+    /// <summary>
+    /// This creates a new character controlled by the player
+    /// This handles
+    ///  - Re/Spawning logic
+    ///  - Creating the player subcontext
+    ///  - Disabling and Enabling player control when paused
+    ///  - Binding the PlayerData to the new subcontext
+    /// </summary>
+    public class PlayerCharacterFactory
     {
-        [Inject] SpawnPointGroup spawnPoints;
         [Inject] GameState gameState;
         [Inject] DiContainer container;
 
-        public GameObject InitializePlayer(PlayerData playerData)
+        /// <summary>
+        /// Creates new Character representing the data about the player
+        /// </summary>
+        /// <returns>The player character's prefab</returns>
+        /// <param name="playerData">Player data.</param>
+        public GameObject SpawnPlayerCharacter(PlayerData playerData)
         {
             DiContainer playerContext = null;
             CharacterState characterState = null;
@@ -27,21 +39,24 @@ namespace Swing.Game
             {
                 playerContext = container.CreateSubContainer();
                 characterState = new CharacterState();
+
                 playerContext.DeclareSignal<PlayerKilledSignal>();
                 playerContext.BindInstance(characterState);
                 playerContext.BindInstance(playerData);
+
                 instance = playerContext.InstantiatePrefab(playerData.character.prefab);
 
+                // HACK: There has to be a better way to do this
                 var playerKilledStream = playerContext.Resolve<SignalBus>()
                                                       .GetStream<PlayerKilledSignal>();
 
-            // Disabled player control when paused
-            gameState.isPaused
-                         .TakeUntilDestroy(instance)
-                         .Subscribe(isPaused => characterState.localPlayerControl.Value = !isPaused);
+                // Disabled player control when paused
+                gameState.isPaused
+                             .TakeUntilDestroy(instance)
+                             .Subscribe(isPaused => characterState.localPlayerControl.Value = !isPaused);
 
-            // Reset the player when killed via recursion
-            playerKilledStream
+                // Reset the player when killed via recursion
+                playerKilledStream
                          .First()
                          .TakeUntilDestroy(instance)
                          .Subscribe(_ =>
@@ -54,20 +69,15 @@ namespace Swing.Game
                                        .Subscribe(__ =>
                                        {
                                            characterState.isCorpse.Value = true;
+                                           /// Keep the body alive for 30 sexonds
                                            Observable.Timer(TimeSpan.FromSeconds(30))
                                                      .TakeUntilDestroy(oldInstance)
                                                      .Subscribe(___ => GameObject.Destroy(oldInstance));
-
-                                       //----RESETS ALL VALUES-----
-                                       MakeNewPlayer();
-
-                                           spawnPoints.ResolvePlayerSpawn(new List<Tuple<PlayerData, GameObject>> { new Tuple<PlayerData, GameObject>(playerData, instance) });
+                                           
+                                            MakeNewPlayer();
                                        });
 
                          });
-
-
-
             };
 
             MakeNewPlayer();

@@ -19,7 +19,6 @@ namespace Swing.Game.Soccer
         [Inject] private LevelAsset levelAsset;
         [Inject] private PlayerData[] playersData;
         [Inject] private GameTime gameTime;
-        [Inject] private PlayerLifeController playerLifeController;
         [Inject] private SpawnPointGroup spawnPointGroup;
         [Inject] private SoccerState soccerState;
         [Inject] private DiContainer container;
@@ -30,17 +29,7 @@ namespace Swing.Game.Soccer
         {
             InitGameState();
 
-            // Init the players
-            var spawned = new List<Tuple<PlayerData, GameObject>>();
-
-            for (int a = 0; a < playersData.Length; a++)
-            {
-                var playerData = playersData[a];
-                var instance = playerLifeController.InitializePlayer(playerData);
-
-                spawned.Add(new Tuple<PlayerData, GameObject>(playerData, instance));
-            }
-            spawnPointGroup.ResolvePlayerSpawn(spawned);
+            spawnPointGroup.ResolvePlayerSpawn(playersData);
         }
 
         private void InitGameState(){
@@ -60,7 +49,7 @@ namespace Swing.Game.Soccer
                      .Subscribe(_ =>
                      {
                          Observable.Timer(TimeSpan.FromSeconds(10))
-                                   .Subscribe(__ => ProjectUtils.ReturnToMainMenu())
+                                   .Subscribe(__ => ProjectUtils.RefreshScene())
                                    .AddTo(disposables);
                      })
                      .AddTo(disposables);

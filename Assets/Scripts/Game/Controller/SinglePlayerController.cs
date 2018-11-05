@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Swing.Level;
 using Swing.Player;
 using UniRx;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Swing.Game
     public class SinglePlayerController : IDisposable, IInitializable
     {
         [Inject] SignalBus signalBus;
-        [Inject] PlayerLifeController playerLifeController;
+        [Inject] SpawnPointGroup spawnPointGroup;
         [Inject] PlayerData[] playerData;
         [Inject] LevelsController levelsController;
 
@@ -35,7 +36,7 @@ namespace Swing.Game
                      .Subscribe(_=>levelsController.RestartLevel())
                      .AddTo(disposables); //reload the level
 
-            playerLifeController.InitializePlayer(playerData[0]);
+            spawnPointGroup.SpawnPlayerAtStart(playerData[0]);
         }
 
         public void Dispose()

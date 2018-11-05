@@ -13,6 +13,15 @@ namespace Swing.Game
         public float slowTime;
     }
 
+    /// <summary>
+    /// This owns: 
+    ///  - Time.timescale 
+    ///  - "GamePitch" property of the game AudioMixer 
+    /// It listens to:
+    ///  - TimeSlowSignal to slow time
+    ///  - GameState.isPaused to pause time
+    /// It also listens to the pause key press
+    /// </summary>
     public class TimeController : IInitializable, IDisposable
     {
         [Inject] private AudioMixer gameMixer;
@@ -24,7 +33,7 @@ namespace Swing.Game
         public void Initialize()
         {
             Observable.EveryUpdate()
-                      .Where(_ => InputManager.ActiveDevice.CommandWasPressed || Input.GetKeyDown(KeyCode.P))
+                      .Where(_ => InputManager.ActiveDevice.CommandWasPressed || Input.GetKeyDown(KeyCode.Escape))
                       .Subscribe(_ => state.isPaused.Value = !state.isPaused.Value)
                       .AddTo(disposables);
 

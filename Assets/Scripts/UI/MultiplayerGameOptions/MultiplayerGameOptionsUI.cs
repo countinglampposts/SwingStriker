@@ -55,7 +55,7 @@ namespace Swing.UI
                           .Subscribe(_ =>
                           {
                               var level = levels.levels[levelSelectMenu.scroller.CurrentIndex()];
-                              Debug.Log("Binding: " + level.displayName);
+                              levelsController.levelSubcontainer.Unbind(level.GetType());
                               levelsController.levelSubcontainer.BindInstance(level);
 
                               levelSelectMenu.root.SetActive(false);
@@ -80,6 +80,7 @@ namespace Swing.UI
                           .Subscribe(_ =>
                           {
                               var gameTime = gameTimeOptions.levelTimes[timeSelectMenu.scroller.CurrentIndex()];
+                              levelsController.levelSubcontainer.Unbind(gameTime.GetType());
                               levelsController.levelSubcontainer.BindInstance(gameTime);
 
                               gameObject.SetActive(false);

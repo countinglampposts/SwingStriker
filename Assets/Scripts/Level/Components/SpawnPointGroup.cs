@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Swing.Game;
 using Swing.Player;
 using UniRx;
 using UnityEngine;
@@ -13,13 +14,28 @@ namespace Swing.Level
         [SerializeField]
         public SpawnPoint[] spawnPoints;
 
-        public void ResolvePlayerSpawn(GameObject spawned)
+        [Inject]
+        public PlayerCharacterFactory playerCharacterFactory;
+
+        public void SpawnPlayerAtStart(PlayerData spawnedPlayerData)
         {
+            var spawned = playerCharacterFactory.SpawnPlayerCharacter(spawnedPlayerData);
             spawned.transform.position = spawnPoints.First(sp => sp.isStart).transform.position;
         }
 
-        public void ResolvePlayerSpawn(List<Tuple<PlayerData, GameObject>> spawned)
+        public void ResolvePlayerSpawn(params PlayerData[] playerDatas)
         {
+            // Init the players
+            var spawned = new List<Tuple<PlayerData, GameObject>>();
+
+            for (int a = 0; a < playerDatas.Length; a++)
+            {
+                var playerData = playerDatas[a];
+                var instance = playerCharacterFactory.SpawnPlayerCharacter(playerData);
+
+                spawned.Add(new Tuple<PlayerData, GameObject>(playerData, instance));
+            }
+
             List<SpawnPoint> availiblePoint = new List<SpawnPoint>(spawnPoints);
             foreach (var spawnPoint in spawnPoints)
             {

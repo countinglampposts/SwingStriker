@@ -43,9 +43,11 @@ namespace Swing.UI
                       var levelAsset = levelCollection.levels[levelScroller.CurrentIndex()];
                       var playerData = new PlayerData { deviceID = InputManager.ActiveDevice.GUID, character = levelAsset.defaultCharacter };
 
+                      levelsController.ClearSubcontainer();
                       levelsController.levelSubcontainer.BindInstance(levelAsset);
                       levelsController.levelSubcontainer.BindInstance(new[] { playerData });
                       levelsController.levelSubcontainer.BindInstance(levelCollection);
+
                       levelsController.LaunchCampaign(0);
 
                       root.SetActive(false);

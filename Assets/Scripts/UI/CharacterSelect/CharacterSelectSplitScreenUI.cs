@@ -50,8 +50,11 @@ namespace Swing.UI
             goButton.onClick.AddListener(() =>
             {
                 var players = selectUIs.Where(ui => ui.isReady).Select(ui => ui.GetPlayerData()).ToArray();
+
+                levelsController.levelSubcontainer.Unbind(players.GetType());
                 levelsController.levelSubcontainer.BindInstance(players);
                 levelsController.LaunchLevel();
+
                 root.SetActive(false);
             });
 
