@@ -13,13 +13,27 @@ namespace Swing.Game
         [Inject] SignalBus signalBus;
         [Inject] PlayerLifeController playerLifeController;
         [Inject] PlayerData[] playerData;
+        [Inject] LevelsController levelsController;
 
         CompositeDisposable disposables = new CompositeDisposable();
 
         public void Initialize()
         {
-            signalBus.GetStream<LevelWonSignal>(); //go to next level
-            signalBus.GetStream<LevelLostSignal>(); //reload the level
+            Observable.EveryUpdate()
+                      .Where(_ => Input.GetKeyDown(KeyCode.W))
+                      .Subscribe(_ => signalBus.Fire<LevelWonSignal>())
+                      .AddTo(disposables);
+            Observable.EveryUpdate()
+                      .Where(_ => Input.GetKeyDown(KeyCode.L))
+                      .Subscribe(_ => signalBus.Fire<LevelLostSignal>())
+                      .AddTo(disposables);
+
+            signalBus.GetStream<LevelWonSignal>()
+                     .Subscribe(_=>levelsController.LaunchNextLevel())
+                     .AddTo(disposables); //go to next level
+            signalBus.GetStream<LevelLostSignal>()
+                     .Subscribe(_=>levelsController.RestartLevel())
+                     .AddTo(disposables); //reload the level
 
             playerLifeController.InitializePlayer(playerData[0]);
         }

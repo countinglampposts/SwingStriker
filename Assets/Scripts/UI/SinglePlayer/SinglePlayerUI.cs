@@ -45,7 +45,8 @@ namespace Swing.UI
 
                       levelsController.levelSubcontainer.BindInstance(levelAsset);
                       levelsController.levelSubcontainer.BindInstance(new[] { playerData });
-                      var levelDisposable = levelsController.LaunchLevel();
+                      levelsController.levelSubcontainer.BindInstance(levelCollection);
+                      levelsController.LaunchCampaign(0);
 
                       root.SetActive(false);
                   });

@@ -11,9 +11,13 @@ namespace Swing.Game
 {
     public class LevelsController : MonoInstaller
     {
+        [SerializeField] GameObject rootMenu;
         [Inject] DiContainer container;
 
         public DiContainer levelSubcontainer { get; private set; }
+
+        private GameObject currentLevelInstance;
+        private int currentCampaignIndex;
 
         private void Start()
         {
@@ -25,16 +29,42 @@ namespace Swing.Game
             Container.BindInstance(this);
         }
 
-        public IDisposable LaunchLevel()
+        public void LaunchLevel()
         {
             var levelAsset = levelSubcontainer.Resolve<LevelAsset>();
-            var currentLevelPrefab = levelSubcontainer.InstantiatePrefab(levelAsset.gameTypePrefab);
+            currentLevelInstance = levelSubcontainer.InstantiatePrefab(levelAsset.gameTypePrefab);
+        }
 
-            return Disposable.Create(() =>
-            {
-                levelSubcontainer.UnbindAll();
-                Destroy(currentLevelPrefab);
-            });
+        public void LaunchCampaign(int index){
+            currentCampaignIndex = index;
+            var collection = levelSubcontainer.Resolve<LevelCollection>();
+            var level = collection.levels[index];
+            levelSubcontainer.Unbind(level.GetType());
+            levelSubcontainer.BindInstance(level);
+            LaunchLevel();
+        }
+
+        public void LaunchNextLevel()
+        {
+            Destroy(currentLevelInstance);
+            LaunchCampaign(currentCampaignIndex + 1);
+        }
+
+        public void ReturnToMainMenu(){
+            ClearLevel();
+            rootMenu.SetActive(true);
+        }
+
+        public void RestartLevel()
+        {
+            Destroy(currentLevelInstance);
+            LaunchLevel();
+        }
+
+        private void ClearLevel()
+        {
+            levelSubcontainer.UnbindAll();
+            Destroy(currentLevelInstance);
         }
     }
 }
