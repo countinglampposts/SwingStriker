@@ -9,6 +9,11 @@ using Zenject;
 
 namespace Swing.Game.Soccer
 {
+    /// <summary>
+    /// This is added to the project context
+    /// Installs all static data that is commonly used
+    /// DO NOT save any dynamic data here
+    /// </summary>
     public class GameDataInstaller : MonoInstaller
     {
         [SerializeField] private CharacterCollection characters;

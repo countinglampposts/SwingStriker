@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Swing.Player;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
-using UniRx;
-using UniRx.Triggers;
+using Swing.Game;
 
 namespace Swing.Character
 {

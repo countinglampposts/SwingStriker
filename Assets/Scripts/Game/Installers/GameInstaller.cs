@@ -10,6 +10,15 @@ using Zenject;
 
 namespace Swing.Game
 {
+    /// <summary>
+    /// This installs all basic game functionality and dependencies
+    /// This includes:
+    ///  - Audio functionality
+    ///  - Camera control
+    ///  - Gamestate
+    ///  - Time control
+    ///  - Player spawning
+    /// </summary>
     public class GameInstaller : MonoInstaller
     {
         [SerializeField] private GameCameraController cameraControllerPrefab;

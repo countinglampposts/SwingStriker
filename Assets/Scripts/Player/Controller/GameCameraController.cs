@@ -12,6 +12,10 @@ namespace Swing.Game
         public List<Transform> pointsOfInterest = new List<Transform>();
     }
 
+    /// <summary>
+    /// This moves the camera and adjusts its orthographic size 
+    /// to include every transform in GameCameraState.pointsOfInterest
+    /// </summary>
     public class GameCameraController : MonoBehaviour
     {
         [SerializeField] private float minSize = 8;

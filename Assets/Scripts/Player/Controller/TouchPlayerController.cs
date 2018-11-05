@@ -8,6 +8,9 @@ using System;
 
 namespace Swing.Player
 {
+    /// <summary>
+    /// This was made obsolete by removing the split screen functionality
+    /// </summary>
     [Obsolete]
     public class TouchPlayerController : MonoBehaviour
     {

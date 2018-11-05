@@ -10,6 +10,8 @@ using Zenject;
 
 namespace Swing.Game
 {
+    public class PlayerKilledSignal { }
+
     /// <summary>
     /// This creates a new character controlled by the player
     /// This handles

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Swing.Level;
-using Swing.Player;
-using UniRx;
+﻿using Swing.Level;
 using UnityEngine;
 using Zenject;
 
@@ -49,7 +44,8 @@ namespace Swing.Game
         /// Launches a campaign based on the LevelCollection bound to levelSubcontainer
         /// </summary>
         /// <param name="index">The index of the level in LevelCollection to launch</param>
-        public void LaunchCampaign(int index){
+        public void LaunchCampaign(int index)
+        {
             currentCampaignIndex = index;
             var collection = levelSubcontainer.Resolve<LevelCollection>();
             var level = collection.levels[index];
@@ -81,7 +77,7 @@ namespace Swing.Game
 
         public void ClearSubcontainer()
         {
-            if(currentLevelInstance != null) Destroy(currentLevelInstance);
+            if (currentLevelInstance != null) Destroy(currentLevelInstance);
             levelSubcontainer.UnbindAll();
             levelSubcontainer = container.CreateSubContainer();
         }

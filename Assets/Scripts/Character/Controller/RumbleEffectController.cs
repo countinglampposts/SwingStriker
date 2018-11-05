@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Swing.Player;
+﻿using Swing.Game;
 using UniRx;
 using UnityEngine;
 using Zenject;

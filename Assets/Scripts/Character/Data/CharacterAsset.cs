@@ -7,8 +7,8 @@ namespace Swing.Character
     [CreateAssetMenu(menuName = "Swing/Character")]
     public class CharacterAsset : ScriptableObject, IDisplayAsset
     {
-        public GameObject prefab;
         public string displayName;
+        public GameObject prefab;
 
         string IDisplayAsset.displayName
         {

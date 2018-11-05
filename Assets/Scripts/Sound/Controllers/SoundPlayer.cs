@@ -9,6 +9,9 @@ using Zenject;
 
 namespace Swing.Sound
 {
+    /// <summary>
+    /// Use this to create all sound effects
+    /// </summary>
     public class SoundPlayer 
     {
         [Inject] AudioMixerGroup audioMixerGroup;

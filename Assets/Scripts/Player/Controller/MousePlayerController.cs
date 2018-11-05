@@ -11,6 +11,9 @@ using System.Collections.Generic;
 
 namespace Swing.Player
 {
+    /// <summary>
+    /// This adds mouse functionality to the player
+    /// </summary>
     public class MousePlayerController : IInitializable, IDisposable
     {
         [Inject] private Camera playerCamera;
