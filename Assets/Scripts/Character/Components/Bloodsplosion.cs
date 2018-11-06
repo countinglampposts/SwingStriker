@@ -1,17 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 using UniRx;
-using UniRx.Triggers;
-using System;
-using UnityEngine.Audio;
 using Swing.Sound;
-using System.Linq;
 
 namespace Swing.Character
 {
-    public class JointBrokenSignal{}
+    public class JointBrokenSignal { }
 
     [RequireComponent(typeof(AnchoredJoint2D))]
     public class Bloodsplosion : MonoBehaviour
@@ -34,7 +28,8 @@ namespace Swing.Character
             BreakEffect(false);
         }
 
-        private void BreakEffect(bool destroyJoint){
+        private void BreakEffect(bool destroyJoint)
+        {
             if (dead) return;
 
             signalBus.Fire<JointBrokenSignal>();

@@ -10,6 +10,11 @@ using System;
 
 namespace Swing.UI
 {
+    /// <summary>
+    /// This is a generic way of showing all assets listed in IScrollableAsset
+    /// All displayed assets need to implement IDisplayAsset
+    /// This can be bound to a gamepad device or all devices
+    /// </summary>
     public class AssetScroller : MonoBehaviour
     {
         [SerializeField]
@@ -27,7 +32,6 @@ namespace Swing.UI
         {
             rightButton.onClick.AddListener(() => index.Value++);
             leftButton.onClick.AddListener(() => index.Value--);
-
 
             var assets = new List<IDisplayAsset>(scrollableAsset.assets);
             index
@@ -51,7 +55,7 @@ namespace Swing.UI
             disposables = new CompositeDisposable();
             Observable.EveryUpdate()
                       .Where(_ => gameObject.activeInHierarchy && gameObject.activeSelf)
-                      .Select(_ => (deviceID == Guid.Empty)? InputManager.ActiveDevice : InputManager.Devices.FirstOrDefault(device => device.GUID == deviceID))
+                      .Select(_ => (deviceID == Guid.Empty) ? InputManager.ActiveDevice : InputManager.Devices.FirstOrDefault(device => device.GUID == deviceID))
                       .Where(device => device != null)
                       .Select(device => device.RightStickX < -.9f || device.LeftStickX < -.9f || device.DPadX < -.9f)
                       .DistinctUntilChanged()
@@ -72,7 +76,8 @@ namespace Swing.UI
             return disposables;
         }
 
-        public int CurrentIndex(){
+        public int CurrentIndex()
+        {
             return usedIndex;
         }
 
